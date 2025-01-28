@@ -1,6 +1,6 @@
 #include "lexer.h"
 #include <unordered_map>
-
+// Map of reserved words to their corresponding token types
 std::unordered_map<std::string, TokenType>reservedWords = {
     {"or", TokenType::OR},
     {"and", TokenType::AND},

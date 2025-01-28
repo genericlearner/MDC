@@ -71,7 +71,7 @@ enum class TokenType
     INCOMPLETE_CMT,
 
 };
-
+// Overload the << operator to print TokenType
 std::ostream& operator<<(std::ostream& stream, TokenType tokenType);
 class Token 
 {
@@ -85,7 +85,7 @@ class Token
         size_t getLine() const;
         TokenType getType() const;
 
-
+        // Constructor to initialize a token
         Token(TokenType type, std::string& lexeme, size_t line);
 };
 
