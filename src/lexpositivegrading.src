@@ -38,7 +38,7 @@ block comment
 */
 
 /* this is an imbricated 
-/* block comment
+/* block comment /* test */
 */
 */
 

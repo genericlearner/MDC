@@ -67,6 +67,6 @@ multiple line
 block comment 
 */, 35]
 [BLOCK_COMMENT, ** this is an imbricated 
-/* block comment
+/* block comment /* test */
 */
 */, 40]
