@@ -71,5 +71,6 @@
     "list": "cpp",
     "unordered_map": "cpp",
     "xhash": "cpp"
-  }
+  },
+  "cmake.sourceDirectory": "C:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src"
 }

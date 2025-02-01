@@ -28,6 +28,8 @@ std::unordered_map<std::string, TokenType>reservedWords = {
 
 
 };
+
+
 Lexer::Lexer()
 {
     source = nullptr;
@@ -79,7 +81,13 @@ char Lexer::nextChar()
     }
     return EOF;
 }
-
+std::string Lexer::errorLoop(std::string &lex){
+    while(!isspace(currentChar) || currentChar != '\n' || currentChar != EOF){
+        lex += currentChar;
+        currentChar = nextChar();
+    }
+    
+}
 void Lexer::backupChar(){
     if(source && source->unget()){
         if(currentChar == '\n'){
@@ -119,17 +127,19 @@ Token Lexer::nextToken(){
     writeToken(idToken);
     return idToken;
     }
+        
 
     if(isdigit(currentChar)){
         std::string lex;
         bool isFloat = false;
-
+        bool isValid = true;
         do{
             lex += currentChar;
             currentChar = nextChar();
         }while(isdigit(currentChar));
 
         if(lex[0] == '0' && lex.length() > 1){
+            isValid = false;
             Token errToken = createToken(TokenType::INVALID_NUM, lex);
             writeError(errToken);
             writeToken(errToken);
