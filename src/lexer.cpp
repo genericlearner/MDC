@@ -81,11 +81,14 @@ char Lexer::nextChar()
     }
     return EOF;
 }
-std::string Lexer::errorLoop(std::string &lex){
+Token Lexer::errorLoop(std::string &lex){
     while(!isspace(currentChar) || currentChar != '\n' || currentChar != EOF){
         lex += currentChar;
         currentChar = nextChar();
     }
+    Token errorToken = createToken(TokenType::INVALID_NUM, lex);
+    writeError(errorToken);
+    return errorToken ;
     
 }
 void Lexer::backupChar(){
@@ -139,11 +142,7 @@ Token Lexer::nextToken(){
         }while(isdigit(currentChar));
 
         if(lex[0] == '0' && lex.length() > 1){
-            isValid = false;
-            Token errToken = createToken(TokenType::INVALID_NUM, lex);
-            writeError(errToken);
-            writeToken(errToken);
-            return errToken;
+            errorLoop(lex);
         }
 
         if(currentChar == '.'){
@@ -152,10 +151,7 @@ Token Lexer::nextToken(){
             currentChar = nextChar();
 
             if(!isdigit(currentChar)){
-                Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-                writeError(errorToken);
-                writeToken(errorToken);
-                return errorToken;
+                errorLoop(lex);
             }
             while(isdigit(currentChar)){
                 lex += currentChar;
@@ -163,10 +159,7 @@ Token Lexer::nextToken(){
             }
 
             if(lex.back() == '0'){
-                Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-                writeError(errorToken);
-                writeToken(errorToken);
-                return errorToken;
+                errorLoop(lex);
             }
 
 
@@ -181,16 +174,10 @@ Token Lexer::nextToken(){
                 currentChar = nextChar();
             }
             else{
-                Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-                writeError(errorToken);
-                writeToken(errorToken);
-                return errorToken;
+                errorLoop(lex);
             }
             if(!isdigit(currentChar)){
-                Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-                writeError(errorToken);
-                writeToken(errorToken);
-                return errorToken;
+                
             }
             while(isdigit(currentChar)){
                 lex += currentChar;

@@ -31,7 +31,7 @@ class Lexer
 
         void writeToken(const Token& token);
         void writeError(const Token& errToken);
-        std::string errorLoop(std::string &lex);
+        Token errorLoop(std::string &lex);
 
 
 
