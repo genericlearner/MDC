@@ -1,13 +1,8 @@
-int x = 10 + 5;
-float pi = 3.14159;
-while (x < 100) {
-    x = x + 1;
+int x = 10 ;
+int ?abs;
+gg
+010ABC
+
+for ( int i = 1 ) {
+    c++;
 }
-if (pi > 3) {
-    read();
-}
-invalid!char ;
-public function test;
-constructor MyClass;
-42
-identifier123

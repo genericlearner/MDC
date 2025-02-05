@@ -82,15 +82,25 @@ char Lexer::nextChar()
     return EOF;
 }
 Token Lexer::errorLoop(std::string &lex){
-    while(!isspace(currentChar) || currentChar != '\n' || currentChar != EOF){
+    while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF){
         lex += currentChar;
         currentChar = nextChar();
     }
     Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-    writeError(errorToken);
     return errorToken ;
     
 }
+
+Token Lexer::errorLoopAlpha(std::string &lex){
+    while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF){
+        lex += currentChar;
+        currentChar = nextChar();
+    }
+    Token errorToken = createToken(TokenType::INVALID_ID, lex);
+    return errorToken ;
+    
+}
+
 void Lexer::backupChar(){
     if(source && source->unget()){
         if(currentChar == '\n'){
@@ -111,38 +121,78 @@ Token Lexer::nextToken(){
         Token eofToken = createToken(TokenType::ENDOFILE, s);
         return eofToken;
     }
-
+    if(currentChar == '_'){
+        std::string lex;
+        lex += '_';
+        currentChar = nextChar();
+        Token errToken = errorLoopAlpha(lex);
+        writeError(errToken);
+        return errToken;
+    }
     if(isalpha(currentChar)){
         std::string lex;
-        do{
-            lex +=currentChar;
-            currentChar = nextChar();
-        } while(isalnum(currentChar) || currentChar == '_');
+        
+        while(true){
+            if(isalnum(currentChar) || currentChar == '_'){
+                lex += currentChar;
+                currentChar = nextChar();
+            }
+            else if(isspace(currentChar)){
+                break;
+            }
+            else{
+                Token errToken = errorLoopAlpha(lex);
+                writeError(errToken);
+                return errToken;
+            }
+        }
     
 
-    backupChar();
-    if(reservedWords.find(lex) != reservedWords.end()){
-        Token resWordToken = createToken(reservedWords[lex], lex);
-        writeToken(resWordToken);
-        return resWordToken;
-    }
-    Token idToken = createToken(TokenType::ID, lex);
-    writeToken(idToken);
-    return idToken;
+        backupChar();
+        if(reservedWords.find(lex) != reservedWords.end()){
+            Token resWordToken = createToken(reservedWords[lex], lex);
+            writeToken(resWordToken);
+            return resWordToken;
+            }
+        Token idToken = createToken(TokenType::ID, lex);
+        writeToken(idToken);
+        return idToken;
     }
         
 
     if(isdigit(currentChar)){
         std::string lex;
         bool isFloat = false;
-        bool isValid = true;
+
+        while(true){
+            if(isdigit(currentChar)){
+                lex += currentChar;
+                currentChar = nextChar();
+            }
+            else if(isspace(currentChar) || currentChar == 'e' || currentChar == '.'){
+                break;
+            }
+            else{
+                Token errToken = errorLoop(lex);
+                writeError(errToken);
+                return errToken;
+            }
+        }
+        /*
         do{
             lex += currentChar;
             currentChar = nextChar();
         }while(isdigit(currentChar));
-
+        
+        if(currentChar != '.' || currentChar != 'e'){
+            Token errToken = errorLoop(lex);
+            writeError(errToken);
+            return errToken;
+        }*/
         if(lex[0] == '0' && lex.length() > 1){
-            errorLoop(lex);
+            Token errToken = errorLoop(lex);
+            writeError(errToken);
+            return errToken;
         }
 
         if(currentChar == '.'){
@@ -151,7 +201,9 @@ Token Lexer::nextToken(){
             currentChar = nextChar();
 
             if(!isdigit(currentChar)){
-                errorLoop(lex);
+                Token errToken = errorLoop(lex);
+                writeError(errToken);
+                return errToken;
             }
             while(isdigit(currentChar)){
                 lex += currentChar;
@@ -159,7 +211,9 @@ Token Lexer::nextToken(){
             }
 
             if(lex.back() == '0'){
-                errorLoop(lex);
+                Token errToken = errorLoop(lex);
+                writeError(errToken);
+                return errToken;
             }
 
 
@@ -174,10 +228,14 @@ Token Lexer::nextToken(){
                 currentChar = nextChar();
             }
             else{
-                errorLoop(lex);
+                Token errToken = errorLoop(lex);
+                writeError(errToken);
+                return errToken;
             }
             if(!isdigit(currentChar)){
-                
+                Token errToken = errorLoop(lex);
+                writeError(errToken);
+                return errToken;
             }
             while(isdigit(currentChar)){
                 lex += currentChar;
@@ -377,6 +435,7 @@ Token Lexer::nextToken(){
             std::string assignop = ":=";
             Token assToken = createToken(TokenType::ASSIGN, assignop);
             writeToken(assToken);
+            currentChar = nextChar();
             return assToken;
         }
         else{
@@ -420,6 +479,7 @@ Token Lexer::nextToken(){
             std::string greaterThanEq = ">=";
             Token geqToken = createToken(TokenType::GTEQ, greaterThanEq);
             writeToken(geqToken);
+            currentChar = nextChar();
             return geqToken;
         }
         
@@ -448,7 +508,7 @@ Token Lexer::createToken(TokenType type, std::string& lexeme){
 
 void Lexer::writeError(const Token& errToken){
     if(outLexErrors){
-        *outLexErrors<<"Lexecial Error: "<<errToken.getLine()<<":"<<errToken.getType()<<"\n";
+        *outLexErrors<<"Lexecial Error: "<<errToken.getType()<<": "<<"\""<<errToken.getLexeme()<<"\""<<"at line: "<<errToken.getLine()<<"\n";
     }
 
 
