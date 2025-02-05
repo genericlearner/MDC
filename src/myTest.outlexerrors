@@ -1,6 +1,3 @@
 Lexecial Error: INTEGER_VAL: ""at line: 1
 Lexecial Error: INVALID_CHAR: "?"at line: 2
-Lexecial Error: INVALID_ID: "abs;"at line: 3
 Lexecial Error: INVALID_NUM: "010ABC"at line: 5
-Lexecial Error: INTEGER_VAL: ""at line: 6
-Lexecial Error: INVALID_ID: "c++;"at line: 8

@@ -18,7 +18,6 @@ class Lexer
         void setSource(std::ifstream* inputFile);
         Token nextToken();
         char nextChar();
-        Token createToken(TokenType type, std::string& lexeme);
         void backupChar();
         Token createCurrToken(TokenType type, std::string& lexeme, size_t curr_line);
         
@@ -33,6 +32,8 @@ class Lexer
         void writeError(const Token& errToken);
         Token errorLoop(std::string &lex);
         Token errorLoopAlpha(std::string &lex);
+        Token createToken(TokenType type, const std::string& lexeme);
+        Token matchSingleCharToken(TokenType type) ;
 
 
 

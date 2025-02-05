@@ -101,6 +101,13 @@ Token Lexer::errorLoopAlpha(std::string &lex){
     
 }
 
+Token Lexer::matchSingleCharToken(TokenType type){
+    std::string lex(1, currentChar);
+    Token token = createToken(type, lex);
+    writeToken(token);
+    currentChar = nextChar();
+    return token;
+}
 void Lexer::backupChar(){
     if(source && source->unget()){
         if(currentChar == '\n'){
@@ -316,28 +323,10 @@ Token Lexer::nextToken(){
         }
     }
 
-    if(currentChar == '+'){
-            std::string addOp = "+";
-            Token addToken = createToken(TokenType::ADD, addOp);
-            writeToken(addToken);
-            currentChar = nextChar();
-            return addToken;
-    }
-    else if(currentChar == '-'){
-            std::string subOp = "-";
-            Token subToken = createToken(TokenType::SUBT, subOp);
-            writeToken(subToken);
-            currentChar = nextChar();
-            return subToken;
-    }
-    else if(currentChar == '*'){
-            std::string multiOp = "*";
-            Token multiToken = createToken(TokenType::MULT, multiOp);
-            writeToken(multiToken);
-            currentChar = nextChar();
-            return multiToken;
-    }
-
+    if(currentChar == '+')return matchSingleCharToken(TokenType::ADD);
+    if(currentChar == '-')return matchSingleCharToken(TokenType::SUBT);
+    if(currentChar == '*')return matchSingleCharToken(TokenType::MULT);
+    
     if(currentChar == '='){
         char nextc = nextChar();
         std::string lex;
@@ -356,79 +345,19 @@ Token Lexer::nextToken(){
             currentChar = nextChar();
             return arrToken;
         }
-        else {
-            Token errorToken = createToken(TokenType::INTEGER_VAL, lex);
-            writeError(errorToken);
-            writeToken(errorToken);
-            currentChar = nextChar();
-            return errorToken;
-        }
+        
     }
 
 
-   if(currentChar == '{'){
-        std::string curlybr = "{";
-        Token lCurToken = createToken(TokenType::OPENCURLY, curlybr);
-        writeToken(lCurToken);
-        currentChar = nextChar();
-        return lCurToken;
-   }
-   else if(currentChar == '}'){
-        std::string closecurlybr = "}";
-        Token rCurToken = createToken(TokenType::CLOSECURLY, closecurlybr);
-        writeToken(rCurToken);
-        currentChar = nextChar();
-        return rCurToken;
-   }
-   else if(currentChar == '('){
-        std::string openpar = "(";
-        Token lParToken = createToken(TokenType::OPENPAR, openpar);
-        writeToken(lParToken);
-        currentChar = nextChar();
-        return lParToken;
-   }
-   else if(currentChar == ')'){
-        std::string closepar = ")";
-        Token rParToken = createToken(TokenType::CLOSEPAR, closepar);
-        writeToken(rParToken);
-        currentChar = nextChar();
-        return rParToken;
-   }
-   else if(currentChar == '['){
-        std::string opensq = "[";
-        Token lSqrToken = createToken(TokenType::OPENSQUARE, opensq);
-        writeToken(lSqrToken);
-        currentChar = nextChar();
-        return lSqrToken;
-   }
-   else if(currentChar == ']'){
-        std::string closesq = "]";
-        Token rSqrToken = createToken(TokenType::CLOSESQUARE, closesq);
-        writeToken(rSqrToken);
-        currentChar = nextChar();
-        return rSqrToken;
-   }
-   else if(currentChar == ';'){
-        std::string semicolon = ";";
-        Token semiColonToken = createToken(TokenType::SEMICOLON, semicolon);
-        writeToken(semiColonToken);
-        currentChar = nextChar();
-        return semiColonToken;
-   }
-   else if(currentChar == '.'){
-        std::string dot = ".";
-        Token dotToken = createToken(TokenType::DOT, dot);
-        writeToken(dotToken);
-        currentChar = nextChar();
-        return dotToken;
-   }
-   else if(currentChar == ','){
-        std::string comma = ",";
-        Token commaToken = createToken(TokenType::COMMA, comma);
-        writeToken(commaToken);
-        currentChar = nextChar();
-        return commaToken;
-   }
+   if(currentChar == '{')return matchSingleCharToken(TokenType::OPENCURLY);
+   else if(currentChar == '}')return matchSingleCharToken(TokenType::CLOSECURLY);
+   else if(currentChar == '(')return matchSingleCharToken(TokenType::OPENPAR);
+   else if(currentChar == ')')return matchSingleCharToken(TokenType::CLOSEPAR);
+   else if(currentChar == '[')return matchSingleCharToken(TokenType::OPENSQUARE);
+   else if(currentChar == ']')return matchSingleCharToken(TokenType::CLOSESQUARE);
+   else if(currentChar == ';')return matchSingleCharToken(TokenType::SEMICOLON);
+   else if(currentChar == '.')return matchSingleCharToken(TokenType::DOT);
+   else if(currentChar == ',')return matchSingleCharToken(TokenType::COMMA);
    else if(currentChar == ':'){
         char nextc = nextChar();
         if(nextc == '='){
@@ -439,10 +368,7 @@ Token Lexer::nextToken(){
             return assToken;
         }
         else{
-            std::string colon = ":";
-            Token colonToken = createToken(TokenType::COLON, colon);
-            writeToken(colonToken);
-            return colonToken;
+           return matchSingleCharToken(TokenType::COLON);
         }
 
    }
@@ -502,7 +428,7 @@ Token Lexer::nextToken(){
 Token Lexer::createCurrToken(TokenType type, std::string& lexeme, size_t curr_line){
     return Token(type, lexeme, curr_line);
 }
-Token Lexer::createToken(TokenType type, std::string& lexeme){
+Token Lexer::createToken(TokenType type,const std::string& lexeme){
     return Token(type, lexeme, line);
 }
 

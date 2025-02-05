@@ -68,7 +68,7 @@ enum class TokenType
     INVALID_NUM,
     INVALID_ID,
     INVALID_CHAR,
-    INCOMPLETE_CMT,
+    UNCLOSED_COMMENT,
 
 };
 // Overload the << operator to print TokenType
@@ -86,7 +86,7 @@ class Token
         TokenType getType() const;
 
         // Constructor to initialize a token
-        Token(TokenType type, std::string& lexeme, size_t line);
+        Token(TokenType type,const std::string& lexeme, size_t line);
 };
 
 

@@ -2,7 +2,7 @@
 
 
 
-Token::Token(TokenType type, std::string& lexeme, size_t line){
+Token::Token(TokenType type,const std::string& lexeme, size_t line){
     this->type = type;
     this->lexeme = lexeme;
     this->line = line;
@@ -76,7 +76,7 @@ std::ostream& operator<<(std::ostream& stream, TokenType tokenType) {
         case TokenType::INVALID_CHAR: return stream << "INVALID_CHAR";
         case TokenType::INVALID_NUM: return stream << "INVALID_NUM";
         case TokenType::INVALID_ID: return stream << "INVALID_ID";
-        case TokenType::INCOMPLETE_CMT: return stream << "INCOMPLETE_CMT";
+        case TokenType::UNCLOSED_COMMENT: return stream << "INCOMPLETE_CMT";
         default: return stream << "UNKNOWN";
     }
 }

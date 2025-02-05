@@ -25,7 +25,7 @@
 [GT, >, 4]
 [DIV, /, 4]
 [CLOSECURLY, }, 4]
-[COLON, :, 4]
+[COLON, 	, 4]
 [CLASS, class, 4]
 [ELSE, else, 4]
 [FUNCTION, function, 4]

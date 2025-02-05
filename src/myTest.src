@@ -1,8 +1,8 @@
 int x = 10 ;
-int ?abs;
+int ?abs ;
 gg
 010ABC
 
-for ( int i = 1 ) {
-    c++;
+if ( x > 1 ) {
+    do this ;
 }
