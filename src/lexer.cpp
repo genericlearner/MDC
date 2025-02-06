@@ -30,6 +30,16 @@ std::unordered_map<std::string, TokenType>reservedWords = {
 };
 
 
+/**
+ * @brief Constructs a new Lexer object.
+ * 
+ * @param source Pointer to the input file stream from which the lexer reads the source code.
+ * @param outLexTokens Pointer to the output stream where the lexer writes the recognized tokens.
+ * @param outLexErrors Pointer to the output file stream where the lexer writes any lexical errors encountered.
+ * Initializes the Lexer with default values. Sets the source, outLexErrors, 
+ * and outLexTokens pointers to nullptr. Initializes the current character to 
+ * the null character and sets the line number to 1.
+ */
 Lexer::Lexer()
 {
     source = nullptr;
@@ -70,6 +80,15 @@ void Lexer::setErrorFile(std::ofstream* errorFile)
     outLexErrors = errorFile;
 }
 
+/**
+ * @brief Retrieves the next character from the source input.
+ * 
+ * This function reads the next character from the source input stream.
+ * If the character is a newline ('\n'), it increments the line counter.
+ * If the end of the source input is reached, it returns EOF.
+ * 
+ * @return char The next character from the source input, or EOF if the end is reached.
+ */
 char Lexer::nextChar()
 {
     if(source &&source->get(currentChar))
@@ -81,6 +100,17 @@ char Lexer::nextChar()
     }
     return EOF;
 }
+/**
+ * Handles the error loop for the lexer, capturing invalid tokens.
+ *
+ * This function continues to read characters until it encounters a whitespace,
+ * newline, or EOF. It appends each character to the provided lexeme string.
+ * Once the loop terminates, it creates and returns an error token of type
+ * INVALID_NUM with the accumulated lexeme.
+ *
+ * @param lex A reference to the string where the invalid token will be stored.
+ * @return A Token object representing the invalid token.
+ */
 Token Lexer::errorLoop(std::string &lex){
     while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF){
         lex += currentChar;
@@ -91,6 +121,16 @@ Token Lexer::errorLoop(std::string &lex){
     
 }
 
+/**
+ * @brief Handles the error loop for invalid alphanumeric tokens.
+ * 
+ * This function continues to read characters until a whitespace, newline, or EOF is encountered.
+ * It appends each character to the provided lexeme string.
+ * Once the loop terminates, it creates and returns an error token of type INVALID_ID.
+ * 
+ * @param lex A reference to the string where the invalid token will be stored.
+ * @return Token An error token of type INVALID_ID containing the invalid lexeme.
+ */
 Token Lexer::errorLoopAlpha(std::string &lex){
     while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF){
         lex += currentChar;
@@ -101,6 +141,15 @@ Token Lexer::errorLoopAlpha(std::string &lex){
     
 }
 
+/**
+ * Matches a single character token of the specified type.
+ *
+ * This function creates a token from the current character, writes the token,
+ * advances to the next character, and returns the created token.
+ *
+ * @param type The type of the token to be created.
+ * @return The created token.
+ */
 Token Lexer::matchSingleCharToken(TokenType type){
     std::string lex(1, currentChar);
     Token token = createToken(type, lex);
@@ -108,6 +157,17 @@ Token Lexer::matchSingleCharToken(TokenType type){
     currentChar = nextChar();
     return token;
 }
+
+
+/**
+ * @brief Backs up one character in the input stream.
+ *
+ * This function moves the input stream position back by one character.
+ * If the character being backed up is a newline character ('\n'), 
+ * it also decrements the line counter.
+ *
+ * @note This function assumes that the source stream supports the unget() operation.
+ */
 void Lexer::backupChar(){
     if(source && source->unget()){
         if(currentChar == '\n'){
@@ -117,6 +177,24 @@ void Lexer::backupChar(){
     }
 }
 
+/**
+ * @brief Extracts the next token from the input stream.
+ * 
+ * This function processes the input stream character by character to identify and return the next token.
+ * It handles various types of tokens including identifiers, numbers, comments, operators, and delimiters.
+ * 
+ * @return Token The next token identified from the input stream.
+ * 
+ * The function performs the following steps:
+ * - Skips any whitespace characters.
+ * - Checks for end-of-file and returns an EOF token if reached.
+ * - Handles identifiers and reserved words.
+ * - Processes numeric literals, including integers and floating-point numbers.
+ * - Identifies and processes single-line and multi-line comments.
+ * - Matches single-character tokens for operators and delimiters.
+ * - Handles compound operators like '==', '=>', '<=', '<>', and '>='.
+ * - Returns an error token for any unrecognized characters.
+ */
 Token Lexer::nextToken(){
     
     while(isspace(currentChar)){
@@ -425,13 +503,39 @@ Token Lexer::nextToken(){
    
          
 }
+/**
+ * @brief Creates a new token with the specified type, lexeme, and line number.
+ * 
+ * @param type The type of the token to be created.
+ * @param lexeme The lexeme (string value) of the token.
+ * @param curr_line The line number where the token was found.
+ * @return Token The newly created token.
+ */
 Token Lexer::createCurrToken(TokenType type, std::string& lexeme, size_t curr_line){
     return Token(type, lexeme, curr_line);
 }
+
+
+/**
+ * @brief Creates a new Token object.
+ * 
+ * @param type The type of the token.
+ * @param lexeme The lexeme associated with the token.
+ * @return Token The newly created token.
+ */
 Token Lexer::createToken(TokenType type,const std::string& lexeme){
     return Token(type, lexeme, line);
 }
 
+/**
+ * @brief Writes a lexical error message to the output stream.
+ * 
+ * This function formats and writes a lexical error message to the output stream
+ * specified by `outLexErrors`. The error message includes the type of the token,
+ * the lexeme, and the line number where the error occurred.
+ * 
+ * @param errToken The token that caused the lexical error.
+ */
 void Lexer::writeError(const Token& errToken){
     if(outLexErrors){
         *outLexErrors<<"Lexecial Error: "<<errToken.getType()<<": "<<"\""<<errToken.getLexeme()<<"\""<<"at line: "<<errToken.getLine()<<"\n";
@@ -440,6 +544,14 @@ void Lexer::writeError(const Token& errToken){
 
 }
 
+/**
+ * @brief Writes the token information to the standard output and an output stream.
+ * 
+ * This function outputs the token's type, lexeme, and line number to both the standard
+ * output (console) and an output stream if the output stream is available.
+ * 
+ * @param token The token to be written. It contains the type, lexeme, and line number.
+ */
 void Lexer::writeToken(const Token& token){
     if(outLexTokens){
         std::cout<<"["<<token.getType()<<", "<<token.getLexeme()<<", "<<token.getLine()<<"]";
