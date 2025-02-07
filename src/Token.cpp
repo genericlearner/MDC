@@ -19,6 +19,17 @@ TokenType Token::getType() const {
     return type;
 }
 /**/
+/**
+ * @brief Overloaded stream insertion operator for TokenType.
+ *
+ * This function allows TokenType values to be output to an ostream.
+ * It converts the TokenType enum values to their corresponding string
+ * representations and inserts them into the provided output stream.
+ *
+ * @param stream The output stream to insert the TokenType string representation into.
+ * @param tokenType The TokenType value to be converted to a string and inserted into the stream.
+ * @return A reference to the output stream with the TokenType string representation inserted.
+ */
 std::ostream& operator<<(std::ostream& stream, TokenType tokenType) {
     switch (tokenType) {
         case TokenType::ID: return stream << "ID";

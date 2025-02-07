@@ -73,6 +73,39 @@ enum class TokenType
 };
 // Overload the << operator to print TokenType
 std::ostream& operator<<(std::ostream& stream, TokenType tokenType);
+/**
+ * @class Token
+ * @brief Represents a token in the source code.
+ * 
+ * The Token class encapsulates information about a token, including its type,
+ * lexeme, and the line number where it appears in the source code.
+ */
+
+/**
+ * @brief Constructs a Token object.
+ * 
+ * @param type The type of the token.
+ * @param lexeme The lexeme (text) of the token.
+ * @param line The line number where the token appears.
+ */
+
+/**
+ * @brief Gets the lexeme of the token.
+ * 
+ * @return A constant reference to the lexeme string.
+ */
+
+/**
+ * @brief Gets the line number where the token appears.
+ * 
+ * @return The line number.
+ */
+
+/**
+ * @brief Gets the type of the token.
+ * 
+ * @return The type of the token.
+ */
 class Token 
 {
 
