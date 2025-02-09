@@ -115,7 +115,8 @@ char Lexer::nextChar()
  bool isOperator(char ch){
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
            ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
-           ch == '!' || ch == '&' || ch == '|' || ch == ';' ;
+           ch == '!' || ch == '&' || ch == '|' || ch == ';' ||
+           ch == ',';
 }
 
 bool isBracket(char ch){
@@ -311,12 +312,6 @@ Token Lexer::nextToken(){
                 currentChar = nextChar();
             }
 
-            if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar) &&
-                currentChar != '\n' && currentChar !=EOF){
-                    Token errToken = errorLoop(lex);
-                    writeError(errToken);
-                    return errToken;
-                }
         }
         if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar) &&
                 currentChar != '\n' && currentChar !=EOF ){
@@ -324,7 +319,7 @@ Token Lexer::nextToken(){
                     writeError(errToken);
                     return errToken;
                 }
-        backupChar();
+        //backupChar();
         Token nToken = createToken(isFloat? TokenType::FLOAT_VAL : TokenType::INTEGER_VAL, lex);
         writeToken(nToken);
         return nToken;
@@ -433,6 +428,7 @@ Token Lexer::nextToken(){
    else if(currentChar == ';')return matchSingleCharToken(TokenType::SEMICOLON);
    else if(currentChar == '.')return matchSingleCharToken(TokenType::DOT);
    else if(currentChar == ',')return matchSingleCharToken(TokenType::COMMA);
+
    else if(currentChar == ':'){
         char nextc = nextChar();
         if(nextc == '='){
@@ -443,7 +439,11 @@ Token Lexer::nextToken(){
             return assToken;
         }
         else{
-           return matchSingleCharToken(TokenType::COLON);
+            std::string colon = ":";
+            backupChar();
+            Token colonToken = createToken(TokenType::COLON, colon);
+            writeToken(colonToken);
+            return colonToken;
         }
 
    }
@@ -469,7 +469,6 @@ Token Lexer::nextToken(){
             std::string lt = "<";
             Token ltToken = createToken(TokenType::LT, lt);
             writeToken(ltToken);
-            currentChar = nextChar();
             return ltToken;
         }
 
@@ -551,7 +550,6 @@ void Lexer::writeError(const Token& errToken){
  */
 void Lexer::writeToken(const Token& token){
     if(outLexTokens){
-        std::cout<<"["<<token.getType()<<", "<<token.getLexeme()<<", "<<token.getLine()<<"]";
         *outLexTokens<<"["<<token.getType()<<", "<<token.getLexeme()<<", "<<token.getLine()<<"]\n";
     }
 
