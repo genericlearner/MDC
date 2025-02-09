@@ -121,6 +121,16 @@ Token Lexer::errorLoop(std::string &lex){
     
 }
 
+bool isOperator(char ch){
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
+           ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
+           ch == '!' || ch == '&' || ch == '|' || ch == ';' ;
+}
+
+bool isBracket(char ch){
+    return ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}';
+}
+
 /**
  * @brief Handles the error loop for invalid alphanumeric tokens.
  * 
@@ -132,7 +142,8 @@ Token Lexer::errorLoop(std::string &lex){
  * @return Token An error token of type INVALID_ID containing the invalid lexeme.
  */
 Token Lexer::errorLoopAlpha(std::string &lex){
-    while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF){
+    while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF ||
+            isOperator(currentChar) && isBracket(currentChar)){
         lex += currentChar;
         currentChar = nextChar();
     }
@@ -217,28 +228,23 @@ Token Lexer::nextToken(){
     if(isalpha(currentChar)){
         std::string lex;
         
-        while(true){
-            if(isalnum(currentChar) || currentChar == '_'){
-                lex += currentChar;
-                currentChar = nextChar();
-            }
-            else if(isspace(currentChar)){
-                break;
-            }
-            else{
-                Token errToken = errorLoopAlpha(lex);
-                writeError(errToken);
-                return errToken;
-            }
+        while(isalnum(currentChar) || currentChar == '_'){
+            lex += currentChar;
+            currentChar = nextChar();
         }
-    
 
-        backupChar();
         if(reservedWords.find(lex) != reservedWords.end()){
             Token resWordToken = createToken(reservedWords[lex], lex);
             writeToken(resWordToken);
             return resWordToken;
             }
+        
+        if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar)){
+            Token errToken = errorLoopAlpha(lex);
+            writeError(errToken);
+            return errToken;
+        }
+
         Token idToken = createToken(TokenType::ID, lex);
         writeToken(idToken);
         return idToken;
@@ -263,17 +269,7 @@ Token Lexer::nextToken(){
                 return errToken;
             }
         }
-        /*
-        do{
-            lex += currentChar;
-            currentChar = nextChar();
-        }while(isdigit(currentChar));
         
-        if(currentChar != '.' || currentChar != 'e'){
-            Token errToken = errorLoop(lex);
-            writeError(errToken);
-            return errToken;
-        }*/
         if(lex[0] == '0' && lex.length() > 1){
             Token errToken = errorLoop(lex);
             writeError(errToken);

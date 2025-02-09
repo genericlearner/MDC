@@ -1,0 +1,341 @@
+[BLOCK_COMMENT, ** sort the array */, 1]
+[FUNCTION, function, 2]
+[ID, bubbleSort, 2]
+[OPENPAR, (, 2]
+[ID, arr, 2]
+[COLON,  , 2]
+[INT_T, int, 2]
+[OPENSQUARE, [, 2]
+[CLOSESQUARE, ], 2]
+[COMMA, ,, 2]
+[ID, size, 2]
+[COLON,  , 2]
+[INT_T, int, 2]
+[CLOSEPAR, ), 2]
+[ARROW, =>, 2]
+[VOID, void, 2]
+[OPENCURLY, {, 3]
+[LOCAL, local, 4]
+[ID, n, 4]
+[COLON,  , 4]
+[INT_T, int, 4]
+[SEMICOLON, ;, 4]
+[LOCAL, local, 5]
+[ID, i, 5]
+[COLON,  , 5]
+[INT_T, int, 5]
+[SEMICOLON, ;, 5]
+[LOCAL, local, 6]
+[ID, j, 6]
+[COLON,  , 6]
+[INT_T, int, 6]
+[SEMICOLON, ;, 6]
+[LOCAL, local, 7]
+[ID, temp, 7]
+[COLON,  , 7]
+[INT_T, int, 7]
+[SEMICOLON, ;, 7]
+[ID, n, 8]
+[ASSIGN, :=, 8]
+[ID, size, 8]
+[SEMICOLON, ;, 8]
+[ID, i, 9]
+[ASSIGN, :=, 9]
+[ID, j, 10]
+[ASSIGN, :=, 10]
+[ID, temp, 11]
+[ASSIGN, :=, 11]
+[WHILE, while, 12]
+[OPENPAR, (, 12]
+[ID, i, 12]
+[LT, <, 12]
+[ID, n, 12]
+[SUBT, -, 12]
+[OPENCURLY, {, 12]
+[WHILE, while, 13]
+[OPENPAR, (, 13]
+[ID, j, 13]
+[LT, <, 13]
+[ID, n, 13]
+[SUBT, -, 13]
+[ID, i, 13]
+[SUBT, -, 13]
+[OPENCURLY, {, 13]
+[IF, if, 14]
+[OPENPAR, (, 14]
+[ID, arr, 14]
+[OPENSQUARE, [, 14]
+[ID, j, 14]
+[CLOSESQUARE, ], 14]
+[GT, >, 14]
+[ID, arr, 14]
+[OPENSQUARE, [, 14]
+[ID, j, 14]
+[ADD, +, 14]
+[THEN, then, 15]
+[OPENCURLY, {, 15]
+[COMMENT, // swap temp and arr[i], 16]
+[ID, temp, 17]
+[ASSIGN, :=, 17]
+[ID, arr, 17]
+[OPENSQUARE, [, 17]
+[ID, j, 17]
+[CLOSESQUARE, ], 17]
+[SEMICOLON, ;, 17]
+[ID, arr, 18]
+[OPENSQUARE, [, 18]
+[ID, j, 18]
+[CLOSESQUARE, ], 18]
+[ASSIGN, :=, 18]
+[ID, arr, 18]
+[OPENSQUARE, [, 18]
+[ID, j, 18]
+[ADD, +, 18]
+[ID, arr, 19]
+[OPENSQUARE, [, 19]
+[ID, j, 19]
+[ADD, +, 19]
+[ASSIGN, :=, 19]
+[ID, temp, 19]
+[SEMICOLON, ;, 19]
+[CLOSECURLY, }, 20]
+[ELSE, else, 20]
+[SEMICOLON, ;, 20]
+[ID, j, 21]
+[ASSIGN, :=, 21]
+[ID, j, 21]
+[ADD, +, 21]
+[CLOSECURLY, }, 22]
+[SEMICOLON, ;, 22]
+[ID, i, 23]
+[ASSIGN, :=, 23]
+[ID, i, 23]
+[ADD, +, 23]
+[CLOSECURLY, }, 24]
+[SEMICOLON, ;, 24]
+[CLOSECURLY, }, 25]
+[BLOCK_COMMENT, ** print the array */, 27]
+[FUNCTION, function, 28]
+[ID, printArray, 28]
+[OPENPAR, (, 28]
+[ID, arr, 28]
+[COLON,  , 28]
+[INT_T, int, 28]
+[OPENSQUARE, [, 28]
+[CLOSESQUARE, ], 28]
+[COMMA, ,, 28]
+[ID, size, 28]
+[COLON,  , 28]
+[INT_T, int, 28]
+[CLOSEPAR, ), 28]
+[ARROW, =>, 28]
+[VOID, void, 28]
+[OPENCURLY, {, 29]
+[LOCAL, local, 30]
+[ID, n, 30]
+[COLON,  , 30]
+[INT_T, int, 30]
+[SEMICOLON, ;, 30]
+[LOCAL, local, 31]
+[ID, i, 31]
+[COLON,  , 31]
+[INT_T, int, 31]
+[SEMICOLON, ;, 31]
+[ID, n, 32]
+[ASSIGN, :=, 32]
+[ID, size, 32]
+[SEMICOLON, ;, 32]
+[ID, i, 33]
+[ASSIGN, :=, 33]
+[WHILE, while, 34]
+[OPENPAR, (, 34]
+[ID, i, 34]
+[LT, <, 34]
+[CLOSEPAR, ), 34]
+[OPENCURLY, {, 34]
+[WRITE, write, 35]
+[OPENPAR, (, 35]
+[ID, arr, 35]
+[OPENSQUARE, [, 35]
+[ID, i, 35]
+[CLOSESQUARE, ], 35]
+[CLOSEPAR, ), 35]
+[SEMICOLON, ;, 35]
+[ID, i, 36]
+[ASSIGN, :=, 36]
+[ID, i, 36]
+[ADD, +, 36]
+[CLOSECURLY, }, 37]
+[SEMICOLON, ;, 37]
+[CLOSECURLY, }, 38]
+[COMMENT, // main funtion to test above, 40]
+[FUNCTION, function, 41]
+[ID, main, 41]
+[OPENPAR, (, 41]
+[CLOSEPAR, ), 41]
+[ARROW, =>, 41]
+[VOID, void, 42]
+[OPENCURLY, {, 42]
+[LOCAL, local, 43]
+[ID, arr, 43]
+[COLON,  , 43]
+[INT_T, int, 43]
+[OPENSQUARE, [, 43]
+[ID, arr, 44]
+[OPENSQUARE, [, 44]
+[ASSIGN, :=, 44]
+[ID, arr, 45]
+[OPENSQUARE, [, 45]
+[ASSIGN, :=, 45]
+[ID, arr, 46]
+[OPENSQUARE, [, 46]
+[ASSIGN, :=, 46]
+[ID, arr, 47]
+[OPENSQUARE, [, 47]
+[ASSIGN, :=, 47]
+[ID, arr, 48]
+[OPENSQUARE, [, 48]
+[ASSIGN, :=, 48]
+[ID, arr, 49]
+[OPENSQUARE, [, 49]
+[ASSIGN, :=, 49]
+[ID, arr, 50]
+[OPENSQUARE, [, 50]
+[ASSIGN, :=, 50]
+[ID, printarray, 51]
+[OPENPAR, (, 51]
+[ID, bubbleSort, 52]
+[OPENPAR, (, 52]
+[ID, printarray, 53]
+[OPENPAR, (, 53]
+[CLOSECURLY, }, 54]
+[BLOCK_COMMENT, **
+    classes
+    --------------------------------------
+|X| no class declaration
+| | class declaration
+| | multiple class declarations
+| | no data member declaration
+| | data member declaration
+| | multiple data member declaration
+| | no member function declaration
+| | member function declaration
+| | multiple member function declaration
+| | no member
+| | no inherited class
+| | one inherited class
+| | multiple inherited classes
+| | private member specifier
+| | public member specifier
+
+    functions: definitions
+    --------------------------------------
+| | no main function definition
+|X| main function definition
+| | no free function definition
+|X| free function definition
+|X| multiple free function definitions
+|X| no member function definition
+| | member function definition
+| | multiple member function definitions
+|X| return type: void
+| | return type: integer
+| | return type: float
+| | return type: id
+| | return type: array (not allowed)
+
+    functions: formal parameters
+    --------------------------------------
+|X| type: integer
+| | type: float
+| | type: id
+|X| type: 1-dim array 
+| | type: n-dim array
+| | type: array (with size)
+|X| type: array (without size)
+
+    functions: calls
+    --------------------------------------
+|X| free function call
+| | member function call
+| | parameters:0
+| | parameters:1
+|X| parameters:n
+|X| array parameter - 1-dim
+| | array parameter - n-dim
+| | array parameter - with size
+| | array parameter - without size
+| | function call as statement
+| | function call as expression factor
+| | expression as parameter
+
+    variable declaration
+    --------------------------------------
+|X| type: integer
+| | type: float
+| | type: string
+| | type: id
+|X| type: 1-dim array 
+| | type: n-dim array
+|X| type: array (with size)
+| | type: array (without size) (not allowed)
+
+    function body: local variable declarations
+    --------------------------------------
+| | no local variable declarations
+|X| local variable declarations
+| | intertwined statements and variable declarations
+
+    function body: statements
+    --------------------------------------
+| | no statement
+| | 1 statement
+|X| n statements
+|X| if statement
+|X| if: empty then or else blocks
+| | if: 1-statement then or else blocks
+|X| if: n-statements then or else blocks
+|X| while statement
+| | while: empty block
+| | while: 1-statement block
+|X| while: n-statement block
+| | read(<variable>) statement
+|X| write(<expr>) statement
+|X| return(<expr>) statement
+|X| assignment statement
+
+    variable + idnest
+    --------------------------------------
+|X| id
+| | id.id
+| | id.id(id)
+| | id(id).id
+| | id(id).id()
+| | id.id[id]
+| | id[id].id
+| | id[id].id[id]
+| | id.id[id][id]
+| | id[id][id].id
+| | id[id][id].id[id][id]
+| | id(id).id[id]
+| | id(id).id[id][id]
+| | expression as array index
+
+    expressions
+    --------------------------------------
+|X| single variable
+|X| involving addop
+| | involving multop
+|X| involving relop
+| | involving addop + multop
+|X| involving multop + relop
+| | involving addop + multop + relop
+| | involving parentheses
+| | involving nested parentheses
+| | involving not
+| | involving sign
+|X| involving literals
+| | involving variable + idnest
+|X| involving function calls
+| | involving all the above in one expression
+*/, 56]

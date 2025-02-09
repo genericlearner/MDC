@@ -4,3 +4,8 @@
 [INVALID_CHAR, ', 1]
 [INVALID_CHAR, \, 1]
 [INVALID_CHAR, ~, 1]
+[ID, a, 24]
+[DOT, ., 24]
+[ID, b, 24]
+[DOT, ., 24]
+[INTEGER_VAL, 1000, 24]
