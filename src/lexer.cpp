@@ -111,17 +111,8 @@ char Lexer::nextChar()
  * @param lex A reference to the string where the invalid token will be stored.
  * @return A Token object representing the invalid token.
  */
-Token Lexer::errorLoop(std::string &lex){
-    while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF){
-        lex += currentChar;
-        currentChar = nextChar();
-    }
-    Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-    return errorToken ;
-    
-}
 
-bool isOperator(char ch){
+ bool isOperator(char ch){
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
            ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
            ch == '!' || ch == '&' || ch == '|' || ch == ';' ;
@@ -130,6 +121,19 @@ bool isOperator(char ch){
 bool isBracket(char ch){
     return ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}';
 }
+
+Token Lexer::errorLoop(std::string &lex){
+    while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF && 
+            !isOperator(currentChar) && !isBracket(currentChar)){
+        lex += currentChar;
+        currentChar = nextChar();
+    }
+    Token errorToken = createToken(TokenType::INVALID_NUM, lex);
+    return errorToken ;
+    
+}
+
+
 
 /**
  * @brief Handles the error loop for invalid alphanumeric tokens.
@@ -254,27 +258,18 @@ Token Lexer::nextToken(){
     if(isdigit(currentChar)){
         std::string lex;
         bool isFloat = false;
-
-        while(true){
-            if(isdigit(currentChar)){
-                lex += currentChar;
-                currentChar = nextChar();
-            }
-            else if(isspace(currentChar) || currentChar == 'e' || currentChar == '.'){
-                break;
-            }
-            else{
-                Token errToken = errorLoop(lex);
-                writeError(errToken);
-                return errToken;
-            }
+        while(isdigit(currentChar)){
+            lex += currentChar;
+            currentChar = nextChar();
         }
+        
         
         if(lex[0] == '0' && lex.length() > 1){
             Token errToken = errorLoop(lex);
             writeError(errToken);
             return errToken;
         }
+        
 
         if(currentChar == '.'){
             isFloat = true;
@@ -297,10 +292,8 @@ Token Lexer::nextToken(){
                 return errToken;
             }
 
-
         }
         if(currentChar == 'e'){
-            isFloat = true;
             lex += currentChar;
             currentChar = nextChar();
 
@@ -313,16 +306,24 @@ Token Lexer::nextToken(){
                 writeError(errToken);
                 return errToken;
             }
-            if(!isdigit(currentChar)){
-                Token errToken = errorLoop(lex);
-                writeError(errToken);
-                return errToken;
-            }
             while(isdigit(currentChar)){
                 lex += currentChar;
                 currentChar = nextChar();
             }
+
+            if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar) &&
+                currentChar != '\n' && currentChar !=EOF){
+                    Token errToken = errorLoop(lex);
+                    writeError(errToken);
+                    return errToken;
+                }
         }
+        if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar) &&
+                currentChar != '\n' && currentChar !=EOF ){
+                    Token errToken = errorLoop(lex);
+                    writeError(errToken);
+                    return errToken;
+                }
         backupChar();
         Token nToken = createToken(isFloat? TokenType::FLOAT_VAL : TokenType::INTEGER_VAL, lex);
         writeToken(nToken);

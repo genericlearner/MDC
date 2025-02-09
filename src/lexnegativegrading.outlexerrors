@@ -21,3 +21,4 @@ Lexecial Error: INVALID_NUM: "1abc"at line: 19
 Lexecial Error: INVALID_ID: "_1abc"at line: 20
 Lexecial Error: INVALID_NUM: "00.00"at line: 23
 Lexecial Error: INVALID_NUM: "001000"at line: 24
+Lexecial Error: INVALID_ID: "a.b.1000"at line: 25
