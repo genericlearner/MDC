@@ -112,11 +112,17 @@ char Lexer::nextChar()
  * @return A Token object representing the invalid token.
  */
 
- bool isOperator(char ch){
+ bool isOperatorAlpha(char ch){
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
            ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
            ch == '!' || ch == '&' || ch == '|' || ch == ';' ||
-           ch == ',';
+           ch == ',' || ch == '.';
+}
+ bool isOperatorNum(char ch){
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
+           ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
+           ch == '!' || ch == '&' || ch == '|' || ch == ';' ||
+           ch == ',' ;
 }
 
 bool isBracket(char ch){
@@ -125,7 +131,7 @@ bool isBracket(char ch){
 
 Token Lexer::errorLoop(std::string &lex){
     while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF && 
-            !isOperator(currentChar) && !isBracket(currentChar)){
+            !isOperatorNum(currentChar) && !isBracket(currentChar)){
         lex += currentChar;
         currentChar = nextChar();
     }
@@ -148,7 +154,7 @@ Token Lexer::errorLoop(std::string &lex){
  */
 Token Lexer::errorLoopAlpha(std::string &lex){
     while(!isspace(currentChar) && currentChar != '\n' && currentChar != EOF ||
-            isOperator(currentChar) && isBracket(currentChar)){
+            isOperatorAlpha(currentChar) && isBracket(currentChar)){
         lex += currentChar;
         currentChar = nextChar();
     }
@@ -244,7 +250,7 @@ Token Lexer::nextToken(){
             return resWordToken;
             }
         
-        if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar)){
+        if(!isOperatorAlpha(currentChar) && !isBracket(currentChar) && !isspace(currentChar)){
             Token errToken = errorLoopAlpha(lex);
             writeError(errToken);
             return errToken;
@@ -276,6 +282,7 @@ Token Lexer::nextToken(){
             isFloat = true;
             lex += currentChar;
             currentChar = nextChar();
+            int floatLex = 0;
 
             if(!isdigit(currentChar)){
                 Token errToken = errorLoop(lex);
@@ -284,10 +291,11 @@ Token Lexer::nextToken(){
             }
             while(isdigit(currentChar)){
                 lex += currentChar;
+                floatLex ++;
                 currentChar = nextChar();
             }
 
-            if(lex.back() == '0'){
+            if(lex.back() == '0' && floatLex > 1){
                 Token errToken = errorLoop(lex);
                 writeError(errToken);
                 return errToken;
@@ -313,7 +321,7 @@ Token Lexer::nextToken(){
             }
 
         }
-        if(!isOperator(currentChar) && !isBracket(currentChar) && !isspace(currentChar) &&
+        if(!isOperatorNum(currentChar) && !isBracket(currentChar) && !isspace(currentChar) &&
                 currentChar != '\n' && currentChar !=EOF ){
                     Token errToken = errorLoop(lex);
                     writeError(errToken);
