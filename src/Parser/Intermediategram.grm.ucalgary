@@ -1,22 +1,18 @@
-'|' -> |  . 
-'|' ->  . 
-
-='|' -> 'ADDOP::= plus  . 
-='|' -> minus  . 
-='|' -> or  . 
+ADDOP -> plus  . 
+ADDOP -> minus  . 
+ADDOP -> or  . 
 
 APARAMS -> EXPR REPTAPARAMS1  . 
 APARAMS ->  . 
 
 APARAMSTAIL -> comma EXPR  . 
 
-ARITHEXPR -> ARITHEXPR ADDOP TERM  . 
-ARITHEXPR -> TERM  . 
+ARITHEXPR -> TERM RIGHTRECARITHEXPR  . 
 
 ARRAYSIZE -> lsqbr intnum rsqbr  . 
 ARRAYSIZE -> lsqbr rsqbr  . 
 
-ASSIGNOP -> colonequal  . 
+ASSIGNOP -> assign  . 
 
 ASSIGNSTAT -> VARIABLE ASSIGNOP EXPR  . 
 
@@ -50,11 +46,13 @@ FUNCDECL -> FUNCHEAD semi  .
 
 FUNCDEF -> FUNCHEAD FUNCBODY  . 
 
-FUNCHEAD -> function id lpar FPARAMS rpar equal> RETURNTYPE  . 
+FUNCHEAD -> function id lpar FPARAMS rpar arrow RETURNTYPE  . 
 FUNCHEAD -> constructor lpar FPARAMS rpar  . 
 
-FUNCTIONCALL -> REPTFUNCTIONCALL0 id (MISSING '(' 'APARAMS' <aparams> )MISSING ')' 'IDNEST::= IDORSELF REPTFUNCTIONCALL7 dot  . 
-FUNCTIONCALL -> IDORSELF lpar APARAMS rpar dot  . 
+FUNCTIONCALL -> REPTFUNCTIONCALL0 id lpar APARAMS rpar  . 
+
+IDNEST -> IDORSELF REPTIDNEST1 dot  . 
+IDNEST -> IDORSELF lpar APARAMS rpar dot  . 
 
 IDORSELF -> id  . 
 IDORSELF -> self  . 
@@ -71,9 +69,6 @@ LOCALVARDECLORSTAT -> STATEMENT  .
 MEMBERDECL -> FUNCDECL  . 
 MEMBERDECL -> ATTRIBUTEDECL  . 
 
-MISSING ID -> |  . 
-MISSING ID ->  . 
-
 MULTOP -> mult  . 
 MULTOP -> div  . 
 MULTOP -> and  . 
@@ -85,8 +80,12 @@ PROG -> REPTPROG0  .
 
 RELEXPR -> ARITHEXPR RELOP ARITHEXPR  . 
 
-RELOP -> equalequal  . 
-RELOP -> 'MISSING '''  . 
+RELOP -> eq  . 
+RELOP -> neq  . 
+RELOP -> lt  . 
+RELOP -> gt  . 
+RELOP -> lteq  . 
+RELOP -> gteq  . 
 
 REPTAPARAMS1 -> APARAMSTAIL REPTAPARAMS1  . 
 REPTAPARAMS1 ->  . 
@@ -109,8 +108,8 @@ REPTFUNCBODY1 ->  .
 REPTFUNCTIONCALL0 -> IDNEST REPTFUNCTIONCALL0  . 
 REPTFUNCTIONCALL0 ->  . 
 
-REPTFUNCTIONCALL7 -> INDICE REPTFUNCTIONCALL7  . 
-REPTFUNCTIONCALL7 ->  . 
+REPTIDNEST1 -> INDICE REPTIDNEST1  . 
+REPTIDNEST1 ->  . 
 
 REPTIMPLDEF3 -> FUNCDEF REPTIMPLDEF3  . 
 REPTIMPLDEF3 ->  . 
@@ -136,6 +135,12 @@ REPTVARIABLE2 ->  .
 RETURNTYPE -> TYPE  . 
 RETURNTYPE -> void  . 
 
+RIGHTRECARITHEXPR ->  . 
+RIGHTRECARITHEXPR -> ADDOP TERM RIGHTRECARITHEXPR  . 
+
+RIGHTRECTERM ->  . 
+RIGHTRECTERM -> MULTOP FACTOR RIGHTRECTERM  . 
+
 SIGN -> plus  . 
 SIGN -> minus  . 
 
@@ -153,8 +158,7 @@ STATEMENT -> write lpar EXPR rpar semi  .
 STATEMENT -> return lpar EXPR rpar semi  . 
 STATEMENT -> FUNCTIONCALL semi  . 
 
-TERM -> TERM MULTOP FACTOR  . 
-TERM -> FACTOR  . 
+TERM -> FACTOR RIGHTRECTERM  . 
 
 TYPE -> int  . 
 TYPE -> float  . 

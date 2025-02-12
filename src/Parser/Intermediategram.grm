@@ -1,13 +1,3 @@
-<'|'> ::= '|' 
-<'|'> ::= 
-
-<<missing ID>> ::= '|' 
-<<missing ID>> ::= 
-
-<='|'> ::= '<addOp>::= '+' 
-<='|'> ::= '-' 
-<='|'> ::= 'or' 
-
 <START> ::= <prog> 
 
 <aParams> ::= <expr> <rept-aParams1> 
@@ -15,13 +5,16 @@
 
 <aParamsTail> ::= ',' <expr> 
 
-<arithExpr> ::= <arithExpr> <addOp> <term> 
-<arithExpr> ::= <term> 
+<addOp> ::= '+' 
+<addOp> ::= '-' 
+<addOp> ::= 'or' 
+
+<arithExpr> ::= <term> <rightrec-arithExpr> 
 
 <arraySize> ::= '[' 'intNum' ']' 
 <arraySize> ::= '[' ']' 
 
-<assignOp> ::= ':=' 
+<assignOp> ::= 'assign' 
 
 <assignStat> ::= <variable> <assignOp> <expr> 
 
@@ -55,14 +48,16 @@
 
 <funcDef> ::= <funcHead> <funcBody> 
 
-<funcHead> ::= 'function' 'id' '(' <fParams> ')' '=>' <returnType> 
+<funcHead> ::= 'function' 'id' '(' <fParams> ')' 'arrow' <returnType> 
 <funcHead> ::= 'constructor' '(' <fParams> ')' 
 
-<functionCall> ::= <rept-functionCall0> 'id' (<missing '('> '<aParams>' )<missing ')'> '<idnest>::= <idOrSelf> <rept-functionCall7> '.' 
-<functionCall> ::= <idOrSelf> '(' <aParams> ')' '.' 
+<functionCall> ::= <rept-functionCall0> 'id' '(' <aParams> ')' 
 
 <idOrSelf> ::= 'id' 
 <idOrSelf> ::= 'self' 
+
+<idnest> ::= <idOrSelf> <rept-idnest1> '.' 
+<idnest> ::= <idOrSelf> '(' <aParams> ')' '.' 
 
 <implDef> ::= 'implementation' 'id' '{' <rept-implDef3> '}' 
 
@@ -87,8 +82,12 @@
 
 <relExpr> ::= <arithExpr> <relOp> <arithExpr> 
 
-<relOp> ::= '==' 
-<relOp> ::= '<missing '''> 
+<relOp> ::= 'eq' 
+<relOp> ::= 'neq' 
+<relOp> ::= 'lt' 
+<relOp> ::= 'gt' 
+<relOp> ::= 'lteq' 
+<relOp> ::= 'gteq' 
 
 <rept-aParams1> ::= <aParamsTail> <rept-aParams1> 
 <rept-aParams1> ::= EPSILON 
@@ -111,8 +110,8 @@
 <rept-functionCall0> ::= <idnest> <rept-functionCall0> 
 <rept-functionCall0> ::= EPSILON 
 
-<rept-functionCall7> ::= <indice> <rept-functionCall7> 
-<rept-functionCall7> ::= EPSILON 
+<rept-idnest1> ::= <indice> <rept-idnest1> 
+<rept-idnest1> ::= EPSILON 
 
 <rept-implDef3> ::= <funcDef> <rept-implDef3> 
 <rept-implDef3> ::= EPSILON 
@@ -138,6 +137,12 @@
 <returnType> ::= <type> 
 <returnType> ::= 'void' 
 
+<rightrec-arithExpr> ::= EPSILON 
+<rightrec-arithExpr> ::= <addOp> <term> <rightrec-arithExpr> 
+
+<rightrec-term> ::= EPSILON 
+<rightrec-term> ::= <multOp> <factor> <rightrec-term> 
+
 <sign> ::= '+' 
 <sign> ::= '-' 
 
@@ -153,8 +158,7 @@
 <statement> ::= 'return' '(' <expr> ')' ';' 
 <statement> ::= <functionCall> ';' 
 
-<term> ::= <term> <multOp> <factor> 
-<term> ::= <factor> 
+<term> ::= <factor> <rightrec-term> 
 
 <type> ::= 'int' 
 <type> ::= 'float' 

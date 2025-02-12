@@ -11,8 +11,9 @@ addOp -> 'or'
 
 arithExpr -> term rightrec-arithExpr 
 
-arraySize -> '[' 'intNum' ']' 
-arraySize -> '[' ']' 
+arraySize -> '[' arraySizeTail ']' 
+arraySizeTail -> 'intNum'
+arraySizeTail -> EPSILON 
 
 assignOp -> ':=' 
 
@@ -27,7 +28,9 @@ classOrImplOrFunc -> implDef
 classOrImplOrFunc -> funcDef 
 
 expr -> arithExpr 
-expr -> relExpr 
+expr -> relExprRest
+relExprRest -> relOp arithExpr
+relExprRest -> EPSILON
 
 fParams -> 'id' ':' type rept-fParams3 rept-fParams4 
 fParams -> EPSILON 
@@ -170,5 +173,6 @@ variable -> rept-variable0 'id' rept-variable2
 
 visibility -> 'public' 
 visibility -> 'private' 
+
 
 
