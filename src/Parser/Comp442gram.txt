@@ -36,11 +36,9 @@ rightrec-arithExpr -> addOp term rightrec-arithExpr
 term -> factor rightrec-term
 rightrec-term -> EPSILON 
 rightrec-term -> multOp factor rightrec-term
-factor -> 'id' factor2 VarOrFunc
-factor2 -> '(' aParams ')'
-factor2 -> rept-idnest10
-VarOrFunc -> idnest VarOrFunc
-VarOrFunc -> EPSILON
+factor -> idnest 'id' VarOrFunc
+VarOrFunc -> rept-idnest10
+VarOrFunc -> '(' aParams ')'
 factor -> 'intLit' 
 factor -> 'floatLit' 
 factor -> '(' arithExpr ')' 
@@ -87,9 +85,8 @@ aParamsTail -> ',' expr
 
 idOrSelf -> 'id' 
 idOrSelf -> 'self'
-idnest -> '.' idOrSelf idnest2
-idnest2 -> '(' aParams ')'
-idnest2 -> rept-idnest10
+idnest -> idOrSelf VarOrFunc '.'
+
 rept-idnest10 -> indice rept-idnest10
 rept-idnest10 -> EPSILON
 
@@ -97,7 +94,7 @@ rept-idnest2 -> '(' aParams ')'
 rept-idnest2 -> EPSILON
 
 indice -> '[' arithExpr ']' 
-variable -> 'id' rept-idnest10 VarOrFunc
+variable -> idnest 'id' rept-idnest10
 localVarDecl -> 'local' varDecl 
 
 relExpr -> arithExpr relOp arithExpr 
@@ -124,7 +121,7 @@ rept-statBlock1 -> statement rept-statBlock1
 rept-statBlock1 -> EPSILON 
 statBlock -> EPSILON 
 
-statement -> 'id' factor2 VarOrFunc assignStat ';'
+statement -> idnest 'id' '(' assignStat ';'
 assignStat -> assignOp expr
 assignStat -> EPSILON 
 statement -> 'if' '(' relExpr ')' 'then' statBlock 'else' statBlock ';' 
