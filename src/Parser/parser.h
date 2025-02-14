@@ -10,12 +10,12 @@ class Parser{
 
     private:
         TokenType lookAhead;
-        std::unordered_map<TokenType, std::vector<TokenType>>firstSet;
-        std::unordered_map<TokenType, std::vector<TokenType>>followSet;
+        std::unordered_map<std::string, std::vector<TokenType>>firstSet;
+        std::unordered_map<std::string, std::vector<TokenType>>followSet;
         bool match(TokenType token);
         bool start();
         bool prog();
-        bool reptProg0();
+        bool rept_prog0();
         bool classOrImpleOrFunc();
         bool classDecl();
         bool opt_classDecl2();
