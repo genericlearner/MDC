@@ -102,7 +102,22 @@ Parser::Parser(){
     followSet["assignStat"] = {TokenType::SEMICOLON};
 };
 
-bool Parser::match(TokenType token){};
+bool Parser::match(TokenType token){
+    if(lookAhead == token){
+        lookAhead = lexer->nextToken().getType();
+        return true;
+    }
+    else{
+        lookAhead = lexer->nextToken().getType();
+        return false;
+    }
+};
+bool Parser::startParse(){
+    lookAhead = lexer->nextToken().getType();
+    if(start() && match(TokenType::ENDOFILE))return true;
+    else return false;
+
+}
 bool Parser::start(){};
 bool Parser::prog(){};
 bool Parser::rept_prog0(){};

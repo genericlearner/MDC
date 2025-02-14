@@ -9,9 +9,13 @@
 class Parser{
 
     private:
-        TokenType lookAhead;
+
         std::unordered_map<std::string, std::vector<TokenType>>firstSet;
         std::unordered_map<std::string, std::vector<TokenType>>followSet;
+
+        TokenType lookAhead;
+        Lexer* lexer;
+
         bool match(TokenType token);
         bool start();
         bool prog();
