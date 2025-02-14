@@ -112,20 +112,20 @@ char Lexer::nextChar()
  * @return A Token object representing the invalid token.
  */
 
- bool isOperatorAlpha(char ch){
+bool Lexer::isOperatorAlpha(char ch){
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
            ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
            ch == '!' || ch == '&' || ch == '|' || ch == ';' ||
            ch == ',' || ch == '.';
 }
- bool isOperatorNum(char ch){
+bool Lexer::isOperatorNum(char ch){
     return ch == '+' || ch == '-' || ch == '*' || ch == '/' || 
            ch == '<' || ch == '>' || ch == '=' || ch == ':' || 
            ch == '!' || ch == '&' || ch == '|' || ch == ';' ||
            ch == ',' ;
 }
 
-bool isBracket(char ch){
+bool Lexer::isBracket(char ch){
     return ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}';
 }
 

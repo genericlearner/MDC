@@ -34,6 +34,9 @@ class Lexer
         Token errorLoopAlpha(std::string &lex);
         Token createToken(TokenType type, const std::string& lexeme);
         Token matchSingleCharToken(TokenType type) ;
+        bool isOperatorAlpha(char ch);
+        bool isOperatorNum(char ch);
+        bool isBracket(char ch);
 
 
 
