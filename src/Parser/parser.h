@@ -15,7 +15,8 @@ class Parser{
 
         TokenType lookAhead;
         Lexer* lexer;
-
+        bool checkFirstSet(std::string funcName);
+        bool checkFollowSet(std::string funcName);
         bool match(TokenType token);
         bool start();
         bool prog();
@@ -73,6 +74,7 @@ class Parser{
         bool rept_statBlock1();
         bool statement();
         bool assignStat();
+        bool visibility();
 
     public:
         Parser();
