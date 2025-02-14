@@ -90,9 +90,6 @@ idnest -> idOrSelf VarOrFunc '.'
 rept-idnest10 -> indice rept-idnest10
 rept-idnest10 -> EPSILON
 
-rept-idnest2 -> '(' aParams ')'
-rept-idnest2 -> EPSILON
-
 indice -> '[' arithExpr ']' 
 variable -> idnest 'id' rept-idnest10
 localVarDecl -> 'local' varDecl 
@@ -121,7 +118,7 @@ rept-statBlock1 -> statement rept-statBlock1
 rept-statBlock1 -> EPSILON 
 statBlock -> EPSILON 
 
-statement -> idnest 'id' '(' assignStat ';'
+statement -> idnest 'id' VarOrFunc assignStat ';'
 assignStat -> assignOp expr
 assignStat -> EPSILON 
 statement -> 'if' '(' relExpr ')' 'then' statBlock 'else' statBlock ';' 

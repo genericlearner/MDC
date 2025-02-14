@@ -1,0 +1,83 @@
+#ifndef PARSER_H
+#define PARSER_H
+#include "Lexer/Token.h"
+#include "iostream"
+#include "unordered_map"
+#include "vector"
+#include "Lexer/lexer.h"
+
+class Parser{
+
+    private:
+        TokenType lookAhead;
+        std::unordered_map<TokenType, std::vector<TokenType>>firstSet;
+        std::unordered_map<TokenType, std::vector<TokenType>>followSet;
+        bool match(TokenType token);
+        bool start();
+        bool prog();
+        bool reptProg0();
+        bool classOrImpleOrFunc();
+        bool classDecl();
+        bool opt_classDecl2();
+        bool rept_opt_classDecl22();
+        bool rept_classDecl4();
+        bool implDef();
+        bool rept_implDef3();
+        bool funcDef();
+        bool funcHead();
+        bool funcBody();
+        bool rept_funcBody1();
+        bool localVarDeclOrStat();
+        bool arithExpr();
+        bool rightrec_arithExpr();
+        bool term();
+        bool rightrec_term();
+        bool factor();
+        bool VarOrFunc();
+        bool arraySize();
+        bool arraySizeTail();
+        bool type();
+        bool returnType();
+        bool memberDecl();
+        bool funcDecl();
+        bool attributeDecl();
+        bool varDecl();
+        bool rept_varDecl3();
+        bool expr();
+        bool relExprRest();
+        bool fParams();
+        bool rept_fParamas3();
+        bool rept_fParams4();
+        bool fParamsTail();
+        bool rept_fParamsTail4();
+        bool aParams();
+        bool rept_aParams1();
+        bool aParamsTail();
+        bool idOrSelf();
+        bool idNest();
+        bool rept_idnest10();
+        bool indice();
+        bool variable();
+        bool localVarDecl();
+        bool relExpr();
+        bool assignOp();
+        bool relOp();
+        bool multOp();
+        bool addOp();
+        bool sign();
+        bool statBlock();
+        bool rept_statBlock1();
+        bool statement();
+        bool assignStat();
+
+    public:
+        Parser();
+        bool startParse();
+
+
+
+
+
+};
+
+#endif
