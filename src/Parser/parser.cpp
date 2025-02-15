@@ -363,19 +363,194 @@ bool Parser::localVarDeclOrStat(){
             return true;
         }
         else return false;
-
     }
+    else return false;
 };
-bool Parser::arithExpr(){};
-bool Parser::rightrec_arithExpr(){};
-bool Parser::term(){};
-bool Parser::rightrec_term(){};
-bool Parser::factor(){};
-bool Parser::VarOrFunc(){};
-bool Parser::arraySize(){};
-bool Parser::arraySizeTail(){};
-bool Parser::type(){};
-bool Parser::returnType(){};
+bool Parser::arithExpr(){
+    if(checkFirstSet("arithExpr")){
+        if(term() && rightrec_arithExpr()){
+            std::cout<<"arithExpr -> term rightrec_arithExpr"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+};
+bool Parser::rightrec_arithExpr(){
+    if(checkFirstSet("rightrec_arithExpr")){
+        if(addOp() && term() && rightrec_arithExpr()){
+            std::cout<<"rightrec_arithExpr -> addOp term rightrec_arithExpr"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(checkFollowSet("rightrec_arithExpr")){
+        std::cout<<"rightrec_arithExpr -> EPSILON"<<std::endl;
+        return true;
+    }
+    else return false;
+};
+bool Parser::term(){
+    if(checkFirstSet("term")){
+        if(factor() && rightrec_term()){
+            std::cout<<"term -> factor rightrec_term"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+};
+bool Parser::rightrec_term(){
+    if(checkFirstSet("rightrec_term")){
+        if(multOp() && factor() && rightrec_term()){
+            std::cout<<"rightrec_term -> multOp factor rightrec_term"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(checkFollowSet("rightrec_term")){
+        std::cout<<"righrec_term -> EPSILON"<<std::endl;
+        return true;
+    }
+    else return false;
+};
+bool Parser::factor(){
+    if(lookAhead == TokenType::ADD || lookAhead == TokenType::SUBT){
+        if(sign() && factor()){
+            std::cout<<"factor -> sign factor"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::NOT){
+        if(match(TokenType::NOT) && factor()){
+            std::cout<<"factor -> not factor"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::INTEGER_VAL){
+        if(match(TokenType::INTEGER_VAL)){
+            std::cout<<"factor -> intLit"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::FLOAT_VAL){
+        if(match(TokenType::FLOAT_VAL)){
+            std::cout<<"factor -> floatLit"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::ID || lookAhead == TokenType::SELF){
+        if(idNest() && match(TokenType::ID) && VarOrFunc()){
+            std::cout<<"factor -> idnest id varOrFunc"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::OPENPAR){
+        if(match(TokenType::OPENPAR) && arithExpr() && match(TokenType::CLOSEPAR)){
+            std::cout<<"factor -> ( arithExpr )"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+    
+};
+//TODO: work the logic where epsilon is in one of the sets
+bool Parser::VarOrFunc(){
+    if(lookAhead == TokenType::OPENSQUARE){
+        if(rept_idnest10()){
+            std::cout<<"VarOrFunc -> rept_idnest10"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::OPENPAR){
+        if(match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR)){
+            std::cout<<"VarOrFunc -> ( aParams )"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(checkFollowSet("VarOrFunc")){
+        std::cout<<"varOrFunc -> EPSILON"<<std::endl;
+        return true;
+    }
+    else return false;
+};
+bool Parser::arraySize(){
+    if(lookAhead == TokenType::OPENSQUARE){
+        if(match(TokenType::OPENSQUARE) && arraySizeTail()){
+            std::cout<<"arraySize -> [ arraySizeTail"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+};
+bool Parser::arraySizeTail(){
+    if(lookAhead == TokenType::CLOSESQUARE){
+        if(match(TokenType::CLOSESQUARE)){
+            std::cout<<"arraySizeTail -> ]"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::INTEGER_VAL){
+        if(match(TokenType::INTEGER_VAL) && match(TokenType::CLOSESQUARE)){
+            std::cout<<"arraySizetail -> intNum ]"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+};
+bool Parser::type(){
+    if(lookAhead == TokenType::INT_T){
+        if(match(TokenType::INT_T)){
+            std::cout<<"type -> int"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::ID){
+        if(match(TokenType::ID)){
+            std::cout<<"type -> ID"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::FLOAT_T){
+        if(match(TokenType::FLOAT_T)){
+            std::cout<<"type -> float"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+    
+};
+bool Parser::returnType(){
+    if(checkFirstSet("returnType") && lookAhead != TokenType::VOID){
+        if(type()){
+            std::cout<<"returnType -> type"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else if(lookAhead == TokenType::VOID){
+        if(match(TokenType::VOID)){
+            std::cout<<"returntype -> void"<<std::endl;
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+};
 bool Parser::memberDecl(){};
 bool Parser::funcDecl(){};
 bool Parser::attributeDecl(){};
