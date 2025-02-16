@@ -1,6 +1,6 @@
 ^C:\USERS\UMARA\ONEDRIVE\DESKTOP\UNIVERSITY\COMP 442\MDC\SRC\BUILD\CMAKEFILES\AB12F08E676C63A4A3384EC93ACA3F3B\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src" "-BC:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src/build/LexerProject.sln"
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src" "-BC:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/umara/OneDrive/Desktop/University/COMP 442/MDC/src/build/Compiler.sln"
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
