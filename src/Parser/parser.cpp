@@ -1,8 +1,8 @@
 #include "parser.h"
 
 
-
-Parser::Parser(){
+Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream& syntaxErrors, Lexer& lexer)
+    :source(source), outDerivation(outDerivation), syntaxErrors(syntaxErrors), lexer(lexer){
     firstSet["prog"] = {TokenType::FUNCTION, TokenType::CONSTRUCTOR, TokenType::CLASS, TokenType::IMPLEMENTATION};
     firstSet["start"] = {TokenType::FUNCTION, TokenType::CONSTRUCTOR, TokenType::CLASS, TokenType::IMPLEMENTATION};
     firstSet["rept_prog0"] = {TokenType::FUNCTION, TokenType::CONSTRUCTOR, TokenType::CLASS, TokenType::IMPLEMENTATION};
@@ -100,62 +100,73 @@ Parser::Parser(){
     followSet["statBlock"] = {TokenType::ELSE, TokenType::SEMICOLON};
     followSet["rept_statBlock1"] = {TokenType::CLOSECURLY};
     followSet["assignStat"] = {TokenType::SEMICOLON};
-};
+
+
+    lookAhead = lexer.nextToken().getType();
+    std::cout<<lookAhead<<std::endl;
+
+}
+
 
 bool Parser::match(TokenType token){
     if(lookAhead == token){
-        lookAhead = lexer->nextToken().getType();
+        lookAhead = lexer.nextToken().getType();
         return true;
     }
     else{
-        lookAhead = lexer->nextToken().getType();
+        lookAhead = lexer.nextToken().getType();
         return false;
     }
 };
 
 bool Parser::checkFirstSet(std::string funcName){
-    bool isValid = false;
-    for(int i = 0; i<firstSet[funcName].size(); i++){
-        if(lookAhead == firstSet[funcName][i])isValid = true;
-    }
-    return isValid;
+    return firstSet.count(funcName) > 0;
 }
 
 bool Parser::checkFollowSet(std::string funcName){
-    bool isValid = false;
-    for(int i= 0;i<followSet[funcName].size();i++){
-        if(lookAhead == followSet[funcName][i]) isValid = true;
-    }
-    return isValid;
+    return firstSet.count(funcName) > 0;
 }
 bool Parser::startParse(){
-    lookAhead = lexer->nextToken().getType();
-    if(start() && match(TokenType::ENDOFILE))return true;
+    std::cout<<"Started Parsing"<<std::endl;
+    if(start() && match(TokenType::ENDOFILE)){
+        std::cout<<"Parsing Ended"<<std::endl;
+        return true;}
     else return false;
 
 }
 
 bool Parser::start(){
     
-    if(checkFirstSet("start")){
+    if(lookAhead == TokenType::FUNCTION || lookAhead == TokenType::CONSTRUCTOR || lookAhead == TokenType::CLASS
+        || lookAhead == TokenType::IMPLEMENTATION){
         if(prog()){
             std::cout<<"start->prog"<<std::endl;
+            outDerivation<<"Start -> prog \n";
             return true;
         }
         else{
             return false;
         }
     }
-    else if(match(TokenType::ENDOFILE)){
+    else if(lookAhead == TokenType::COMMENT){
+        lookAhead = lexer.nextToken().getType();
+        return start();
+    }
+    else if(lookAhead == TokenType::ENDOFILE){
         std::cout<<"start->EOF"<<std::endl;
+        return true;
     }
-    else{
-        return false;
+    else if(checkFollowSet("start")){
+        return true;
     }
+    else return false;
 };
+
 bool Parser::prog(){
-    if(checkFirstSet("rept_prog0")){
-        if(rept_prog0){
+    if(lookAhead == TokenType::FUNCTION || lookAhead == TokenType::CONSTRUCTOR || lookAhead == TokenType::CLASS
+        || lookAhead == TokenType::IMPLEMENTATION){
+
+        if(rept_prog0()){
             std::cout<<"prog->rept_prog0"<<std::endl;
             return true;
         }
@@ -165,13 +176,14 @@ bool Parser::prog(){
     }
     else if(match(TokenType::ENDOFILE)){
         std::cout<<"prog->EOF"<<std::endl;
+        return true;
     }
     else{
         return false;
     }
 };
 bool Parser::rept_prog0(){
-    if(checkFirstSet("classOrImplOrFunc") && checkFirstSet("rept_prog0")){
+    if(checkFirstSet("rept_prog0")){
         if(classOrImpleOrFunc() && rept_prog0()){
             std::cout<<"rept_prog0 -> classOrImplOrFunc rept_prog0"<<std::endl;
             return true;
@@ -187,23 +199,23 @@ bool Parser::rept_prog0(){
     return false;
 };
 bool Parser::classOrImpleOrFunc(){
-    if(checkFirstSet("implDef")){
-        if(implDef){
+    if(lookAhead == TokenType::IMPLEMENTATION){
+        if(implDef()){
             std::cout<<"classOrImpleOrFunc -> implDef"<<std::endl;
             return true;
         }
         else return false;
     }
-    else if(checkFirstSet("classDecl")){
-        if(classDecl){
+    else if(lookAhead == TokenType::CLASS){
+        if(classDecl()){
             std::cout<<"classOrImpleOrFunc->implDef"<<std::endl;
             return true;
         }
         else return false;
 
     }
-    else if(checkFirstSet("funcDef")){
-        if(funcDef){
+    else if(lookAhead == TokenType::FUNCTION || lookAhead == TokenType::CONSTRUCTOR){
+        if(funcDef()){
             std::cout<<"classOrImplOrFunc -> funcDef"<<std::endl;
             return true;
         }
@@ -215,19 +227,19 @@ bool Parser::classOrImpleOrFunc(){
 };
 //check the conditions of the first set for this declaration
 bool Parser::classDecl(){
-    if(checkFirstSet("opt_classDecl2") && checkFirstSet("rept_classDecl4")){
-        if(match(TokenType::CLASS) && match(TokenType::ID) && opt_classDecl2 && match(TokenType::OPENCURLY)
-            && rept_classDecl4 && match(TokenType::CLOSECURLY)){
-                std::cout<<"classDecl -> class id opt_classDecl2 { rept_classDecl4 }"<<std::endl;
+    if (lookAhead == TokenType::CLASS) {
+            if (match(TokenType::CLASS) && match(TokenType::ID) && opt_classDecl2() && match(TokenType::OPENCURLY)
+                && rept_classDecl4() && match(TokenType::CLOSECURLY) && match(TokenType::SEMICOLON)) {
+                std::cout << "classDecl -> class id opt_classDecl2 { rept_classDecl4 }" << std::endl;
                 return true;
             }
-        else return false;
-    }
+            else return false;
+        }
     else return false;
 };
 bool Parser::opt_classDecl2(){
-    if(checkFirstSet("rept_opt_classDecl22")){
-        if(match(TokenType::ISA) && match(TokenType::ID) && rept_opt_classDecl22){
+    if(lookAhead == TokenType::ISA){
+        if(match(TokenType::ISA) && match(TokenType::ID) && rept_opt_classDecl22()){
             std::cout<<"opt_classDecl2 -> isa id rept_opt_classDecl22"<<std::endl;
             return true;
         }
@@ -240,14 +252,11 @@ bool Parser::opt_classDecl2(){
 };
 bool Parser::rept_opt_classDecl22(){
     if(lookAhead == TokenType::COMMA){
-        if(lookAhead == TokenType::ID){
-            if(rept_opt_classDecl22){
+            if(match(TokenType::COMMA) && match(TokenType::ID) && rept_opt_classDecl22()){
                 std::cout<<"rept_opt_classDecl22 -> , ID rept_opt_classDecl22"<<std::endl;
                 return true;
             }
             else return false;
-        }
-        else return false;
     }
     else if(checkFollowSet("rept_opt_classDecl22")){
         return true;
@@ -255,7 +264,7 @@ bool Parser::rept_opt_classDecl22(){
     else return false;
 };
 bool Parser::rept_classDecl4(){
-    if(checkFirstSet("visibility") || checkFirstSet("memberDecl") || checkFirstSet("rept_classDecl4")){
+    if(lookAhead == TokenType::PRIVATE || lookAhead == TokenType::PUBLIC){
         if(visibility() && memberDecl() && rept_classDecl4()){
             std::cout<<"rept_classDecl4 -> visibility memberDecl rept_classDecl4"<<std::endl;
             return true;
@@ -270,15 +279,17 @@ bool Parser::rept_classDecl4(){
 bool Parser::implDef(){
     if(match(TokenType::IMPLEMENTATION)){
         if(match(TokenType::ID)){
-            if(match(TokenType::OPENCURLY))
+            if(match(TokenType::OPENCURLY)){
                 if(checkFirstSet("rept_implDef3")){
-                    if(rept_implDef3){
+                    if(rept_implDef3()){
                         std::cout<<"implDef -> implementation id { rept_implDef3 }"<<std::endl;
                         return true;
                     }
                     else return false;
                 }
                 else return false;
+            }
+            else return false;
         }
         else return false;
     }
@@ -288,6 +299,7 @@ bool Parser::rept_implDef3(){
     if(checkFirstSet("rept_implDef3")){
         if(funcDef()&& rept_implDef3()){
             std::cout<<"rept_implDef3 -> funcDef rept_implDef3"<<std::endl;
+            return true;
         }
         else return false;
     }
@@ -327,7 +339,7 @@ bool Parser::funcHead(){
 };
 bool Parser::funcBody(){
     if(checkFirstSet("funcBody")){
-        if(match(TokenType::OPENCURLY) && rept_funcBody1 && match(TokenType::CLOSECURLY)){
+        if(match(TokenType::OPENCURLY) && rept_funcBody1() && match(TokenType::CLOSECURLY)){
             std::cout<<"funcBody -> { rept_funcBody1 }";
             return true;
         }
@@ -570,7 +582,7 @@ bool Parser::memberDecl(){
 };
 bool Parser::funcDecl(){
     if(checkFirstSet("funcDecl")){
-        if(funcHead()){
+        if(funcHead() && match(TokenType::SEMICOLON)){
             std::cout<<"funcDecl -> funcHead"<<std::endl;
             return true;
         }
@@ -590,7 +602,7 @@ bool Parser::attributeDecl(){
 };
 bool Parser::varDecl(){
     if(checkFirstSet("varDecl")){
-        if(match(TokenType::ID) && match(TokenType::COLON) && rept_varDecl3()){
+        if(match(TokenType::ID) && match(TokenType::COLON) && type() && rept_varDecl3() && match(TokenType::SEMICOLON)){
             std::cout<<"varDecl -> id : type rept_varDecl3"<<std::endl;
             return true;
         }
@@ -599,7 +611,7 @@ bool Parser::varDecl(){
     else return false;
 };
 bool Parser::rept_varDecl3(){
-    if(checkFirstSet("rept_varDecl3")){
+    if(lookAhead == TokenType::OPENSQUARE){
         if(arraySize() && rept_varDecl3()){
             std::cout<<"rept_varDecl3 -> arraySize rept_Decl3"<<std::endl;
             return true;
@@ -638,7 +650,7 @@ bool Parser::relExprRest(){
 };
 bool Parser::fParams(){
     if(checkFirstSet("fParams")){
-        if(match(TokenType::ID) && match(TokenType::COLON) && type() && rept_fParamas3() && rept_fParams4){
+        if(match(TokenType::ID) && match(TokenType::COLON) && type() && rept_fParamas3() && rept_fParams4()){
             std::cout<<"fParams -> id : type rept_fParams3 rept_fParams4"<<std::endl;
             return true;
         }
@@ -665,7 +677,7 @@ bool Parser::rept_fParamas3(){
     else return false;
 };
 bool Parser::rept_fParams4(){
-    if(lookAhead == TokenType::COLON){
+    if(lookAhead == TokenType::COMMA){
         if(fParamsTail() && rept_fParams4()){
             std::cout<<"rept_fParams4 -> fParamsTail rept_fParams4"<<std::endl;
             return true;
@@ -759,7 +771,7 @@ bool Parser::idOrSelf(){
     else return false;
 };
 bool Parser::idNest(){
-    if(lookAhead == TokenType::SELF || lookAhead == TokenType::SELF){
+    if(lookAhead == TokenType::ID || lookAhead == TokenType::SELF){
         if(idOrSelf() && VarOrFunc() && match(TokenType::DOT)){
             std::cout<<"idNet -> idOrSelf VarOrFunc ."<<std::endl;
             return true;
@@ -1059,8 +1071,8 @@ bool Parser::visibility(){
         if(match(TokenType::PRIVATE)){
             std::cout<<"visibility -> private"<<std::endl;
             return true;
-
         }
+        else return false;
     }
     else return false;
 };

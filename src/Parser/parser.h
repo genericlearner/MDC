@@ -1,10 +1,12 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include "Lexer/Token.h"
-#include "iostream"
+#include "../Lexer/Token.h"
+#include <iostream>
 #include "unordered_map"
 #include "vector"
-#include "Lexer/lexer.h"
+#include "../Lexer/lexer.h"
+#include <fstream>
+#include <ostream>
 
 class Parser{
 
@@ -14,7 +16,7 @@ class Parser{
         std::unordered_map<std::string, std::vector<TokenType>>followSet;
 
         TokenType lookAhead;
-        Lexer* lexer;
+        Lexer& lexer;
         bool checkFirstSet(std::string funcName);
         bool checkFollowSet(std::string funcName);
         bool match(TokenType token);
@@ -77,8 +79,15 @@ class Parser{
         bool visibility();
 
     public:
-        Parser();
+        //Parser();
+        Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream& syntaxErrors, Lexer& lexer);
+        std::ifstream& source;
+        std::ostream& outDerivation;
+        std::ofstream& syntaxErrors;
+
         bool startParse();
+        void writeDerivation();
+        void writeError();
 
 
 

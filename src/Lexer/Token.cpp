@@ -11,7 +11,7 @@ const std::string& Token::getLexeme() const {
     return lexeme;
 }
 
-unsigned long long Token::getLine() const {
+size_t Token::getLine() const {
     return line;
 }
 

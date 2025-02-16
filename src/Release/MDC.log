@@ -1,0 +1,7 @@
+﻿  lexer.cpp
+  Token.cpp
+  main.cpp
+  parser.cpp
+  Generating Code...
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification
+  MDC.vcxproj -> C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\Release\MDC.exe
