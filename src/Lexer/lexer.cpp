@@ -333,65 +333,46 @@ Token Lexer::nextToken(){
         return nToken;
     }
 
-    if(currentChar == '/'){
-
+    if (currentChar == '/') {
         char nextc = nextChar();
-        std::string lex;
-        lex+= currentChar;
 
-        if(nextc == '/'){
-            size_t curr_line = line;
-            lex += nextc;
+        if (nextc == '/') { // Single-line comment
             currentChar = nextChar();
-            while(currentChar != '\n' && currentChar != EOF){
-                lex +=currentChar;
-                currentChar = nextChar();
+            while (currentChar != '\n' && currentChar != EOF) {
+                currentChar = nextChar(); // Skip comment characters
             }
-
-            Token cmtToken = createCurrToken(TokenType::COMMENT, lex, curr_line);
-            writeToken(cmtToken);
-            currentChar = nextChar();
-            return cmtToken;
-
+            currentChar = nextChar(); // Move past the newline
+            return nextToken(); // Skip comment and continue with the next token
         }
-       else if (nextc == '*') { // Multi-line comment
-            size_t curr_line = line;
-            lex += nextc; // Add the '*'
-            currentChar = nextChar();
+        else if (nextc == '*') { // Multi-line comment
+            currentChar = nextChar(); // Move past '*'
             int blockCommentDepth = 1;
 
-             while (currentChar != EOF) {
-                if (currentChar == '*' && nextChar() == '/') { 
-                lex += "*"; 
-                lex += "/"; 
-                blockCommentDepth--; // Close one level of block comment
-                if (blockCommentDepth == 0) {
-                    currentChar = nextChar(); // Move past the '/'
-                    break; 
+            while (currentChar != EOF) {
+                if (currentChar == '*' && nextChar() == '/') {
+                    blockCommentDepth--; // Close one level of block comment
+                    currentChar = nextChar(); // Move past '/'
+                    if (blockCommentDepth == 0) {
+                        currentChar = nextChar(); // Move past the closing '/'
+                        break;
+                    }
                 }
-            } else if (currentChar == '/' && nextChar() == '*') { 
-                    lex += "/"; 
-                    lex += "*"; 
-                    blockCommentDepth++; 
-            } else {
-            lex += currentChar; 
+                else if (currentChar == '/' && nextChar() == '*') {
+                    blockCommentDepth++; // Nested block comment
+                }
+
+                currentChar = nextChar(); // Read next character
             }
 
-        currentChar = nextChar(); // Read next character
-    }
+            // If block comment is not properly closed
+            if (blockCommentDepth > 0) {
+                Token errorToken = createToken(TokenType::INVALID_NUM, "Unterminated block comment");
+                writeError(errorToken);
+                return errorToken;
+            }
 
-    // Check if block comment was not terminated correctly
-    if (blockCommentDepth > 0) {
-        Token errorToken = createToken(TokenType::INVALID_NUM, lex);
-        writeError(errorToken);
-        writeToken(errorToken);
-        return errorToken;
-    }
-
-    Token blockToken = createCurrToken(TokenType::BLOCK_COMMENT, lex, curr_line);
-    writeToken(blockToken);
-    return blockToken;
-    }
+            return nextToken(); // Skip comment and return the next token
+        }
         else{
             std::string divop = "/";
             Token divToken = createToken(TokenType::DIV, divop);

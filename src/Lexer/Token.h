@@ -116,6 +116,7 @@ class Token
     public:
         const std::string& getLexeme() const;
         size_t getLine() const;
+        Token() : type(TokenType::UNKNOWN), lexeme(""), line(0) {};
         TokenType getType() const;
 
         // Constructor to initialize a token

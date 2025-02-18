@@ -1,0 +1,374 @@
+<AUTOMATON>
+    <TYPE value="NKA"/>
+    <ALPHABET>
+        <ITEM value="class"/>
+        <ITEM value="id"/>
+        <ITEM value="{"/>
+        <ITEM value="}"/>
+        <ITEM value=";"/>
+        <ITEM value="isa"/>
+        <ITEM value=","/>
+        <ITEM value="implementation"/>
+        <ITEM value="function"/>
+        <ITEM value="("/>
+        <ITEM value=")"/>
+        <ITEM value="arrow"/>
+        <ITEM value="constructor"/>
+        <ITEM value="floatLit"/>
+        <ITEM value="intLit"/>
+        <ITEM value="not"/>
+        <ITEM value="["/>
+        <ITEM value="intNum"/>
+        <ITEM value="]"/>
+        <ITEM value="float"/>
+        <ITEM value="int"/>
+        <ITEM value="void"/>
+        <ITEM value="attribute"/>
+        <ITEM value=":"/>
+        <ITEM value="self"/>
+        <ITEM value="."/>
+        <ITEM value="local"/>
+        <ITEM value=":="/>
+        <ITEM value="&lt;"/>
+        <ITEM value="&lt;="/>
+        <ITEM value="&lt;&gt;"/>
+        <ITEM value="=="/>
+        <ITEM value="&gt;"/>
+        <ITEM value="&gt;="/>
+        <ITEM value="*"/>
+        <ITEM value="/"/>
+        <ITEM value="and"/>
+        <ITEM value="+"/>
+        <ITEM value="-"/>
+        <ITEM value="or"/>
+        <ITEM value="if"/>
+        <ITEM value="then"/>
+        <ITEM value="else"/>
+        <ITEM value="read"/>
+        <ITEM value="return"/>
+        <ITEM value="while"/>
+        <ITEM value="write"/>
+        <ITEM value="private"/>
+        <ITEM value="public"/>
+    </ALPHABET>
+    <STACKALPHABET>
+        <ITEM value="$"/>
+        <ITEM value="class"/>
+        <ITEM value="id"/>
+        <ITEM value="{"/>
+        <ITEM value="}"/>
+        <ITEM value=";"/>
+        <ITEM value="isa"/>
+        <ITEM value=","/>
+        <ITEM value="implementation"/>
+        <ITEM value="function"/>
+        <ITEM value="("/>
+        <ITEM value=")"/>
+        <ITEM value="arrow"/>
+        <ITEM value="constructor"/>
+        <ITEM value="floatLit"/>
+        <ITEM value="intLit"/>
+        <ITEM value="not"/>
+        <ITEM value="["/>
+        <ITEM value="intNum"/>
+        <ITEM value="]"/>
+        <ITEM value="float"/>
+        <ITEM value="int"/>
+        <ITEM value="void"/>
+        <ITEM value="attribute"/>
+        <ITEM value=":"/>
+        <ITEM value="self"/>
+        <ITEM value="."/>
+        <ITEM value="local"/>
+        <ITEM value=":="/>
+        <ITEM value="&lt;"/>
+        <ITEM value="&lt;="/>
+        <ITEM value="&lt;&gt;"/>
+        <ITEM value="=="/>
+        <ITEM value="&gt;"/>
+        <ITEM value="&gt;="/>
+        <ITEM value="*"/>
+        <ITEM value="/"/>
+        <ITEM value="and"/>
+        <ITEM value="+"/>
+        <ITEM value="-"/>
+        <ITEM value="or"/>
+        <ITEM value="if"/>
+        <ITEM value="then"/>
+        <ITEM value="else"/>
+        <ITEM value="read"/>
+        <ITEM value="return"/>
+        <ITEM value="while"/>
+        <ITEM value="write"/>
+        <ITEM value="private"/>
+        <ITEM value="public"/>
+        <ITEM value="START"/>
+        <ITEM value="prog"/>
+        <ITEM value="rept-prog0"/>
+        <ITEM value="classOrImplOrFunc"/>
+        <ITEM value="classDecl"/>
+        <ITEM value="opt-classDecl2"/>
+        <ITEM value="rept-opt-classDecl22"/>
+        <ITEM value="rept-classDecl4"/>
+        <ITEM value="implDef"/>
+        <ITEM value="rept-implDef3"/>
+        <ITEM value="funcDef"/>
+        <ITEM value="funcHead"/>
+        <ITEM value="funcBody"/>
+        <ITEM value="rept-funcBody1"/>
+        <ITEM value="localVarDeclOrStat"/>
+        <ITEM value="arithExpr"/>
+        <ITEM value="rightrec-arithExpr"/>
+        <ITEM value="term"/>
+        <ITEM value="rightrec-term"/>
+        <ITEM value="factor"/>
+        <ITEM value="factor2"/>
+        <ITEM value="VarOrFunc"/>
+        <ITEM value="arraySize"/>
+        <ITEM value="arraySizeTail"/>
+        <ITEM value="type"/>
+        <ITEM value="returnType"/>
+        <ITEM value="memberDecl"/>
+        <ITEM value="funcDecl"/>
+        <ITEM value="attributeDecl"/>
+        <ITEM value="varDecl"/>
+        <ITEM value="rept-varDecl3"/>
+        <ITEM value="expr"/>
+        <ITEM value="relExprRest"/>
+        <ITEM value="fParams"/>
+        <ITEM value="rept-fParams3"/>
+        <ITEM value="rept-fParams4"/>
+        <ITEM value="fParamsTail"/>
+        <ITEM value="rept-fParamsTail4"/>
+        <ITEM value="aParams"/>
+        <ITEM value="rept-aParams1"/>
+        <ITEM value="aParamsTail"/>
+        <ITEM value="idOrSelf"/>
+        <ITEM value="idnest"/>
+        <ITEM value="idnest2"/>
+        <ITEM value="rept-idnest10"/>
+        <ITEM value="rept-idnest2"/>
+        <ITEM value="indice"/>
+        <ITEM value="variable"/>
+        <ITEM value="Variable2"/>
+        <ITEM value="rept-variable"/>
+        <ITEM value="varidnest"/>
+        <ITEM value="varidnest2"/>
+        <ITEM value="localVarDecl"/>
+        <ITEM value="relExpr"/>
+        <ITEM value="assignOp"/>
+        <ITEM value="relOp"/>
+        <ITEM value="multOp"/>
+        <ITEM value="addOp"/>
+        <ITEM value="sign"/>
+        <ITEM value="statBlock"/>
+        <ITEM value="rept-statBlock1"/>
+        <ITEM value="statement"/>
+        <ITEM value="visibility"/>
+    </STACKALPHABET>
+    <STATE name="Start" finalstate="false">
+        <TRANSITION target="Work">
+            <LABEL read="EPSILON" topofstack="$" write="START$"/>
+        </TRANSITION>
+    </STATE>
+    <STATE name="Work" finalstate="false">
+        <TRANSITION target="Halt">
+            <LABEL read="EPSILON" topofstack="$" write="EPSILON"/>
+        </TRANSITION>
+        <TRANSITION target="Work">
+            <LABEL read="class" topofstack="class" write="EPSILON"/>
+            <LABEL read="id" topofstack="id" write="EPSILON"/>
+            <LABEL read="{" topofstack="{" write="EPSILON"/>
+            <LABEL read="}" topofstack="}" write="EPSILON"/>
+            <LABEL read=";" topofstack=";" write="EPSILON"/>
+            <LABEL read="isa" topofstack="isa" write="EPSILON"/>
+            <LABEL read="," topofstack="," write="EPSILON"/>
+            <LABEL read="implementation" topofstack="implementation" write="EPSILON"/>
+            <LABEL read="function" topofstack="function" write="EPSILON"/>
+            <LABEL read="(" topofstack="(" write="EPSILON"/>
+            <LABEL read=")" topofstack=")" write="EPSILON"/>
+            <LABEL read="arrow" topofstack="arrow" write="EPSILON"/>
+            <LABEL read="constructor" topofstack="constructor" write="EPSILON"/>
+            <LABEL read="floatLit" topofstack="floatLit" write="EPSILON"/>
+            <LABEL read="intLit" topofstack="intLit" write="EPSILON"/>
+            <LABEL read="not" topofstack="not" write="EPSILON"/>
+            <LABEL read="[" topofstack="[" write="EPSILON"/>
+            <LABEL read="intNum" topofstack="intNum" write="EPSILON"/>
+            <LABEL read="]" topofstack="]" write="EPSILON"/>
+            <LABEL read="float" topofstack="float" write="EPSILON"/>
+            <LABEL read="int" topofstack="int" write="EPSILON"/>
+            <LABEL read="void" topofstack="void" write="EPSILON"/>
+            <LABEL read="attribute" topofstack="attribute" write="EPSILON"/>
+            <LABEL read=":" topofstack=":" write="EPSILON"/>
+            <LABEL read="self" topofstack="self" write="EPSILON"/>
+            <LABEL read="." topofstack="." write="EPSILON"/>
+            <LABEL read="local" topofstack="local" write="EPSILON"/>
+            <LABEL read=":=" topofstack=":=" write="EPSILON"/>
+            <LABEL read="&lt;" topofstack="&lt;" write="EPSILON"/>
+            <LABEL read="&lt;=" topofstack="&lt;=" write="EPSILON"/>
+            <LABEL read="&lt;&gt;" topofstack="&lt;&gt;" write="EPSILON"/>
+            <LABEL read="==" topofstack="==" write="EPSILON"/>
+            <LABEL read="&gt;" topofstack="&gt;" write="EPSILON"/>
+            <LABEL read="&gt;=" topofstack="&gt;=" write="EPSILON"/>
+            <LABEL read="*" topofstack="*" write="EPSILON"/>
+            <LABEL read="/" topofstack="/" write="EPSILON"/>
+            <LABEL read="and" topofstack="and" write="EPSILON"/>
+            <LABEL read="+" topofstack="+" write="EPSILON"/>
+            <LABEL read="-" topofstack="-" write="EPSILON"/>
+            <LABEL read="or" topofstack="or" write="EPSILON"/>
+            <LABEL read="if" topofstack="if" write="EPSILON"/>
+            <LABEL read="then" topofstack="then" write="EPSILON"/>
+            <LABEL read="else" topofstack="else" write="EPSILON"/>
+            <LABEL read="read" topofstack="read" write="EPSILON"/>
+            <LABEL read="return" topofstack="return" write="EPSILON"/>
+            <LABEL read="while" topofstack="while" write="EPSILON"/>
+            <LABEL read="write" topofstack="write" write="EPSILON"/>
+            <LABEL read="private" topofstack="private" write="EPSILON"/>
+            <LABEL read="public" topofstack="public" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="START" write="prog"/>
+            <LABEL read="EPSILON" topofstack="prog" write="rept-prog0"/>
+            <LABEL read="EPSILON" topofstack="rept-prog0" write="classOrImplOrFuncrept-prog0"/>
+            <LABEL read="EPSILON" topofstack="rept-prog0" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="classOrImplOrFunc" write="funcDef"/>
+            <LABEL read="EPSILON" topofstack="classOrImplOrFunc" write="classDecl"/>
+            <LABEL read="EPSILON" topofstack="classOrImplOrFunc" write="implDef"/>
+            <LABEL read="EPSILON" topofstack="classDecl" write="classidopt-classDecl2{rept-classDecl4};"/>
+            <LABEL read="EPSILON" topofstack="opt-classDecl2" write="isaidrept-opt-classDecl22"/>
+            <LABEL read="EPSILON" topofstack="opt-classDecl2" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-opt-classDecl22" write=",idrept-opt-classDecl22"/>
+            <LABEL read="EPSILON" topofstack="rept-opt-classDecl22" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-classDecl4" write="visibilitymemberDeclrept-classDecl4"/>
+            <LABEL read="EPSILON" topofstack="rept-classDecl4" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="implDef" write="implementationid{rept-implDef3}"/>
+            <LABEL read="EPSILON" topofstack="rept-implDef3" write="funcDefrept-implDef3"/>
+            <LABEL read="EPSILON" topofstack="rept-implDef3" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="funcDef" write="funcHeadfuncBody"/>
+            <LABEL read="EPSILON" topofstack="funcHead" write="functionid(fParams)arrowreturnType"/>
+            <LABEL read="EPSILON" topofstack="funcHead" write="constructor(fParams)"/>
+            <LABEL read="EPSILON" topofstack="funcBody" write="{rept-funcBody1}"/>
+            <LABEL read="EPSILON" topofstack="rept-funcBody1" write="localVarDeclOrStatrept-funcBody1"/>
+            <LABEL read="EPSILON" topofstack="rept-funcBody1" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="localVarDeclOrStat" write="statement"/>
+            <LABEL read="EPSILON" topofstack="localVarDeclOrStat" write="localVarDecl"/>
+            <LABEL read="EPSILON" topofstack="arithExpr" write="termrightrec-arithExpr"/>
+            <LABEL read="EPSILON" topofstack="rightrec-arithExpr" write="addOptermrightrec-arithExpr"/>
+            <LABEL read="EPSILON" topofstack="rightrec-arithExpr" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="term" write="factorrightrec-term"/>
+            <LABEL read="EPSILON" topofstack="rightrec-term" write="multOpfactorrightrec-term"/>
+            <LABEL read="EPSILON" topofstack="rightrec-term" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="factor" write="(arithExpr)"/>
+            <LABEL read="EPSILON" topofstack="factor" write="floatLit"/>
+            <LABEL read="EPSILON" topofstack="factor" write="intLit"/>
+            <LABEL read="EPSILON" topofstack="factor" write="notfactor"/>
+            <LABEL read="EPSILON" topofstack="factor" write="idOrSelffactor2VarOrFunc"/>
+            <LABEL read="EPSILON" topofstack="factor" write="signfactor"/>
+            <LABEL read="EPSILON" topofstack="factor2" write="(aParams)"/>
+            <LABEL read="EPSILON" topofstack="factor2" write="rept-idnest10"/>
+            <LABEL read="EPSILON" topofstack="VarOrFunc" write="idnestVarOrFunc"/>
+            <LABEL read="EPSILON" topofstack="VarOrFunc" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="arraySize" write="[arraySizeTail"/>
+            <LABEL read="EPSILON" topofstack="arraySizeTail" write="intNum]"/>
+            <LABEL read="EPSILON" topofstack="arraySizeTail" write="]"/>
+            <LABEL read="EPSILON" topofstack="type" write="float"/>
+            <LABEL read="EPSILON" topofstack="type" write="id"/>
+            <LABEL read="EPSILON" topofstack="type" write="int"/>
+            <LABEL read="EPSILON" topofstack="returnType" write="void"/>
+            <LABEL read="EPSILON" topofstack="returnType" write="type"/>
+            <LABEL read="EPSILON" topofstack="memberDecl" write="attributeDecl"/>
+            <LABEL read="EPSILON" topofstack="memberDecl" write="funcDecl"/>
+            <LABEL read="EPSILON" topofstack="funcDecl" write="funcHead;"/>
+            <LABEL read="EPSILON" topofstack="attributeDecl" write="attributevarDecl"/>
+            <LABEL read="EPSILON" topofstack="varDecl" write="id:typerept-varDecl3;"/>
+            <LABEL read="EPSILON" topofstack="rept-varDecl3" write="arraySizerept-varDecl3"/>
+            <LABEL read="EPSILON" topofstack="rept-varDecl3" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="expr" write="arithExprrelExprRest"/>
+            <LABEL read="EPSILON" topofstack="relExprRest" write="relOparithExpr"/>
+            <LABEL read="EPSILON" topofstack="relExprRest" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="fParams" write="id:typerept-fParams3rept-fParams4"/>
+            <LABEL read="EPSILON" topofstack="fParams" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-fParams3" write="arraySizerept-fParams3"/>
+            <LABEL read="EPSILON" topofstack="rept-fParams3" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-fParams4" write="fParamsTailrept-fParams4"/>
+            <LABEL read="EPSILON" topofstack="rept-fParams4" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="fParamsTail" write=",id:typerept-fParamsTail4"/>
+            <LABEL read="EPSILON" topofstack="rept-fParamsTail4" write="arraySizerept-fParamsTail4"/>
+            <LABEL read="EPSILON" topofstack="rept-fParamsTail4" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="aParams" write="exprrept-aParams1"/>
+            <LABEL read="EPSILON" topofstack="aParams" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-aParams1" write="aParamsTailrept-aParams1"/>
+            <LABEL read="EPSILON" topofstack="rept-aParams1" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="aParamsTail" write=",expr"/>
+            <LABEL read="EPSILON" topofstack="idOrSelf" write="id"/>
+            <LABEL read="EPSILON" topofstack="idOrSelf" write="self"/>
+            <LABEL read="EPSILON" topofstack="idnest" write=".ididnest2"/>
+            <LABEL read="EPSILON" topofstack="idnest2" write="(aParams)"/>
+            <LABEL read="EPSILON" topofstack="idnest2" write="rept-idnest10"/>
+            <LABEL read="EPSILON" topofstack="rept-idnest10" write="indicerept-idnest10"/>
+            <LABEL read="EPSILON" topofstack="rept-idnest10" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-idnest2" write="(aParams)"/>
+            <LABEL read="EPSILON" topofstack="rept-idnest2" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="indice" write="[arithExpr]"/>
+            <LABEL read="EPSILON" topofstack="variable" write="idOrSelfVariable2"/>
+            <LABEL read="EPSILON" topofstack="Variable2" write="(aParams)idnest"/>
+            <LABEL read="EPSILON" topofstack="Variable2" write="rept-idnest10rept-variable"/>
+            <LABEL read="EPSILON" topofstack="rept-variable" write="varidnestrept-variable"/>
+            <LABEL read="EPSILON" topofstack="rept-variable" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="varidnest" write=".idvaridnest2"/>
+            <LABEL read="EPSILON" topofstack="varidnest2" write="(aParams)varidnest"/>
+            <LABEL read="EPSILON" topofstack="varidnest2" write="rept-idnest10"/>
+            <LABEL read="EPSILON" topofstack="localVarDecl" write="localvarDecl"/>
+            <LABEL read="EPSILON" topofstack="relExpr" write="arithExprrelOparithExpr"/>
+            <LABEL read="EPSILON" topofstack="assignOp" write=":="/>
+            <LABEL read="EPSILON" topofstack="relOp" write="&lt;"/>
+            <LABEL read="EPSILON" topofstack="relOp" write="&lt;="/>
+            <LABEL read="EPSILON" topofstack="relOp" write="&lt;&gt;"/>
+            <LABEL read="EPSILON" topofstack="relOp" write="=="/>
+            <LABEL read="EPSILON" topofstack="relOp" write="&gt;"/>
+            <LABEL read="EPSILON" topofstack="relOp" write="&gt;="/>
+            <LABEL read="EPSILON" topofstack="multOp" write="*"/>
+            <LABEL read="EPSILON" topofstack="multOp" write="/"/>
+            <LABEL read="EPSILON" topofstack="multOp" write="and"/>
+            <LABEL read="EPSILON" topofstack="addOp" write="+"/>
+            <LABEL read="EPSILON" topofstack="addOp" write="-"/>
+            <LABEL read="EPSILON" topofstack="addOp" write="or"/>
+            <LABEL read="EPSILON" topofstack="sign" write="+"/>
+            <LABEL read="EPSILON" topofstack="sign" write="-"/>
+            <LABEL read="EPSILON" topofstack="statBlock" write="{rept-statBlock1}"/>
+            <LABEL read="EPSILON" topofstack="statBlock" write="statement"/>
+            <LABEL read="EPSILON" topofstack="statBlock" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="rept-statBlock1" write="statementrept-statBlock1"/>
+            <LABEL read="EPSILON" topofstack="rept-statBlock1" write="EPSILON"/>
+            <LABEL read="EPSILON" topofstack="statement" write="if(relExpr)thenstatBlockelsestatBlock;"/>
+            <LABEL read="EPSILON" topofstack="statement" write="read(variable);"/>
+            <LABEL read="EPSILON" topofstack="statement" write="return(expr);"/>
+            <LABEL read="EPSILON" topofstack="statement" write="while(relExpr)statBlock;"/>
+            <LABEL read="EPSILON" topofstack="statement" write="write(expr);"/>
+            <LABEL read="EPSILON" topofstack="statement" write="variableassignOpexpr;"/>
+            <LABEL read="EPSILON" topofstack="visibility" write="private"/>
+            <LABEL read="EPSILON" topofstack="visibility" write="public"/>
+        </TRANSITION>
+    </STATE>
+    <STATE name="Halt" finalstate="true"/>
+    <INITIALSTATE value="Start"/>
+    <STACKINITIALCHAR value="$"/>
+    <LAYOUT>
+        <STATELAYOUT name="Start">
+            <LEFT value="150"/>
+            <TOP value="100"/>
+            <RADIUS value="50"/>
+        </STATELAYOUT>
+        <STATELAYOUT name="Work">
+            <LEFT value="350"/>
+            <TOP value="100"/>
+            <RADIUS value="50"/>
+            <TRANSITIONLAYOUT target="Work" drawvertical="true">
+                <TOP value="400"/>
+            </TRANSITIONLAYOUT>
+        </STATELAYOUT>
+        <STATELAYOUT name="Halt">
+            <LEFT value="550"/>
+            <TOP value="100"/>
+            <RADIUS value="50"/>
+        </STATELAYOUT>
+    </LAYOUT>
+</AUTOMATON>

@@ -15,7 +15,7 @@ class Parser{
         std::unordered_map<std::string, std::vector<TokenType>>firstSet;
         std::unordered_map<std::string, std::vector<TokenType>>followSet;
 
-        TokenType lookAhead;
+        Token lookAhead;
         Lexer& lexer;
         bool checkFirstSet(std::string funcName);
         bool checkFollowSet(std::string funcName);
