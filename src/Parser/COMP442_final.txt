@@ -128,8 +128,9 @@ statBlock -> statement
 rept-statBlock1 -> statement rept-statBlock1 
 rept-statBlock1 -> EPSILON 
 statBlock -> EPSILON 
-
-statement -> variable assignOp expr ';'
+assignStat -> assignOp expr
+assignStat -> EPSILON
+statement -> idOrSelf factor2 VarOrFunc assignStat ';'
 statement -> 'if' '(' relExpr ')' 'then' statBlock 'else' statBlock ';' 
 statement -> 'while' '(' relExpr ')' statBlock ';' 
 statement -> 'read' '(' variable ')' ';' 

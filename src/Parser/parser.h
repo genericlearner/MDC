@@ -40,6 +40,7 @@ class Parser{
         bool term();
         bool rightrec_term();
         bool factor();
+        bool factor2();
         bool VarOrFunc();
         bool arraySize();
         bool arraySizeTail();
@@ -62,9 +63,14 @@ class Parser{
         bool aParamsTail();
         bool idOrSelf();
         bool idNest();
+        bool idNest2();
         bool rept_idnest10();
         bool indice();
         bool variable();
+        bool variable2();
+        bool rept_variable();
+        bool varIdNest();
+        bool varIdNest2();
         bool localVarDecl();
         bool relExpr();
         bool assignOp();
