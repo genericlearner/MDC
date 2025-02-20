@@ -1,1 +1,192 @@
-Start -> prog 
+Started Parsing 
+type -> int
+arraySizeTail -> ]
+arraySize -> [ arraySizeTail
+rept_fParams3 -> EPSILON
+rept_fParams3 -> arraySize rept_fParams3
+type -> int
+rept_fParamsTail4 -> EPSILON
+fParamsTail -> , id : type rept_fParamstail4
+rept_fParams4 -> EPSILON
+rept_fParams4 -> fParamsTail rept_fParams4
+fParams -> id : type rept_fParams3 rept_fParams4
+returntype -> void
+funcHead -> function id {fParams} => returnType 
+type -> int
+rept_varDecl3 -> EPSILON
+varDecl -> id : type rept_varDecl3
+localVarDecl -> local varDecl
+localVarDeclorStat -> localVarDecl
+type -> int
+rept_varDecl3 -> EPSILON
+varDecl -> id : type rept_varDecl3
+localVarDecl -> local varDecl
+localVarDeclorStat -> localVarDecl
+type -> int
+rept_varDecl3 -> EPSILON
+varDecl -> id : type rept_varDecl3
+localVarDecl -> local varDecl
+localVarDeclorStat -> localVarDecl
+type -> int
+rept_varDecl3 -> EPSILON
+varDecl -> id : type rept_varDecl3
+localVarDecl -> local varDecl
+localVarDeclorStat -> localVarDecl
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+assignOp -> :=
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relExprRest -> EPSILON
+expr -> arithExpr relExprRest
+assignStat -> assignOp expr
+statement -> variable assignop expr
+localVarDeclOrStat -> statement
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+assignOp -> :=
+factor -> intLit
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relExprRest -> EPSILON
+expr -> arithExpr relExprRest
+assignStat -> assignOp expr
+statement -> variable assignop expr
+localVarDeclOrStat -> statement
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+assignOp -> :=
+factor -> intLit
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relExprRest -> EPSILON
+expr -> arithExpr relExprRest
+assignStat -> assignOp expr
+statement -> variable assignop expr
+localVarDeclOrStat -> statement
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+assignOp -> :=
+factor -> intLit
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relExprRest -> EPSILON
+expr -> arithExpr relExprRest
+assignStat -> assignOp expr
+statement -> variable assignop expr
+localVarDeclOrStat -> statement
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relOp -> <
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+addOp -> -
+factor -> intLit
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+rightrec_arithExpr -> addOp term rightrec_arithExpr
+arithExpr -> term rightrec_arithExpr
+relExpr -> arithExpr relOp arithExpr
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relOp -> <
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+addOp -> -
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+addOp -> -
+factor -> intLit
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+rightrec_arithExpr -> addOp term rightrec_arithExpr
+rightrec_arithExpr -> addOp term rightrec_arithExpr
+arithExpr -> term rightrec_arithExpr
+relExpr -> arithExpr relOp arithExpr
+idOrSelf -> id
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+indice -> [ arithExpr ]
+rept_idnest10 -> EPSILON
+rept_idnest10 -> indice rept_idnest10
+factor2 -> rept_idnest10
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relOp -> >
+idOrSelf -> id
+idOrSelf -> id
+factor2 -> EPSILON
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+addOp -> +
+factor -> intLit
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+rightrec_arithExpr -> addOp term rightrec_arithExpr
+arithExpr -> term rightrec_arithExpr
+indice -> [ arithExpr ]
+rept_idnest10 -> EPSILON
+rept_idnest10 -> indice rept_idnest10
+factor2 -> rept_idnest10
+varOrFunc -> EPSILON
+factor -> idnest id varOrFunc
+righrec_term -> EPSILON
+term -> factor rightrec_term
+rightrec_arithExpr -> EPSILON
+arithExpr -> term rightrec_arithExpr
+relExpr -> arithExpr relOp arithExpr

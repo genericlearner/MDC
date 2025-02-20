@@ -1,0 +1,108 @@
+function testVariables() => void
+{
+  local a: integer;
+  local b: float;
+  local c: id;
+  
+  a := 10;
+  b := 3.14;
+  c := var_name1;
+
+  write(a);
+  write(b);
+  write(c);
+}
+
+function testExpressions() => void
+{
+  local x: integer;
+  local y: float;
+  local result: float;
+  
+  x := 5;
+  y := 2.5;
+  result := x * y + (10 - 4) / 2;
+  
+  write(result);
+}
+
+function testControlFlow() => void
+{
+  local i: integer;
+  local sum: integer;
+
+  sum := 0;
+  i := 1;
+
+  while (i <= 10) {
+    if (i + 2 == 0) then {
+      sum := sum + i;
+    } else {
+      sum := sum - i;
+    };
+    i := i + 1;
+  };
+
+  write(sum);
+}
+
+class SHAPE {
+  public  function build(A: float, B: float) => LINEAR;
+  public function area(a: int) => float;
+  public function perimeter () => float;
+};
+
+class QUADRATIC isa POLYNOMIAL {
+  private attribute width: float;
+  private attribute height: float;
+
+  public constructor (w: float, h: float);
+  public function area () => float;
+  public function perimeter () => float;
+};
+
+function testObjects() => void
+{
+  //local rect: RECTANGLE(5.0, 10.0);
+
+  write(rect.area());
+  write(rect.perimeter());
+}
+
+function testArrays() => void
+{
+  local arr: integer[5];
+  local i: integer;
+
+  i := 0;
+  while (i < 5) {
+    arr[i] := i * 2;
+    i := i + 1;
+  };
+
+  i := 0;
+  while (i < 5) {
+    write(arr[i]);
+    i := i + 1;
+  };
+}
+
+class CALCULATOR {
+  public function multiply (x: integer, y: integer[][]) => integer;
+  public function multiply (x: float, y: float) => float;
+};
+
+function testNestedExpressions() => void
+{
+  while(){};
+  local x: float;
+  id.id;
+  id[id].id[id];
+  id[id][id].id[id][id];
+  id[id][id].id;
+  x := (3 + 2) * (4 / (1 + 1)) - 5;
+  write(x);
+}
+
+
+

@@ -1,4 +1,6 @@
 ﻿  parser.cpp
-C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(416): warning C4715: 'Parser::factor2': not all control paths return a value
-C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(830): warning C4715: 'Parser::rept_variable': not all control paths return a value
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(122,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(130,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(585): warning C4715: 'Parser::factor2': not all control paths return a value
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1049): warning C4715: 'Parser::rept_variable': not all control paths return a value
   MDC.vcxproj -> C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\Debug\MDC.exe

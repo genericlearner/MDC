@@ -127,15 +127,36 @@ statBlock -> '{' rept-statBlock1 '}'
 statBlock -> statement
 rept-statBlock1 -> statement rept-statBlock1 
 rept-statBlock1 -> EPSILON 
-statBlock -> EPSILON 
-assignStat -> assignOp expr
-assignStat -> EPSILON
-statement -> idOrSelf factor2 VarOrFunc assignStat ';'
+statBlock -> EPSILON
+
+
+
+statement -> statement2
+statement2 -> 'id' stateVar
+statement2 -> 'self' statementidnest '.' statement2
+statementidnest -> '(' aParams ')'
+statementidnest -> rept-idnest10
 statement -> 'if' '(' relExpr ')' 'then' statBlock 'else' statBlock ';' 
 statement -> 'while' '(' relExpr ')' statBlock ';' 
 statement -> 'read' '(' variable ')' ';' 
 statement -> 'write' '(' expr ')' ';' 
-statement -> 'return' '(' expr ')' ';' 
+statement -> 'return' '(' expr ')' ';'
+
+
+stateVar -> rept-idnest10 finishvar
+stateVar ->'(' aParams ')' finishfunc
+finishvar -> assignOp expr ';'
+finishvar -> stateFuncOrVar
+finishfunc -> ';'
+finishfunc -> stateFuncOrVar
+
+stateFuncOrVar -> '.' statenest2
+statenest2 -> 'id' statementnest3
+statenest2 -> 'self' statementidnest stateFuncOrVar
+statementnest3 -> '(' aParams ')' finishfunc
+statementnest3 -> rept-idnest10 finishvar
+
+
 
 visibility -> 'public' 
 visibility -> 'private' 

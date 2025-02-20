@@ -5,7 +5,7 @@ class POLYNOMIAL {
 
 class LINEAR isa POLYNOMIAL {
 	private attribute a: float;
-	private attribute b: float;
+	attribute b: float;
 	public  function build(A: float, B: float) => LINEAR;
 	public  function evaluate(x: float) => float;
 };

@@ -14,11 +14,11 @@ class Parser{
 
         std::unordered_map<std::string, std::vector<TokenType>>firstSet;
         std::unordered_map<std::string, std::vector<TokenType>>followSet;
-
         Token lookAhead;
         Lexer& lexer;
         bool checkFirstSet(std::string funcName);
         bool checkFollowSet(std::string funcName);
+        bool epsilonCheck(std::string funcName);
         bool match(TokenType token);
         bool start();
         bool prog();
@@ -83,6 +83,7 @@ class Parser{
         bool statement();
         bool assignStat();
         bool visibility();
+        bool skipErrors(std::string funcName);
 
     public:
         //Parser();

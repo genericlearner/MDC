@@ -12,7 +12,7 @@ function bubbleSort(arr: int[], size: int) => void
   while (i < n-1) { 
     while (j < n-i-1) {
       if (arr[j] > arr[j+1]) 
-        then {
+         {
           // swap temp and arr[i]
           temp := arr[j];
           arr[j] := arr[j+1];
