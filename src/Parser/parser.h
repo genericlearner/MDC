@@ -82,7 +82,16 @@ class Parser{
         bool rept_statBlock1();
         bool statement();
         bool assignStat();
+        bool statement2();
+        bool statementidnest();
+        bool stateVar();
+        bool finishVar();
+        bool finishFunc();
+        bool stateFuncOrVar();
+        bool statenest2();
+        bool statementnest3();
         bool visibility();
+        
         bool skipErrors(std::string funcName);
 
     public:

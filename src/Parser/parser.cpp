@@ -100,7 +100,7 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
         TokenType::OR, TokenType::MULT, TokenType::DIV, TokenType::AND, TokenType::DOT, TokenType::ASSIGN };
     followSet["statBlock"] = { TokenType::ELSE, TokenType::SEMICOLON };
     followSet["rept_statBlock1"] = { TokenType::CLOSECURLY };
-    followSet["assignStat"] = { TokenType::SEMICOLON };
+    
 
     lookAhead = lexer.nextToken();
 }
