@@ -36,7 +36,12 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
         TokenType::SELF}, {TokenType::OPENCURLY} };
     firstSet["STATEMENTS"] = { {TokenType::IF, TokenType::READ, TokenType::RETURN, TokenType::WHILE, TokenType::WRITE, TokenType::ID,
         TokenType::SELF} };
-
+    firstSet["EXPR"] = { {TokenType::OPENPAR, TokenType::INTEGER_VAL, TokenType::FLOAT_VAL, TokenType::NOT, TokenType::ID, TokenType::SELF,
+        TokenType::SUBT, TokenType::ADD} };
+    firstSet["EXPR2"] = { {TokenType::EQ, TokenType::GT, TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ} };
+    firstSet["RELEXPR"] = { {TokenType::OPENPAR, TokenType::INTEGER_VAL, TokenType::FLOAT_VAL, TokenType::NOT, TokenType::ID, TokenType::SELF,
+        TokenType::SUBT, TokenType::ADD} };
+    firstSet[""]
 
 
 
@@ -230,7 +235,7 @@ bool Parser::opt_classDecl2(){
             std::cout<<"opt_classDecl2 -> isa id rept_opt_classDecl22"<<std::endl;
             outDerivation << "opt_classDecl2 -> isa id rept_opt_classDecl22 \n";
             return true;
-        }
+        } 
         else return false;
     }
     else if(lookAhead.getType() == TokenType::OPENCURLY){
