@@ -41,7 +41,79 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
     firstSet["EXPR2"] = { {TokenType::EQ, TokenType::GT, TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ} };
     firstSet["RELEXPR"] = { {TokenType::OPENPAR, TokenType::INTEGER_VAL, TokenType::FLOAT_VAL, TokenType::NOT, TokenType::ID, TokenType::SELF,
         TokenType::SUBT, TokenType::ADD} };
-    firstSet[""]
+    firstSet["ARITHEXPR"] = { {TokenType::OPENPAR, TokenType::INTEGER_VAL, TokenType::FLOAT_VAL, TokenType::NOT, TokenType::ID, TokenType::SELF,
+       TokenType::SUBT, TokenType::ADD} };
+    firstSet["RIGHTRECARITHEXPR"] = { {TokenType::SUBT, TokenType::OR, TokenType::ADD} };
+    firstSet["SIGN"] = { {TokenType::ADD}, {TokenType::SUBT} };
+    firstSet["TERM"] = { {TokenType::OPENPAR, TokenType::INTEGER_VAL, TokenType::FLOAT_VAL, TokenType::NOT, TokenType::ID, TokenType::SELF,
+        TokenType::SUBT, TokenType::ADD} };
+    firstSet["RIGHTRECTERM"] = { {TokenType::MULT, TokenType::DIV, TokenType::AND} };
+    firstSet["FACTOR"] = { {TokenType::SUBT, TokenType::ADD}, {TokenType::ID, TokenType::SELF}, {TokenType::NOT}, {TokenType::INTEGER_VAL}, {TokenType::FLOAT_VAL},
+        {TokenType::OPENPAR} };
+    //epsilon?
+    firstSet["FACTOR2"] = { {TokenType::OPENSQUARE}, {TokenType::OPENPAR} };
+    firstSet["INDICES"] = { {TokenType::OPENSQUARE} };
+    firstSet["REPTVARIABLEORFUNCTIONCALL"] = { {TokenType::DOT} };
+    firstSet["VARIABLE"] = { {TokenType::ID, TokenType::SELF} };
+    firstSet["VARIABLE2"] = { {TokenType::OPENSQUARE, TokenType::DOT}, {TokenType::OPENPAR} };
+    firstSet["REPTVARIABLE"] = { {TokenType::DOT} };
+    firstSet["VARIDNEST"] = { {TokenType::DOT} };
+    firstSet["VARIDNEST2"] = { {TokenType::OPENSQUARE}, {TokenType::OPENPAR} };
+    firstSet["INDICE"] = { {TokenType::OPENSQUARE} };
+    firstSet["IDNEST"] = { {TokenType::DOT} };
+    firstSet["IDNEST2"] = { {TokenType::OPENSQUARE},{TokenType::OPENPAR} };
+    firstSet["ARRAYSIZE"] = { {TokenType::OPENSQUARE} };
+    firstSet["ARRATSIZE2"] = { {TokenType::CLOSESQUARE}, {TokenType::INTEGER_VAL} };
+    firstSet["ARRAYSIZES"] = { {TokenType::OPENSQUARE} };
+    firstSet["TYPE"] = { {TokenType::INT_T}, {TokenType::ID}, {TokenType::FLOAT_T} };
+    firstSet["RETURNTYPE"] = { {TokenType::INT_T, TokenType::ID, TokenType::FLOAT_T}, {TokenType::VOID} };
+    firstSet["APARAMS"] = { {TokenType::OPENPAR, TokenType::INTEGER_VAL, TokenType::FLOAT_VAL, TokenType::NOT, TokenType::ID, TokenType::SELF,
+        TokenType::SUBT, TokenType::ADD} };
+    firstSet["REPTAPARAMS1"] = { {TokenType::COMMA} };
+    firstSet["APARAMSTAIL"] = { {TokenType::COMMA} };
+    firstSet["FPARAMS"] = { {TokenType::ID} };
+    firstSet["REPTFPARAMS1"] = { {TokenType::COMMA} };
+    firstSet["FPARAMSTAIL"] = { {TokenType::COMMA} };
+    firstSet["ASSIGNOP"] = { {TokenType::ASSIGN} };
+    firstSet["RELOP"] = { {TokenType::NOTEQ}, {TokenType::LTEQ}, {TokenType::LT}, {TokenType::GTEQ},{TokenType::GT}, {TokenType::EQ} };
+    firstSet["ADDOP"] = { {TokenType::ADD}, {TokenType::OR}, {TokenType::SUBT} };
+    firstSet["MULTOP"] = { {TokenType::AND}, {TokenType::DIV}, {TokenType::MULT} };
+    firstSet["IDORSELF"] = { {TokenType::ID}, {TokenType::SELF} };
+
+
+    followSet["START"] = { {TokenType::ENDOFILE} };
+    followSet["PROG"] = { {TokenType::ENDOFILE} };
+    followSet["VISMEMBERDECL"] = { {TokenType::CLOSECURLY} };
+    followSet["ISA1"] = { {TokenType::OPENCURLY} };
+    followSet["ISA2"] = { {TokenType::OPENCURLY} };
+    followSet["IMPLBODY"] = { {TokenType::CLOSECURLY} };
+    followSet["LOCALVARDECLORSTAT2"] = { {TokenType::CLOSECURLY} };
+    followSet["FUNCALLORASSIGN4"] = { {TokenType::SEMICOLON} };
+    followSet["STATBLOCK"] = { {TokenType::ELSE, TokenType::SEMICOLON} };
+    followSet["STATEMENTS"] = { {TokenType::CLOSECURLY} };
+    followSet["EXPR2"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA} };
+    followSet["RIGHTRECARITHEXPR"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::EQ,
+        TokenType::GT, TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE} };
+    followSet["RIGHTRECTERM"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::EQ,
+        TokenType::GT, TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE, TokenType::SUBT, TokenType::OR,
+        TokenType::ADD} };
+    followSet["FACTOR2"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::GT,
+        TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE, TokenType::SUBT, TokenType::OR,
+        TokenType::ADD, TokenType::MULT, TokenType::DIV, TokenType::AND, TokenType::DOT} };
+    followSet["INDICES"] = { {TokenType::ASSIGN, TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::GT,
+        TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE, TokenType::SUBT, TokenType::OR,
+        TokenType::ADD, TokenType::MULT, TokenType::DIV, TokenType::AND, TokenType::DOT} };
+    followSet["REPTVARIABLEORFUNCTIONCAL"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::GT,
+        TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE, TokenType::SUBT, TokenType::OR,
+        TokenType::ADD, TokenType::MULT, TokenType::DIV, TokenType::AND} };
+    followSet["VARIABLE2"] = { {TokenType::CLOSEPAR} };
+    followSet["REPTVARIABLE"] = { {TokenType::CLOSEPAR} };
+    followSet["VARIDNEST2"] = { {TokenType::CLOSEPAR, TokenType::DOT} };
+    followSet["ARRAYSIZES"] = { {TokenType::SEMICOLON, TokenType::CLOSEPAR, TokenType::COMMA} };
+    followSet["APARAMS"] = { {TokenType::CLOSEPAR} };
+    followSet["REPTAPARAMS1"] = { {TokenType::CLOSEPAR} };
+    followSet["FPARAMS"] = { {TokenType::CLOSEPAR} };
+    followSet["REPTFPARAMS1"] = { {TokenType::CLOSEPAR} };
 
 
 
