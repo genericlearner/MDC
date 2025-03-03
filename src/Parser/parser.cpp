@@ -7,10 +7,10 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
     firstSet["START"] = { {TokenType::FUNCTION, TokenType::CONSTRUCTOR, TokenType::IMPLEMENTATION, TokenType::CLASS} };
     firstSet["PROG"] = { {TokenType::FUNCTION, TokenType::CONSTRUCTOR, TokenType::IMPLEMENTATION, TokenType::CLASS} };
     firstSet["CLASSIMPLFUNC"] = { {TokenType::CLASS}, {TokenType::IMPLEMENTATION}, {TokenType::FUNCTION, TokenType::CONSTRUCTOR} };
-    firstSet["CLASSDECL"] = { TokenType::CLASS };
+    firstSet["CLASSDECL"] = { {TokenType::CLASS} };
     firstSet["VISMEMBERDECL"] = { {TokenType::PRIVATE, TokenType::PUBLIC} };
     firstSet["ISA1"] = { {TokenType::ISA} };
-    firstSet["ISA2"] = { {TokenType::COMMA} };
+    firstSet["ISA2"] = { {TokenType::COMMA} }; 
     firstSet["IMPLDEF"] = { {TokenType::IMPLEMENTATION} };
     firstSet["IMPLBODY"] = { {TokenType::FUNCTION, TokenType::CONSTRUCTOR} };
     firstSet["FUNCDEF"] = { {TokenType::FUNCTION, TokenType::CONSTRUCTOR} };
@@ -19,8 +19,8 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
     firstSet["FUNCDECL"] = { {TokenType::FUNCTION, TokenType::CONSTRUCTOR} };
     firstSet["FUNCHEAD"] = { {TokenType::CONSTRUCTOR}, {TokenType::FUNCTION} };
     firstSet["FUNCBODY"] = { {TokenType::OPENCURLY} };
-    firstSet["LOCALVARDECLORSTAT"] = { {TokenType::IF, TokenType::READ, TokenType::RETURN, TokenType::WHILE, TokenType::WRITE, TokenType::ID,
-        TokenType::SELF}, {TokenType::LOCAL} };
+    firstSet["LOCALVARDECLORSTAT"] = { {TokenType::LOCAL} , {TokenType::IF, TokenType::READ, TokenType::RETURN, TokenType::WHILE, TokenType::WRITE, TokenType::ID,
+        TokenType::SELF}  };
     firstSet["LOCALVARDECLORSTAT2"] = { {TokenType::IF, TokenType::READ, TokenType::RETURN, TokenType::WHILE, TokenType::WRITE, TokenType::ID,
         TokenType::SELF, TokenType::LOCAL} };
     firstSet["ATTRDECL"] = { {TokenType::ATTRIBUTE} };
@@ -63,7 +63,7 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
     firstSet["IDNEST"] = { {TokenType::DOT} };
     firstSet["IDNEST2"] = { {TokenType::OPENSQUARE},{TokenType::OPENPAR} };
     firstSet["ARRAYSIZE"] = { {TokenType::OPENSQUARE} };
-    firstSet["ARRATSIZE2"] = { {TokenType::CLOSESQUARE}, {TokenType::INTEGER_VAL} };
+    firstSet["ARRAYSIZE2"] = { {TokenType::CLOSESQUARE}, {TokenType::INTEGER_VAL} };
     firstSet["ARRAYSIZES"] = { {TokenType::OPENSQUARE} };
     firstSet["TYPE"] = { {TokenType::INT_T}, {TokenType::ID}, {TokenType::FLOAT_T} };
     firstSet["RETURNTYPE"] = { {TokenType::INT_T, TokenType::ID, TokenType::FLOAT_T}, {TokenType::VOID} };
@@ -78,7 +78,7 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
     firstSet["RELOP"] = { {TokenType::NOTEQ}, {TokenType::LTEQ}, {TokenType::LT}, {TokenType::GTEQ},{TokenType::GT}, {TokenType::EQ} };
     firstSet["ADDOP"] = { {TokenType::ADD}, {TokenType::OR}, {TokenType::SUBT} };
     firstSet["MULTOP"] = { {TokenType::AND}, {TokenType::DIV}, {TokenType::MULT} };
-    firstSet["IDORSELF"] = { {TokenType::ID}, {TokenType::SELF} };
+    firstSet["IDORSELF"] = { {TokenType::SELF}, {TokenType::ID} };
 
 
     followSet["START"] = { {TokenType::ENDOFILE} };
@@ -103,7 +103,7 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
     followSet["INDICES"] = { {TokenType::ASSIGN, TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::GT,
         TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE, TokenType::SUBT, TokenType::OR,
         TokenType::ADD, TokenType::MULT, TokenType::DIV, TokenType::AND, TokenType::DOT} };
-    followSet["REPTVARIABLEORFUNCTIONCAL"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::GT,
+    followSet["REPTVARIABLEORFUNCTIONCALL"] = { {TokenType::CLOSEPAR, TokenType::SEMICOLON, TokenType::COMMA, TokenType::EQ, TokenType::GT,
         TokenType::GTEQ, TokenType::LT, TokenType::LTEQ, TokenType::NOTEQ, TokenType::CLOSESQUARE, TokenType::SUBT, TokenType::OR,
         TokenType::ADD, TokenType::MULT, TokenType::DIV, TokenType::AND} };
     followSet["VARIABLE2"] = { {TokenType::CLOSEPAR} };
@@ -135,17 +135,34 @@ bool Parser::match(TokenType token){
     }
 };
 
-bool Parser::checkFirstSet(std::string funcName){
+bool Parser::checkFirstSet(std::string funcName, int pos){
     bool isValid = false;
-    for (int i = 0; i < firstSet[funcName].size(); i++) {
-        if (lookAhead.getType() == firstSet[funcName][i])isValid = true;
+    if (firstSet.find(funcName) != firstSet.end()) {
+        for (size_t i = 0; i < firstSet[funcName][pos].size(); i++) {
+            if (lookAhead.getType() == firstSet[funcName][pos][i]) {
+                return true;
+            }
+        }
     }
     return isValid;
 }
 
+bool Parser::checkAllFirstSet(std::string funcName) {
+    bool isValid = false;
+    if (firstSet.find(funcName) != firstSet.end()) {
+        for (size_t i = 0; i < firstSet[funcName].size(); i++) {
+            for (size_t j = 0; j < firstSet[funcName][i].size(); j++) {
+                if (lookAhead.getType() == firstSet[funcName][i][j]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return isValid;
+}
 bool Parser::checkFollowSet(std::string funcName){
     bool isValid = false;
-    for (int i = 0; i < followSet[funcName].size(); i++) {
+    for (size_t i = 0; i < followSet[funcName].size(); i++) {
         if (lookAhead.getType() == followSet[funcName][i]) isValid = true;
     }
     return isValid;
@@ -155,20 +172,17 @@ bool Parser::epsilonCheck(std::string funcName) {
 }
 
 bool Parser::skipErrors(std::string funcName) {
-    if (checkFirstSet(funcName) || epsilonCheck(funcName) && checkFollowSet(funcName)) {
+    if (checkAllFirstSet(funcName) || epsilonCheck(funcName)) {
         return true;
     }
     else {
-        std::cout<<"syntax error at"<< lookAhead.getLine()<<std::endl;
         outDerivation << "syntax error at" << lookAhead.getLine() <<" \n";
-        while (!checkFirstSet(funcName) && checkFollowSet(funcName)) {
+        while (!checkAllFirstSet(funcName) && !checkFollowSet(funcName)) {
             lookAhead = lexer.nextToken();
-            if (checkFollowSet(funcName)) {
-                std::cout << "Parsing Aborted" << std::endl;
-                outDerivation << "Parsing Aborted \n";
-                return false;
-            }
-            
+        }
+        if (epsilonCheck(funcName) && checkFollowSet(funcName)) {
+            outDerivation << "Parsing Aborted \n";
+            return false;
         }
         return true;
     }
@@ -189,8 +203,7 @@ bool Parser::startParse(){
 
 bool Parser::start(){
     
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR || lookAhead.getType() == TokenType::CLASS
-        || lookAhead.getType() == TokenType::IMPLEMENTATION){
+    if(checkFirstSet("START", 0)) {
         if(prog()){
             std::cout<<"start->prog"<<std::endl;
             outDerivation<<"Start -> prog \n";
@@ -218,1187 +231,1348 @@ bool Parser::start(){
 };
 
 bool Parser::prog(){
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR || lookAhead.getType() == TokenType::CLASS
-        || lookAhead.getType() == TokenType::IMPLEMENTATION){
+    bool success = false;
+    if (!skipErrors("PROG"))return false;
+    if(checkFirstSet("PROG", 0)) {
+        if(classimplfunc() && prog()){
+            std::cout << "PROG-> CLASSIMPLFUNC PROG" << std::endl;
+            outDerivation << "PROG-> CLASSIMPLFUNC PROG \n";
+            success = true;
+        }
+        
+    }
+    else if(checkFollowSet("PROG")){
+        std::cout << "PROG -> EPSILON" << std::endl;
+        outDerivation << "PROG -> EPSILON \n";
+        success = true;
+    }
+    else {}
+    return success;
+};
 
-        if(rept_prog0()){
-            std::cout<<"prog->rept_prog0"<<std::endl;
-            outDerivation << "prog->rept_prog0 \n";
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    else if(match(TokenType::ENDOFILE)){
-        std::cout<<"prog->EOF"<<std::endl;
-        outDerivation << "prog->EOF \n";
-        return true;
-    }
-    else{
-        return false;
-    }
-};
-bool Parser::rept_prog0(){
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR || lookAhead.getType() == TokenType::CLASS 
-        || lookAhead.getType() == TokenType::IMPLEMENTATION){
-        if(classOrImpleOrFunc() && rept_prog0()){
-            std::cout<<"rept_prog0 -> classOrImplOrFunc rept_prog0"<<std::endl;
-            outDerivation << "rept_prog0 -> classOrImplOrFunc rept_prog0 \n";
-            return true;
-        }
-        else{
-            return false;
+bool Parser::classimplfunc(){
+    bool success = false;
+    if(!skipErrors("CLASSIMPLFUNC"))return false;
+
+    if(checkFirstSet("CLASSIMPLFUNC", 0)) {
+        if(classdecl()){
+            std::cout << "CLASSIMPLFUNC -> CLASSDEC" << std::endl;
+            outDerivation << "CLASSIMPLFUNC -> CLASSDECL\n";
+            success = true;
         }
     }
-    else if(lookAhead.getType() == TokenType::ENDOFILE){
-        std::cout<<"rept_prog-> EPSILON"<<std::endl;
-        outDerivation << "rept_prog-> EPSILON \n";
-        return true;
-    }
-    return false;
-};
-bool Parser::classOrImpleOrFunc(){
-    if(lookAhead.getType() == TokenType::IMPLEMENTATION){
-        if(implDef()){
-            std::cout<<"classOrImpleOrFunc -> implDef"<<std::endl;
-            outDerivation << "classOrImpleOrFunc -> implDef \n";
-            return true;
+    else if(checkFirstSet("CLASSIMPLFUNC", 1)){
+        if(impldef()){
+            std::cout << "CLASSIMPLFUNC -> IMPLDEF" << std::endl;
+            outDerivation << "CLASSIMPLFUNC -> IMPLDEF \n";
+            success = true;
         }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLASS){
-        if(classDecl()){
-            std::cout<<"classOrImpleOrFunc-> classDecl"<<std::endl;
-            outDerivation << "classOrImpleOrFunc-> classDecl \n";
-            return true;
-        }
-        else return false;
 
     }
-    else if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR){
-        if(funcDef()){
-            std::cout<<"classOrImplOrFunc -> funcDef"<<std::endl;
-            outDerivation << "classOrImplOrFunc -> funcDef \n";
-            return true;
+    else if(checkFirstSet("CLASSIMPLFUNC", 2)){
+        if(funcdef()){
+            std::cout << "CLASSIMPLFUNC -> FUNCDEF" << std::endl;
+            outDerivation << "CLASSIMPLFUNC -> FUNCDEF\n";
+            success = true;
         }
-        else return false;
     }
-    else {
-        return false;
-    }
+    else {}
+
+    return success;
 };
 //check the conditions of the first set for this declaration
-bool Parser::classDecl(){
-    if (lookAhead.getType() == TokenType::CLASS) {
-            if (match(TokenType::CLASS) && match(TokenType::ID) && opt_classDecl2() && match(TokenType::OPENCURLY)
-                && rept_classDecl4() && match(TokenType::CLOSECURLY) && match(TokenType::SEMICOLON)) {
-                std::cout << "classDecl -> class id opt_classDecl2 { rept_classDecl4 }" << std::endl;
-                outDerivation << "classDecl -> class id opt_classDecl2 { rept_classDecl4 } \n";
-                return true;
+bool Parser::classdecl(){
+    bool success = false;
+    if (!skipErrors("CLASSDECL")) return false;
+    if (checkFirstSet("CLASSDECL", 0)) {
+            if (match(TokenType::CLASS) && match(TokenType::ID) && isa1() && match(TokenType::OPENCURLY)
+                && vismemberdecl() && match(TokenType::CLOSECURLY) && match(TokenType::SEMICOLON)) {
+                std::cout << "CLASSDECL -> CLASS ID ISA1 OPENCURLY VSEMEMBERDECL CLOSECURLY SEMICOLON" << std::endl;
+                outDerivation << "CLASSDECL -> CLASS ID ISA1 OPENCURLY VSEMEMBERDECL CLOSECURLY SEMICOLON \n";
+                success = true;
             }
-            else return false;
         }
-    else return false;
+    return success;
 };
-bool Parser::opt_classDecl2(){
-    if(lookAhead.getType() == TokenType::ISA){
-        if(match(TokenType::ISA) && match(TokenType::ID) && rept_opt_classDecl22()){
-            std::cout<<"opt_classDecl2 -> isa id rept_opt_classDecl22"<<std::endl;
-            outDerivation << "opt_classDecl2 -> isa id rept_opt_classDecl22 \n";
-            return true;
-        } 
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::OPENCURLY){
-        return true;
-    }
-    else return false;
-};
-bool Parser::rept_opt_classDecl22(){
-    if(lookAhead.getType() == TokenType::COMMA){
-            if(match(TokenType::COMMA) && match(TokenType::ID) && rept_opt_classDecl22()){
-                std::cout<<"rept_opt_classDecl22 -> , ID rept_opt_classDecl22"<<std::endl;
-                outDerivation << "rept_opt_classDecl22 -> , ID rept_opt_classDecl22 \n";
-                return true;
-            }
-            else return false;
-    }
-    else if(lookAhead.getType() == TokenType::OPENCURLY){
-        return true;
-    }
-    else return false;
-};
-bool Parser::rept_classDecl4(){
-    if(lookAhead.getType() == TokenType::PRIVATE || lookAhead.getType() == TokenType::PUBLIC){
-        if(visibility() && memberDecl() && rept_classDecl4()){
-            std::cout<<"rept_classDecl4 -> visibility memberDecl rept_classDecl4"<<std::endl;
-            outDerivation << "rept_classDecl4 -> visibility memberDecl rept_classDecl4 \n";
-            return true;
+
+bool Parser::vismemberdecl() {
+    bool success = false;
+    if (!skipErrors("VISMEMBERDECL")) return false;
+    if (checkFirstSet("VISMEMBERDECL", 0)) {
+        if (visibility() && memdecl() && vismemberdecl()) {
+            std::cout << "VISEMEMBERDECL -> VISIBILITY MEMDECL VISMEMBERDECL" << std::endl;
+            outDerivation << "VISEMEMBERDECL -> VISIBILITY MEMDECL VISMEMBERDECL \n";
+            success = true;
         }
-        else return false;
     }
-    else if(lookAhead.getType() == TokenType::CLOSECURLY){
-        return true;
+    else if (checkFollowSet("VISMEMBERDECL")) {
+        std::cout << "VISEMEMBERDECL -> EPSILON" << std::endl;
+        outDerivation << "VISEMEMBERDECL -> EPSILON\n";
+        success = true;
     }
-    else return false;
-};
-bool Parser::implDef(){
-    if(match(TokenType::IMPLEMENTATION)){
-        if(match(TokenType::ID)){
-            if(match(TokenType::OPENCURLY)){
-                    if(rept_implDef3() && match(TokenType::CLOSECURLY)){
-                        std::cout<<"implDef -> implementation id { rept_implDef3 }"<<std::endl;
-                        outDerivation << "implDef -> implementation id { rept_implDef3 } \n";
-                        return true;
-                }
-                else return false;
-            }
-            else return false;
+    else {}
+    return success;
+}
+
+bool Parser::isa1() {
+    bool success = false;
+    if (!skipErrors("ISA1")) return false;
+    if (checkFirstSet("ISA1", 0)) {
+        if (match(TokenType::ISA) && match(TokenType::ID) && isa2()) {
+            std::cout << "ISA 1 -> isa id isa2" << std::endl;
+            outDerivation << "ISA 1 -> isa id isa2 \n";
+            success = true;
+
         }
-        else return false;
+        else success = false;
+        
     }
-    else return false;
-};
-bool Parser::rept_implDef3(){
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR){
-        if(funcDef()&& rept_implDef3()){
-            std::cout<<"rept_implDef3 -> funcDef rept_implDef3"<<std::endl;
-            outDerivation << "rept_implDef3 -> funcDef rept_implDef3 \n";
-            return true;
+    else if (checkFollowSet("ISA1")) {
+        std::cout << "ISA 1-> EPSILON" << std::endl;
+        outDerivation << "ISA 1-> EPSILON \n";
+        success = true;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::isa2() {
+    bool success = false;
+    if (!skipErrors("ISA2")) return false;
+    if (checkFirstSet("ISA2", 0)) {
+        if (match(TokenType::COMMA) && match(TokenType::ID) && isa2()) {
+            std::cout << "ISA 2-> COMMA ID ISA2" << std::endl;
+            outDerivation << "ISA 2-> COMMA ID ISA2 \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::CLOSECURLY){
-        std::cout<<"rept_implDef3 -> EPSILON"<<std::endl;
-        outDerivation << "rept_implDef3 -> EPSILON \n";
-        return true;
+    else if (checkFollowSet("ISA2")) {
+        std::cout << "ISA 2-> EPSILON" << std::endl;
+        outDerivation << "ISA 2-> EPSILON \n";
+        success = true;
     }
-    else return false;
-};
-bool Parser::funcDef(){
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR){
-        if(funcHead() && funcBody()){
-            std::cout<<"funcDef -> funchHead funcBody"<<std::endl;
-            outDerivation << "funcDef -> funchHead funcBody \n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::impldef() {
+    bool success = false;
+    if (!skipErrors("IMPLDEF")) return false;
+    if (checkFirstSet("IMPLDEF", 0)) {
+        if (match(TokenType::IMPLEMENTATION) && match(TokenType::ID) && match(TokenType::OPENCURLY) && implbody() && match(TokenType::CLOSECURLY)) {
+            std::cout << "IMPLDEF -> IMPLEMENTATION ID OPENCURLY IMPLBODY CLOSECURLY" << std::endl;
+            outDerivation << " IMPLDEF -> IMPLEMENTATION ID OPENCURLY IMPLBODY CLOSECURLY \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else return false;
-};
-bool Parser::funcHead(){
-    if(lookAhead.getType() == TokenType::CONSTRUCTOR){
-        if(match(TokenType::CONSTRUCTOR) && match(TokenType::OPENPAR) && fParams() && match(TokenType::CLOSEPAR)){
-            std::cout<<"funcHead -> constructor ( fParams )"<<std::endl;
-            outDerivation << "funcHead -> constructor ( fParams ) \n";
-            return true;
+    else success = false;
+    return success;
+}
+
+
+bool Parser::implbody() {
+    bool success = false;
+    if (!skipErrors("IMPLBODY")) return false;
+    if (checkFirstSet("IMPLBODY", 0)) {
+        if (funcdef() && implbody()) {
+            std::cout << "IMPLBODY -> FUNCDEF IMPLBODY" << std::endl;
+            outDerivation << "IMPLBODY -> FUNCDEF IMPLBODY \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::FUNCTION){
-        if(match(TokenType::FUNCTION) && match(TokenType::ID) && match(TokenType::OPENPAR) && fParams() && match(TokenType::CLOSEPAR)
-            && match(TokenType::ARROW) && returnType()){
-                std::cout<<"funcHead -> function id {fParams} => returnType"<<std::endl;
-                outDerivation << "funcHead -> function id {fParams} => returnType \n";
-                return true;
-            }
-        else return false;
+    else if (checkFollowSet("IMPLBODY")) {
+        std::cout << "IMPLBODY -> EPSILON" << std::endl;
+        outDerivation << "IMPLBODY -> EPSILON \n";
+        success = true;
     }
-    else return false;
-};
-bool Parser::funcBody(){
-    if(lookAhead.getType() == TokenType::OPENCURLY){
-        if(match(TokenType::OPENCURLY) && rept_funcBody1() && match(TokenType::CLOSECURLY)){
-            std::cout << "funcBody -> { rept_funcBody1 }" << std::endl;
-            outDerivation << "funcBody -> { rept_funcBody1 } \n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::funcdef() {
+    bool success = false;
+    if (!skipErrors("FUNCDEF")) return false;
+    if (checkFirstSet("FUNCDEF", 0)) {
+        if (funchead() && funcbody()) {
+            std::cout << "FUNCDEF -> FUNCHEAD FUNCBODY" << std::endl;
+            outDerivation << "FUNCDEF -> FUNCHEAD FUNCBODY \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else return false;
-};
-bool Parser::rept_funcBody1(){
-    if(lookAhead.getType() == TokenType::IF || lookAhead.getType() == TokenType::READ || lookAhead.getType() == TokenType::RETURN || lookAhead.getType() == TokenType::WHILE
-        || lookAhead.getType() == TokenType::WRITE || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF 
-        || lookAhead.getType() == TokenType::LOCAL){
-        if(localVarDeclOrStat() && rept_funcBody1()){
-            std::cout<<"rept_funcBody1 -> localVarDeclOrStat rept_funcBody1"<<std::endl;
-            outDerivation << "rept_funcBody1 -> localVarDeclOrStat rept_funcBody1\n";
-            return true;
-        } 
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSECURLY){
-        std::cout<<"rept_funcBody1 -> EPSILON"<<std::endl;
-        outDerivation << "rept_funcBody1 -> EPSILON\n";
-        return true;
-    }
-    return false;
-};
-bool Parser::localVarDeclOrStat(){
-    if(lookAhead.getType() == TokenType::LOCAL){
-        if(localVarDecl()){
-            std::cout<<"localVarDeclorStat -> localVarDecl"<<std::endl;
-            outDerivation << "localVarDeclorStat -> localVarDecl\n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::visibility() {
+    bool success = false;
+    if (!skipErrors("VISIBILITY")) return false;
+    if (checkFirstSet("VISIBILITY", 0)) {
+        if (match(TokenType::PUBLIC)) {
+            std::cout << "VISIBILITY -> PUBLIC" << std::endl;
+            outDerivation << "VISIBILITY -> PUBLIC \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if (lookAhead.getType() == TokenType::IF || lookAhead.getType() == TokenType::READ || lookAhead.getType() == TokenType::RETURN
-        || lookAhead.getType() == TokenType::WHILE || lookAhead.getType() == TokenType::WRITE || lookAhead.getType() == TokenType::ID
-        || lookAhead.getType() == TokenType::SELF) {
-        if(statement()){
-            std::cout<<"localVarDeclOrStat -> statement"<<std::endl;
-            outDerivation << "localVarDeclOrStat -> statement\n";
-            return true;
+    else if (checkFirstSet("VISIBILITY", 1)) {
+        if (match(TokenType::PRIVATE)) {
+            std::cout << "VISIBILITY -> PRIVATE" << std::endl;
+            outDerivation << "VISIBILITY -> PRIVATE \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else return false;
-};
-bool Parser::arithExpr(){
-    if(lookAhead.getType() == TokenType::OPENPAR || lookAhead.getType() == TokenType::FLOAT_VAL || lookAhead.getType() == TokenType::INTEGER_VAL
-        || lookAhead.getType() == TokenType::NOT || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT){
-        if(term() && rightrec_arithExpr()){
-            std::cout<<"arithExpr -> term rightrec_arithExpr"<<std::endl;
-            outDerivation << "arithExpr -> term rightrec_arithExpr\n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::memdecl() {
+    bool success = false;
+    if (!skipErrors("MEMDECL")) return false;
+    if (checkFirstSet("MEMDECL", 0)) {
+        if (funcdecl()) {
+            std::cout << "MEMDECL -> FUNCDECL" << std::endl;
+            outDerivation << "MEMDECL -> FUNCDECL\n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else return false;
-};
-bool Parser::rightrec_arithExpr(){
-    if(lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT || lookAhead.getType() == TokenType::OR){
-        if(addOp() && term() && rightrec_arithExpr()){
-            std::cout<<"rightrec_arithExpr -> addOp term rightrec_arithExpr"<<std::endl;
-            outDerivation << "rightrec_arithExpr -> addOp term rightrec_arithExpr\n";
-            return true;
+    else if (checkFirstSet("MEMDECL", 1)) {
+        if (attrdecl()) {
+            std::cout << "MEMDECL -> ATTRDECL" << std::endl;
+            outDerivation << "MEMDECL -> ATTRDECL\n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ || lookAhead.getType() == TokenType::CLOSEPAR
-        || lookAhead.getType() == TokenType::COMMA || lookAhead.getType() == TokenType::SEMICOLON || lookAhead.getType() == TokenType::CLOSESQUARE){
-        std::cout<<"rightrec_arithExpr -> EPSILON"<<std::endl;
-        outDerivation << "rightrec_arithExpr -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::term(){
-    if(lookAhead.getType() == TokenType::OPENPAR || lookAhead.getType() == TokenType::FLOAT_VAL || lookAhead.getType() == TokenType::INTEGER_VAL
-        || lookAhead.getType() == TokenType::NOT || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT){
-        if(factor() && rightrec_term()){
-            std::cout<<"term -> factor rightrec_term"<<std::endl;
-            outDerivation << "term -> factor rightrec_term\n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::funcdecl() {
+    bool success = false;
+    if (!skipErrors("FUNCDECL")) return false;
+    if (checkFirstSet("FUNCDECL", 0)) {
+        if (funchead() && match(TokenType::SEMICOLON)) {
+            std::cout << "FUNCDECL -> FUNCHEAD SEMICOLON" << std::endl;
+            outDerivation << "FUNCDECL -> FUNCHEAD SEMICOLON \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else return false;
-};
-bool Parser::rightrec_term(){
-    if(lookAhead.getType() == TokenType::MULT || lookAhead.getType() == TokenType::DIV || lookAhead.getType() == TokenType::AND){
-        if(multOp() && factor() && rightrec_term()){
-            std::cout<<"rightrec_term -> multOp factor rightrec_term"<<std::endl;
-            outDerivation << "rightrec_term -> multOp factor rightrec_term\n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::funchead() {
+    bool success = false;
+    if (!skipErrors("FUNCHEAD")) return false;
+    if (checkFirstSet("FUNCHEAD", 0)) {
+        if (match(TokenType::CONSTRUCTOR) && match(TokenType::OPENPAR) && fParams() && match(TokenType::CLOSEPAR)) {
+            std::cout << "CONSTRUCTOR OPENPAR FPARAMS CLOSEPAR" << std::endl;
+            outDerivation << " CONSTRUCTOR OPENPAR FPARAMS CLOSEPAR \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ || lookAhead.getType() == TokenType::CLOSEPAR
-        || lookAhead.getType() == TokenType::COMMA || lookAhead.getType() == TokenType::SEMICOLON || lookAhead.getType() == TokenType::CLOSESQUARE
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT || lookAhead.getType() == TokenType::OR){
-        std::cout<<"righrec_term -> EPSILON"<<std::endl;
-        outDerivation << "righrec_term -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::factor(){
-    if(lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT){
-        if(sign() && factor()){
-            std::cout<<"factor -> sign factor"<<std::endl;
-            outDerivation << "factor -> sign factor\n";
-            return true;
+    else if (checkFirstSet("FUNCHEAD", 1)) {
+        if (match(TokenType::FUNCTION) && match(TokenType::ID) && match(TokenType::OPENPAR) && fParams() && match(TokenType::CLOSEPAR) &&
+            match(TokenType::ARROW) && returnType()) {
+            std::cout << "FUNCTION ID OPENPAR FPARAMS CLOSEPAR ARROW RETURNTYPE" << std::endl;
+            outDerivation << "FUNCTION ID OPENPAR FPARAMS CLOSEPAR ARROW RETURNTYPE \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::NOT){
-        if(match(TokenType::NOT) && factor()){
-            std::cout<<"factor -> not factor"<<std::endl;
-            outDerivation << "factor -> not factor\n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::funcbody() {
+    bool success = false;
+    if (!skipErrors("FUNCBODY")) return false;
+    if (checkFirstSet("FUNCBODY", 0)) {
+        if (match(TokenType::OPENCURLY) && localvardeclorstat2() && match(TokenType::CLOSECURLY)) {
+            std::cout << "OPENPAR LOCALVARDECLORSTAT2 CLOSEPAR" << std::endl;
+            outDerivation << "OPENPAR LOCALVARDECLORSTAT2 CLOSEPAR \n";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::INTEGER_VAL){
-        if(match(TokenType::INTEGER_VAL)){
-            std::cout<<"factor -> intLit"<<std::endl;
-            outDerivation << "factor -> intLit\n";
-            return true;
+    else success = false;
+    return success;
+}
+
+bool Parser::localvardeclorstat() {
+    bool success = false;
+    if (!skipErrors("LOCALVARDECLORSTAT")) return false;
+    if (checkFirstSet("LOCALVARDECLORSTAT", 0)) {
+        if (localvardecl()) {
+            std::cout << "LOCALVARDECLORSTAT -> LOCALVARDECL" << std::endl;
+            outDerivation << "LOCALVARDECLORSTAT -> LOCALVARDECL \n";
+            success = true;
         }
-        else return false;
     }
-    else if(lookAhead.getType() == TokenType::FLOAT_VAL){
-        if(match(TokenType::FLOAT_VAL)){
-            std::cout<<"factor -> floatLit"<<std::endl;
-            outDerivation << "factor -> floatLit\n";
-            return true;
+    else if (checkFirstSet("LOCALVARDECLORSTAT", 1)) {
+        if (statement()) {
+            std::cout << "LOCALVARDECLORSTAT -> STATEMENT" << std::endl;
+            outDerivation << "LOCALVARDECLORSTAT -> STATEMENT \n";
+            success = true;
         }
-        else return false;
+         
     }
-    else if(lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF){
-        if(idOrSelf() && factor2() && VarOrFunc()){
-            std::cout<<"factor -> idnest id varOrFunc"<<std::endl;
-            outDerivation << "factor -> idnest id varOrFunc\n";
-            return true;
+    else {}
+    return success;
+
+}
+
+bool Parser::localvardeclorstat2() {
+    bool success = false;
+    if (!skipErrors("LOCALVARDECLORSTAT2")) return false;
+    if (checkFirstSet("LOCALVARDECLORSTAT2", 0)) {
+        if (localvardeclorstat() && localvardeclorstat2()) {
+            std::cout << "LOCALVARDECLORSTAT2 -> LOCALVARDECLORSTAT LOCALVARDECLORSTAT2" << std::endl;
+            outDerivation << "LOCALVARDECLORSTAT2 -> LOCALVARDECLORSTAT LOCALVARDECLORSTAT2 \n ";
+            success = true;
         }
-        else return false;
+        else success = false;
     }
-    else if(lookAhead.getType() == TokenType::OPENPAR){
-        if(match(TokenType::OPENPAR) && arithExpr() && match(TokenType::CLOSEPAR)){
-            std::cout<<"factor -> ( arithExpr )"<<std::endl;
-            outDerivation << "factor -> ( arithExpr )\n";
-            return true;
+    else if (checkFollowSet("LOCALVARDECLORSTAT2")) {
+        std::cout << "LOCALVARDECLORSTAT2 -> EPSILON " << std::endl;
+        outDerivation << "LOCALVARDECLORSTAT2 -> EPSILON \n";
+        success = true;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::attrdecl() {
+    bool success = false;
+    if (!skipErrors("ATTRDECL")) return false;
+    if (checkFirstSet("ATTRDECL", 0)) {
+        if (match(TokenType::ATTRIBUTE) && vardecl()) {
+            std::cout << "ATTRDECL -> ATTRIBUTE VARDECL " << std::endl;
+            outDerivation << "ATTRDECL -> ATTRIBUTE VARDECL \n";
+            success = true;
         }
-        else return false;
     }
-    else return false;
+    return success;
+}
+
+bool Parser::localvardecl() {
+    bool success = false;
+    if (!skipErrors("LOCALVARDECL")) return false;
+    if (checkFirstSet("LOCALVARDECL", 0)) {
+        if (match(TokenType::LOCAL) && vardecl()) {
+            std::cout << "LOCALVARDECL -> LOCAL VARDECL" << std::endl;
+            outDerivation << "LOCALVARDECL -> LOCAL VARDECL \n";
+            success = true;
+        }
+    }
+    else {}
+    return success;
+}
+
+bool Parser::vardecl() {
+    bool success = false;
+    if (!skipErrors("VARDECL")) return false;
+    if (checkFirstSet("VARDECL", 0)) {
+        if (match(TokenType::ID) && match(TokenType::COLON) && type() && arraySizes() && match(TokenType::SEMICOLON)) {
+            std::cout << "VARDECL -> ID COLON TYPE ARRAYSIZES SEMICOLON" << std::endl;
+            outDerivation << "VARDECL -> ID COLON TYPE ARRAYSIZES SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::statement() {
+    bool success = false;
+    if (!skipErrors("STATEMENT")) return false;
+    if (checkFirstSet("STATEMENT", 0)) {
+        if (funcallorassign() && match(TokenType::SEMICOLON)) {
+            std::cout << "STATEMENT -> FUNCALLAORASSIGN SEMICOLON " << std::endl;
+            outDerivation << "STATEMENT -> FUNCALLAORASSIGN SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFirstSet("STATEMENT", 1)) {
+        if (match(TokenType::WRITE) && match(TokenType::OPENPAR) && expr() && match(TokenType::CLOSEPAR)
+            && match(TokenType::SEMICOLON)) {
+            std::cout << "STATEMENT -> WRITE OPENPAR EXPR CLOSEPAR SEMICOLON" << std::endl;
+            outDerivation << "STATEMENT -> WRITE OPENPAR EXPR CLOSEPAR SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+
+    }
+    else if (checkFirstSet("STATEMENT", 2)) {
+        if (match(TokenType::WHILE) && match(TokenType::OPENPAR) && relexpr() && match(TokenType::CLOSEPAR)
+            && statblock() && match(TokenType::SEMICOLON)) {
+            std::cout << "STATEMENT -> WHILE OPENPAR RELEXPR CLOSEPAR STATBLOCK SEMICOLON" << std::endl;
+            outDerivation << "STATEMENT -> WHILE OPENPAR RELEXPR CLOSEPAR STATBLOCK SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFirstSet("STATEMENT", 3)) {
+        if (match(TokenType::RETURN) && match(TokenType::OPENPAR) && expr() && match(TokenType::CLOSEPAR)
+            && match(TokenType::SEMICOLON)) {
+            std::cout << "STATEMENT -> RETURN OPENPAR EXPR CLOSEPAR SEMICOLON" << std::endl;
+            outDerivation << "STATEMENT -> RETURN OPENPAR EXPR CLOSEPAR SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFirstSet("STATEMENT", 4)) {
+        if (match(TokenType::READ) && match(TokenType::OPENPAR) && variable() && match(TokenType::CLOSEPAR)
+            && match(TokenType::SEMICOLON)) {
+            std::cout << "STATEMENT -> READ OPENPAR VARIABLE CLOSEPAR SEMICOLON" << std::endl;
+            outDerivation << "STATEMENT -> READ OPENPAR VARIABLE CLOSEPAR SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFirstSet("STATEMENT", 5)) {
+        if (match(TokenType::IF) && match(TokenType::OPENPAR) && relexpr() && match(TokenType::CLOSEPAR)
+            && match(TokenType::THEN) && statblock() && match(TokenType::ELSE) && statblock() && match(TokenType::SEMICOLON)) {
+            std::cout << "STATEMENT -> IF OPENPAR RELEXPR CLOSEPAR THEN STATBLOCK ELSE STATBLOCK SEMICOLON" << std::endl;
+            outDerivation << "STATEMENT -> IF OPENPAR RELEXPR CLOSEPAR THEN STATBLOCK ELSE STATBLOCK SEMICOLON \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::funcallorassign() {
+    bool success = false;
+    if (!skipErrors("FUNCALLORASSIGN")) return false;
+    if (checkFirstSet("FUNCALLORASSIGN", 0)) {
+        if (idOrSelf() && funcallorassign2()) {
+            std::cout << "FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2" << std::endl;
+            outDerivation << "FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2 \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::funcallorassign2() {
+    bool success = false;
+    if (!skipErrors("FUNCALLORASSIGN2")) return false;
+    if (checkFirstSet("FUNCALLORASSIGN2", 0)) {
+        if (indices() && funcasllorassign3()) {
+            std::cout << "FUNCALLORASSIGN2 -> INDICES FUNCALLORASSIGN3" << std::endl;
+            outDerivation << "FUNCALLORASSIGN2 -> INDICES FUNCALLORASSIGN3 \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFirstSet("FUNCALLORASSIGN2", 1)) {
+        if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR) && funcallorassign4()) {
+            std::cout << "FUNCALLORASSIGN2 -> OPENPAR AAPARMS CLOSEPAR FUNCALLORASSIGN4" << std::endl;
+            outDerivation << "FUNCALLORASSIGN2 -> OPENPAR AAPARMS CLOSEPAR FUNCALLORASSIGN4 \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::funcasllorassign3() {
+    bool success = false;
+    if (!skipErrors("FUNCALLORASSIGN3")) return false;
+    if (checkFirstSet("FUNCALLORASSIGN3", 0)) {
+        if (assignOp() && expr()) {
+            std::cout << "FUNCALLORASSIGN3 -> ASSIGNOP EXPR" << std::endl;
+            outDerivation << "FUNCALLORASSIGN3 -> ASSIGNOP EXPR \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("FUNCALLORASSIGN3", 1)) {
+        if (match(TokenType::DOT) && match(TokenType::ID) && funcallorassign2()) {
+            std::cout << "FUNCALLORASSIGN3 -> DOT ID FUNCALLORASSIGN2" << std::endl;
+            outDerivation << "FUNCALLORASSIGN3 -> DOT ID FUNCALLORASSIGN2 \n";
+            success = true;
+        }
+    }
+    else {}
+    return success;
+}
+
+bool Parser::funcallorassign4() {
+    bool success = false;
+    if (!skipErrors("FUNCALLORASSIGN4")) return false;
+    if (checkFirstSet("FUNCALLORASSIGN4", 0)) {
+        if (match(TokenType::DOT) && match(TokenType::ID) && funcallorassign2()) {
+            std::cout << "FUNCALLORASSIGN4 -> DOT ID FUNCALLORASSIGN2" << std::endl;
+            outDerivation << "FUNCALLORASSIGN4 -> DOT ID FUNCALLORASSIGN2 \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFollowSet("FUNCALLORASSIGN4")) {
+        std::cout << "FUNCALLORASSIGN4 -> EPSILON" << std::endl;
+        outDerivation << "FUNCALLORASSIGN4 -> EPSILON \n";
+        success = true;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::statblock() {
+    bool success = false;
+
+    if (!skipErrors("STATBLOCK")) return false;
+
+    if (checkFirstSet("STATBLOCK", 0)) {
+        if (statement()) {
+            std::cout << "STATBLOCK -> STATEMENT" << std::endl;
+            outDerivation << "STATBLOCK -> STATEMENT \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFirstSet("STATBLOCK", 1)) {
+        if (match(TokenType::OPENCURLY) && statements() && match(TokenType::CLOSECURLY)) {
+            std::cout << "STATBLOCK -> OPENCURLY STATEMENTS CLOSECURLY" << std::endl;
+            outDerivation << "STATBLOCK -> OPENCURLY STATEMENTS CLOSECURLY \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFollowSet("STATBLOCK")) {
+        std::cout << "STATBLOCK -> EPSILON" << std::endl;
+        outDerivation << "STATBLOCK -> EPSILON \n";
+        success = true;
+    }
+    else success = false;
+    return success;
+}
+
+
+bool Parser::statements() {
+    bool success = false;
+    if (!skipErrors("STATEMENTS")) return false;
+    if (checkFirstSet("STATEMENTS", 0)) {
+        if (statement() && statements()) {
+            std::cout << "STATEMENTS -> STATEMENT STATEMENTS" << std::endl;
+            outDerivation << "STATEMENTS -> STATEMENT STATEMENTS \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFollowSet("STATEMENTS")) {
+        std::cout << "STATEMENTS -> EPSILON " << std::endl;
+        outDerivation << "STATEMENTS -> EPSILON \n";
+        success = true;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::expr() {
+    bool success = false;
+    if (!skipErrors("EXPR")) return false;
+
+    if (checkFirstSet("EXPR", 0)) {
+        if (arithexpr() && expr2()) {
+            std::cout << "EXPR -> ARITHEXPR EXPR2" << std::endl;
+            outDerivation << "EXPR -> ARITHEXPR EXPR2 \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else success = false;
     
-};
+    return success;
+}
+
+bool Parser::expr2() {
+    bool success = false;
+    if (!skipErrors("EXPR2"))return false;
+    if (checkFirstSet("EXPR2", 0)) {
+        if (relOp() && arithexpr()) {
+            std::cout << "EXPR2 -> RELOP ARITHEXPR" << std::endl;
+            outDerivation << "EXPR2 -> RELOP ARITHEXPR \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else if (checkFollowSet("EXPR2")) {
+        std::cout << "EXPR2 -> EPSILON" << std::endl;
+        outDerivation << "EXPR2 -> EPSILON \n";
+        success = true;
+    }
+    else success = false;
+
+    return success;
+}
+
+bool Parser::relexpr() {
+    bool success = false;
+    if (!skipErrors("RELEXPR")) return false;
+
+    if (checkFirstSet("RELEXPR", 0)) {
+        if (arithexpr() && relOp() && arithexpr()) {
+            std::cout << "RELEXPR -> ARITHEXPR RELOP ARITHEXPR" << std::endl;
+            outDerivation << "RELEXPR -> ARITHEXPR RELOP ARITHEXPR \n";
+            success = true;
+        }
+        else success = false;
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::arithexpr() {
+    bool success = false;
+    if (!skipErrors("ARITHEXPR")) return false;
+
+    if (checkFirstSet("ARITHEXPR", 0)) {
+        if (term() && rightrecarithexpr()) {
+            std::cout << "ARITHEXPR -> TERM RIGHTRECARITHEXPR" << std::endl;
+            outDerivation << "ARITHEXPR -> TERM RIGHTRECARITHEXPR \n";
+            success = true;
+        }
+    }
+    return success;
+}
+
+bool Parser::rightrecarithexpr() {
+    bool success = false;
+    if (!skipErrors("RIGHTRECARITHEXPR"))return false;
+
+    if (checkFirstSet("RIGHTRECARITHEXPR", 0)) {
+        if (addOp() && term() && rightrecarithexpr()) {
+            std::cout << "RIGHTRECARITHEXPR -> ADDOP TERM RIGHTRECARITHEXPR" << std::endl;
+            outDerivation << "RIGHTRECARITHEXPR -> ADDOP TERM RIGHTRECARITHEXPR \n";
+            success = true;
+        }
+
+    }
+    else if (checkFollowSet("RIGHTRECARITHEXPR")) {
+        std::cout << "RIGHTRECARITHEXPR -> EPSILON" << std::endl;
+        outDerivation << "RIGHTRECARITHEXPR -> EPSILON \n";
+        success = true;
+    }
+
+    return success;
+}
+
+
+bool Parser::sign() {
+    bool success = false;
+    if (!skipErrors("SIGN")) return false;
+
+    if (checkFirstSet("SIGN", 0)) {
+        if (match(TokenType::ADD)) {
+            std::cout << "SIGN -> ADD" << std::endl;
+            outDerivation << "SIGN -> ADD \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("SIGN", 1)) {
+        if (match(TokenType::SUBT)) {
+            std::cout << "SIGN -> SUBT" << std::endl;
+            outDerivation << "SIGN -> SUBT \n";
+            success = true;
+        }
+    }
+    return success;
+}
+
+bool Parser::term() {
+    bool success = false;
+    if (!skipErrors("TERM")) return false;
+
+    if (checkFirstSet("TERM", 0)) {
+        if (factor() && rightrecterm()) {
+            std::cout << "TERM -> FACTOR RIGHTRECTERM" << std::endl;
+            outDerivation << "TERM -> FACTOR RIGHTRECTERM \n";
+            success = true;
+        }
+
+    }
+    return success;
+}
+
+bool Parser::rightrecterm() {
+    bool success = false;
+    if (!skipErrors("RIGHTRECTERM")) return false;
+
+    if (checkFirstSet("RIGHTRECTERM", 0)) {
+        if (multOp() && factor() && rightrecterm()) {
+            std::cout << "RIGHTRECTERM -> MULTOP FACTOR RIGHTRECTERM" << std::endl;
+            outDerivation << "RIGHTRECTERM -> MULTOP FACTOR RIGHTRECTERM \n";
+            success = true;
+        }
+
+    }
+    else if (checkFollowSet("RIGHTRECTERM")) {
+        std::cout << "RIGHTRECTERM -> EPSILON" << std::endl;
+        outDerivation << "RIGHTRECTERM -> EPSILON \n";
+        success = true;
+    }
+    
+    return success;
+}
+
+bool Parser::factor() {
+    bool success = false;
+    if (!skipErrors("FACTOR"))return false;
+
+    if (checkFirstSet("FACTOR", 0)) {
+        if (sign() && factor()) {
+            std::cout << "FACTOR -> SIGN FACTOR" << std::endl;
+            outDerivation << "FACTOR -> SIGN FACTOR \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("FACTOR", 1)) {
+        if (idOrSelf() && factor2() && reptvariableorfunctioncall()) {
+            std::cout << "FACTOR -> IDORSELF FACTOR2 REPTVARIABLEORFUNCTIONCALL" << std::endl;
+            outDerivation << "FACTOR -> IDORSELF FACTOR2 REPTVARIABLEORFUNCTIONCALL \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("FACTOR", 2)) {
+        if (match(TokenType::NOT) && factor()) {
+            std::cout << "FACTOR -> NOT FACTOR" << std::endl;
+            outDerivation << "FACTOR -> NOT FACTOR \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("FACTOR", 3)) {
+        if (match(TokenType::INTEGER_VAL)) {
+            std::cout << "FACTOR -> INTEGER LITERAL" << std::endl;
+            outDerivation << "FACTOR -> INTEGER LITERAL \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("FACTOR", 4)) {
+        if (match(TokenType::FLOAT_VAL)) {
+            std::cout << "FACTOR -> FLOAT LITERAL" << std::endl;
+            outDerivation << "FACTOR -> FLOAT LITERAL \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("FACTOR", 5)) {
+        if (match(TokenType::OPENPAR) && arithexpr() && match(TokenType::CLOSEPAR)) {
+            std::cout << "FACTOR -> OPENPAR ARITHEXPR CLOSEPAR" << std::endl;
+            outDerivation << "FACTOR -> OPENPAR ARITHEXPR CLOSEPAR \n";
+            success = true;
+        }
+    }
+    else success = false;
+    return success;
+}
 
 bool Parser::factor2() {
-    if (lookAhead.getType() == TokenType::OPENSQUARE) {
-        if (rept_idnest10()) {
-            std::cout << "factor2 -> rept_idnest10" << std::endl;
-            outDerivation << "factor2 -> rept_idnest10\n";
-            return true;
+    bool success = false;
+
+    if (!skipErrors("FACTOR2"))return false;
+
+    if (checkFirstSet("FACTOR2", 0)) {
+        if (indices()) {
+            std::cout << "FACOTR2 -> INDICES" << std::endl;
+            outDerivation << "FACOTR2 -> INDICES \n";
+            success = true;
         }
-        else return false;
+        
     }
-    else if (lookAhead.getType() == TokenType::OPENPAR) {
+    else if (checkFirstSet("FACTOR2", 1)) {
         if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR)) {
-            std::cout << "factor 2 -> ( aParams )" << std::endl;
-            outDerivation << "factor 2 -> ( aParams )\n";
-            return true;
+            std::cout << "FACTOR2 -> OPENPAR APARAMS CLOSEPAR" << std::endl;
+            outDerivation << "FACTOR2 -> OPENPAR APARAMS CLOSEPAR \n";
+            success = true;
         }
-        else return false;
     }
-    else if (lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ || lookAhead.getType() == TokenType::CLOSEPAR
-        || lookAhead.getType() == TokenType::COMMA || lookAhead.getType() == TokenType::SEMICOLON || lookAhead.getType() == TokenType::CLOSESQUARE
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT || lookAhead.getType() == TokenType::OR ||
-        lookAhead.getType() == TokenType::MULT || lookAhead.getType() == TokenType::DIV || lookAhead.getType() == TokenType::AND
-        || lookAhead.getType() == TokenType::DOT || lookAhead.getType() == TokenType::ASSIGN) {
-        std::cout << "factor2 -> EPSILON" << std::endl;
-        outDerivation << "factor2 -> EPSILON\n";
-        return true;
+    else if (checkFollowSet("FACTOR2")) {
+        std::cout << "FACTOR2 -> EPSILON" << std::endl;
+        outDerivation << "FACTOR2 -> EPSILON \n";
+        success = true;
     }
+
+    return success;
 }
-//TODO: work the logic where epsilon is in one of the sets
-bool Parser::VarOrFunc(){
-    if(lookAhead.getType() == TokenType::DOT){
-        if(idNest() && VarOrFunc()){
-            std::cout<<"VarOrFunc -> idnest VarOrFunc"<<std::endl;
-            outDerivation << "VarOrFunc -> idnest VarOrFunc\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ || lookAhead.getType() == TokenType::CLOSEPAR
-        || lookAhead.getType() == TokenType::COMMA || lookAhead.getType() == TokenType::SEMICOLON || lookAhead.getType() == TokenType::CLOSESQUARE
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT || lookAhead.getType() == TokenType::OR ||
-        lookAhead.getType() == TokenType::MULT || lookAhead.getType() == TokenType::DIV || lookAhead.getType() == TokenType::AND || lookAhead.getType() == TokenType::ASSIGN){
-        std::cout<<"varOrFunc -> EPSILON"<<std::endl;
-        outDerivation << "varOrFunc -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::arraySize(){
-    if(lookAhead.getType() == TokenType::OPENSQUARE){
-        if(match(TokenType::OPENSQUARE) && arraySizeTail()){
-            std::cout<<"arraySize -> [ arraySizeTail"<<std::endl;
-            outDerivation << "arraySize -> [ arraySizeTail\n";
 
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::arraySizeTail(){
-    if(lookAhead.getType() == TokenType::CLOSESQUARE){
-        if(match(TokenType::CLOSESQUARE)){
-            std::cout<<"arraySizeTail -> ]"<<std::endl;
-            outDerivation << "arraySizeTail -> ]\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::INTEGER_VAL){
-        if(match(TokenType::INTEGER_VAL) && match(TokenType::CLOSESQUARE)){
-            std::cout<<"arraySizetail -> intNum ]"<<std::endl;
-            outDerivation << "arraySizetail -> intNum ]\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::type(){
-    if(lookAhead.getType() == TokenType::INT_T){
-        if(match(TokenType::INT_T)){
-            std::cout<<"type -> int"<<std::endl;
-            outDerivation << "type -> int\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::ID){
-        if(match(TokenType::ID)){
-            std::cout<<"type -> ID"<<std::endl;
-            outDerivation << "type -> ID\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::FLOAT_T){
-        if(match(TokenType::FLOAT_T)){
-            std::cout<<"type -> float"<<std::endl;
-            outDerivation << "type -> float\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-    
-};
-bool Parser::returnType(){
-    if(lookAhead.getType() == TokenType::FLOAT_T || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::INT_T){
-        if(type()){
-            std::cout<<"returnType -> type"<<std::endl;
-            outDerivation << "returnType -> type\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::VOID){
-        if(match(TokenType::VOID)){
-            std::cout<<"returntype -> void"<<std::endl;
-            outDerivation << "returntype -> void\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::memberDecl(){
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR){
-        if(funcDecl()){
-            std::cout<<"memberDecl -> funcDecl"<<std::endl;
-            outDerivation << "memberDecl -> funcDecl\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::ATTRIBUTE){
-        if(attributeDecl()){
-            std::cout<<"memberDecl -> attributeDecl"<<std::endl;
-            outDerivation << "memberDecl -> attributeDecl\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::funcDecl(){
-    if(lookAhead.getType() == TokenType::FUNCTION || lookAhead.getType() == TokenType::CONSTRUCTOR){
-        if(funcHead() && match(TokenType::SEMICOLON)){
-            std::cout<<"funcDecl -> funcHead"<<std::endl;
-            outDerivation << "funcDecl -> funcHead\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::attributeDecl(){
-    if(lookAhead.getType() == TokenType::ATTRIBUTE){
-        if(match(TokenType::ATTRIBUTE) && varDecl()){
-            std::cout<<"funcDecl -> attribute varDecl"<<std::endl;
-            outDerivation << "funcDecl -> attribute varDecl\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::varDecl(){
-    if(lookAhead.getType() == TokenType::ID){
-        if(match(TokenType::ID) && match(TokenType::COLON) && type() && rept_varDecl3() && match(TokenType::SEMICOLON)){
-            std::cout<<"varDecl -> id : type rept_varDecl3"<<std::endl;
-            outDerivation << "varDecl -> id : type rept_varDecl3\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::rept_varDecl3(){
-    if(lookAhead.getType() == TokenType::OPENSQUARE){
-        if(arraySize() && rept_varDecl3()){
-            std::cout<<"rept_varDecl3 -> arraySize rept_Decl3"<<std::endl;
-            outDerivation << "rept_varDecl3 -> arraySize rept_Decl3\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::SEMICOLON){
-        std::cout<<"rept_varDecl3 -> EPSILON"<<std::endl;
-        outDerivation << "rept_varDecl3 -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::expr(){
-    if(lookAhead.getType() == TokenType::OPENPAR || lookAhead.getType() == TokenType::FLOAT_VAL || lookAhead.getType() == TokenType::INTEGER_VAL
-        || lookAhead.getType() == TokenType::NOT || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT){
-        if(arithExpr() && relExprRest()){
-            std::cout<<"expr -> arithExpr relExprRest"<<std::endl;
-            outDerivation << "expr -> arithExpr relExprRest\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::relExprRest(){
-    if(lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ){
-        if(relOp() && arithExpr()){
-            std::cout<<"relExprRest -> relOp arithExpr"<<std::endl;
-            outDerivation << "relExprRest -> relOp arithExpr\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR || lookAhead.getType() == TokenType::COMMA || 
-        lookAhead.getType() == TokenType::SEMICOLON){
-        std::cout<<"relExprRest -> EPSILON"<<std::endl;
-        outDerivation << "relExprRest -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::fParams(){
-    if(lookAhead.getType() == TokenType::ID){
-        if(match(TokenType::ID) && match(TokenType::COLON) && type() && rept_fParamas3() && rept_fParams4()){
-            std::cout<<"fParams -> id : type rept_fParams3 rept_fParams4"<<std::endl;
-            outDerivation << "fParams -> id : type rept_fParams3 rept_fParams4\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR){
-        std::cout<<"fParams -> EPSILON"<<std::endl;
-        outDerivation << "fParams -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::rept_fParamas3(){
-    if(lookAhead.getType() == TokenType::OPENSQUARE){
-        if(arraySize() && rept_fParamas3()){
-            std::cout<<"rept_fParams3 -> arraySize rept_fParams3"<<std::endl;
-            outDerivation << "rept_fParams3 -> arraySize rept_fParams3\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR || lookAhead.getType() == TokenType::COMMA){
-        std::cout<<"rept_fParams3 -> EPSILON"<<std::endl;
-        outDerivation << "rept_fParams3 -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::rept_fParams4(){
-    if(lookAhead.getType() == TokenType::COMMA){
-        if(fParamsTail() && rept_fParams4()){
-            std::cout<<"rept_fParams4 -> fParamsTail rept_fParams4"<<std::endl;
-            outDerivation << "rept_fParams4 -> fParamsTail rept_fParams4\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR){
-        std::cout<<"rept_fParams4 -> EPSILON"<<std::endl;
-        outDerivation << "rept_fParams4 -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::fParamsTail(){
-    if(lookAhead.getType() == TokenType::COMMA){
-        if(match(TokenType::COMMA) && match(TokenType::ID) && match(TokenType::COLON) && type()
-            && rept_fParamsTail4()){
-                std::cout<<"fParamsTail -> , id : type rept_fParamstail4"<<std::endl;
-                outDerivation << "fParamsTail -> , id : type rept_fParamstail4\n";
-                return true;
-            }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::rept_fParamsTail4(){
-     if(lookAhead.getType() == TokenType::OPENSQUARE){
-        if(arraySize() && rept_fParamsTail4()){
-            std::cout<<"rept_fParamsTail4 -> arraySize rept_fParamsTail4"<<std::endl;
-            outDerivation << "rept_fParamsTail4 -> arraySize rept_fParamsTail4\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR || lookAhead.getType() == TokenType::COMMA){
-        std::cout<<"rept_fParamsTail4 -> EPSILON"<<std::endl;
-        outDerivation << "rept_fParamsTail4 -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::aParams(){
-    if(lookAhead.getType() == TokenType::OPENPAR || lookAhead.getType() == TokenType::FLOAT_VAL || lookAhead.getType() == TokenType::INTEGER_VAL
-        || lookAhead.getType() == TokenType::NOT || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT){
-        if(expr() && rept_aParams1()){
-            std::cout<<"aParams -> expr rept_aParams1"<<std::endl;
-            outDerivation << "aParams -> expr rept_aParams1\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR){
-        std::cout<<"aParams -> EPSILON"<<std::endl;
-        outDerivation << "aParams -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::rept_aParams1(){
-     if(lookAhead.getType() == TokenType::COMMA){
-        if(aParamsTail() && rept_aParams1()){
-            std::cout<<"rept_aParams1 -> aParamsTail rept_aParams1"<<std::endl;
-            outDerivation << "rept_aParams1 -> aParamsTail rept_aParams1\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSEPAR){
-        std::cout<<"rept_aParams1 -> EPSILON"<<std::endl;
-        outDerivation << "rept_aParams1 -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::aParamsTail(){
-    if(lookAhead.getType() == TokenType::COMMA){
-        if(match(TokenType::COMMA) && expr()){
-            std::cout<<"aParamsTail -> , expr"<<std::endl;
-            outDerivation << "aParamsTail -> , expr\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::idOrSelf(){
-    if(lookAhead.getType() == TokenType::SELF){
-        if(match(TokenType::SELF)){
-            std::cout<<"idOrSelf -> self"<<std::endl;
-            outDerivation << "idOrSelf -> self\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::ID){
-        if(match(TokenType::ID)){
-            std::cout<<"idOrSelf -> id"<<std::endl;
-            outDerivation << "idOrSelf -> id\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::idNest(){
-    if(lookAhead.getType() == TokenType::DOT){
-        if (match(TokenType::DOT) && match(TokenType::ID) && idNest2()) {
-            std::cout << "idNest -> . id idnest2 " << std::endl;
-            outDerivation << "idNest -> . id idnest2\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
+bool Parser::indices() {
+    bool success = false;
 
-bool Parser::idNest2() {
-    if (lookAhead.getType() == TokenType::OPENSQUARE) {
-        if (rept_idnest10()) {
-            std::cout << "idNest2 -> rept_idnest10" << std::endl;
-            outDerivation << "idNest2 -> rept_idnest10\n";
-            return true;
+    if (!skipErrors("INDICES"))return false;
+
+    if (checkFirstSet("INDICES", 0)) {
+        if (indice() && indices()) {
+            std::cout << "INDICES -> INDICE INDICES" << std::endl;
+            outDerivation << "INDICES -> INDICE INDICES \n";
+            success = true;
         }
-        else return false;
+
     }
-    else if (lookAhead.getType() == TokenType::OPENPAR) {
-        if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR)) {
-            std::cout << "idNest2 -> ( aParams )" << std::endl;
-            outDerivation << "idNest2 -> ( aParams )\n";
-            return true;
-        }
-        else return false;
+    else if (checkFollowSet("INDICES")) {
+        std::cout << "INDICES -> EPSILON" << std::endl;
+        outDerivation << "INDICES -> EPSILON \n";
+        success = true;
     }
-    else if (lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ || lookAhead.getType() == TokenType::CLOSEPAR
-        || lookAhead.getType() == TokenType::COMMA || lookAhead.getType() == TokenType::SEMICOLON || lookAhead.getType() == TokenType::CLOSESQUARE
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT || lookAhead.getType() == TokenType::OR ||
-        lookAhead.getType() == TokenType::MULT || lookAhead.getType() == TokenType::DIV || lookAhead.getType() == TokenType::AND ||
-        lookAhead.getType() == TokenType::DOT || lookAhead.getType() == TokenType::ASSIGN) {
-        std::cout << "idnest2 -> EPSILON" << std::endl;
-        outDerivation << "idnest2 -> EPSILON\n";
-        return true;
-    }
-    else return false;
+
+    return success;
 }
-bool Parser::rept_idnest10(){
-    if(lookAhead.getType() == TokenType::OPENSQUARE){
-        if(indice() && rept_idnest10()){
-            std::cout<<"rept_idnest10 -> indice rept_idnest10"<<std::endl;
-            outDerivation << "rept_idnest10 -> indice rept_idnest10\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::GT || lookAhead.getType() == TokenType::GTEQ || lookAhead.getType() == TokenType::LT || lookAhead.getType() == TokenType::LTEQ
-        || lookAhead.getType() == TokenType::NOTEQ || lookAhead.getType() == TokenType::EQ || lookAhead.getType() == TokenType::CLOSEPAR
-        || lookAhead.getType() == TokenType::COMMA || lookAhead.getType() == TokenType::SEMICOLON || lookAhead.getType() == TokenType::CLOSESQUARE
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT || lookAhead.getType() == TokenType::OR ||
-        lookAhead.getType() == TokenType::MULT || lookAhead.getType() == TokenType::DIV || lookAhead.getType() == TokenType::AND ||
-        lookAhead.getType() == TokenType::DOT || lookAhead.getType() == TokenType::ASSIGN){
 
-        std::cout<<"rept_idnest10 -> EPSILON"<<std::endl;
-        outDerivation << "rept_idnest10 -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::indice(){
-    if(lookAhead.getType() == TokenType::OPENSQUARE){
-        if(match(TokenType::OPENSQUARE) && arithExpr() && match(TokenType::CLOSESQUARE)){
-            std::cout<<"indice -> [ arithExpr ]"<<std::endl;
-            outDerivation << "indice -> [ arithExpr ]\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
+bool Parser::reptvariableorfunctioncall() {
+    bool success = false;
+    if (!skipErrors("REPTVARIABLEORFUNCTIONCALL"))return false;
 
-bool Parser::variable(){
-    if(lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF){
-        if(idOrSelf() && variable2()){
-            std::cout<<"variable -> idnest id rept_idnest10"<<std::endl;
-            outDerivation << "variable -> idnest id rept_idnest10\n";
-            return true;
+    if (checkFirstSet("REPTVARIABLEORFUNCTIONCALL", 0)) {
+        if (idNest() && reptvariableorfunctioncall()) {
+            std::cout << "REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL" << std::endl;
+            outDerivation << "REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL \n";
+            success = true;
         }
-        else return false;
+
     }
-    else return false;
-};
+    else if (checkFollowSet("REPTVARIABLEORFUNCTIONCALL")) {
+        std::cout << "REPTVARIABLEORFUNCTIONCALL -> EPSILON" << std::endl;
+        outDerivation << "REPTVARIABLEORFUNCTIONCALL -> EPSILON \n";
+        success = true;
+    }
+    return success;
+}
+
+bool Parser::variable() {
+    bool success = false;
+    if (!skipErrors("VARIABLE"))return false;
+
+    if (checkFirstSet("VARIABLE", 0)) {
+        if (idOrSelf() && variable2()) {
+            std::cout << "VARIABLE -> IDORSELF VARIABLE2" << std::endl;
+            outDerivation << "VARIABLE -> IDORSELF VARIABLE2 \n";
+            success = true;
+        }
+    }
+    return success;
+}
+
 bool Parser::variable2() {
-    if (lookAhead.getType() == TokenType::OPENSQUARE || lookAhead.getType() == TokenType::DOT) {
-        if (rept_idnest10() && rept_variable()) {
-            std::cout << "variable2 -> rept_idnest10 rept_variable" << std::endl;
-            outDerivation << "variable2 -> rept_idnest10 rept_variable\n";
-            return true;
+    bool success = false;
+    if (!skipErrors("VARIABLE2"))return false;
+    if (checkFirstSet("VARIABLE2", 0)) {
+        if (indices() && reptvariable()) {
+            std::cout << "VARIABLE2 -> INDICES REPTVARIABLE" << std::endl;
+            outDerivation << "VARIABLE2 -> INDICES REPTVARIABLE \n";
+            success = true;
         }
-        else return false;
     }
-    else if (lookAhead.getType() == TokenType::OPENPAR) {
-        if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR) && idNest()) {
-            std::cout << "variable2 -> ( aParams ) idnest" << std::endl;
-            outDerivation << "variable2 -> ( aParams ) idnest\n";
-            return true;
+    else if (checkFirstSet("VARIABLE2", 1)) {
+        if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR) && varIdNest()) {
+            std::cout << "VARIABLE2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST" << std::endl;
+            outDerivation << "VARIABLE2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST \n";
+            success = true;
         }
-        else return false;
     }
-    else if (lookAhead.getType() == TokenType::CLOSEPAR || lookAhead.getType() == TokenType::ASSIGN) {
-        std::cout << "variable2 -> EPSILON" << std::endl;
-        outDerivation << "variable2 -> EPSILON\n";
-        return true;
-    }
-    else return false;
+    
+
+    return success;
 }
 
-bool Parser::rept_variable() {
-    if (lookAhead.getType() == TokenType::DOT) {
-        if (varIdNest() && rept_variable()) {
-            std::cout << "rept_variable -> varidnest rept_variable" << std::endl;
-            outDerivation << "rept_variable -> varidnest rept_variable\n";
-            return true;
+bool Parser::reptvariable() {
+    bool success = false;
+    if (!skipErrors("REPTVARIABLE"))return false;
+    if (checkFirstSet("REPTVARIABLE", 0)) {
+        if (varIdNest() && reptvariable()) {
+            std::cout << "REPTVARIABLE -> VARIDNEST REPTVARIABLE" << std::endl;
+            outDerivation << "REPTVARIABLE -> VARIDNEST REPTVARIABLE \n";
+            success = true;
         }
-        else return false;
     }
-    else if (lookAhead.getType() == TokenType::CLOSEPAR || lookAhead.getType() == TokenType::ASSIGN) {
-        std::cout << "rept_variable -> EPSILON" << std::endl;
-        outDerivation << "rept_variable -> EPSILON\n";
-        return true;
+    else if (checkFollowSet("REPTVARIABLE")) {
+        std::cout << "REPTVARIABLE -> EPSILON" << std::endl;
+        outDerivation << "REPTVARIABLE -> EPSILON \n";
+        success = true;
     }
+    return success;
 }
 
 bool Parser::varIdNest() {
-    if (lookAhead.getType() == TokenType::DOT) {
+    bool success = false;
+    if (!skipErrors("VARIDNEST"))return false;
+    if (checkFirstSet("VARIDNEST", 0)) {
         if (match(TokenType::DOT) && match(TokenType::ID) && varIdNest2()) {
-            std::cout << "varidnest -> . id varidnest2" << std::endl;
-            outDerivation << "varidnest -> . id varidnest2\n";
-            return true;
+            std::cout << "VARIDNEST -> DOT ID VARIDEST2" << std::endl;
+            outDerivation << "VARIDNEST -> DOT ID VARIDEST2 \n";
+            success = true;
         }
-        else return false;
     }
-    else return false;
+    return success;
 }
 
 bool Parser::varIdNest2() {
-    if (lookAhead.getType() == TokenType::OPENSQUARE) {
-        if (rept_idnest10()) {
-            std::cout << "varidnest2 -> rept_idnest10" << std::endl;
-            outDerivation << "varidnest2 -> rept_idnest10\n";
-            return true;
+    bool success = false;
+    if (!skipErrors("VARIDNEST2"))return false;
+
+    if (checkFirstSet("VARIDNEST2", 0)) {
+        if (indices()) {
+            std::cout << "VARIDNEST2 -> INDICES " << std::endl;
+            outDerivation << "VARIDNEST2 -> INDICES \n";
+            success = true;
         }
-        else return false;
     }
-    else if (lookAhead.getType() == TokenType::OPENPAR) {
+    else if (checkFirstSet("VARIDNEST2", 1)) {
         if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR) && varIdNest()) {
-            std::cout << "varidnest2 -> ( aParams ) varidnest" << std::endl;
-            outDerivation << "varidnest2 -> ( aParams ) varidnest\n";
-            return true;
+            std::cout << "VARIDNEST2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST" << std::endl;
+            outDerivation << "VARIDNEST2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST \n";
+            success = true;
         }
-        else return false;
     }
-    else if (lookAhead.getType() == TokenType::CLOSEPAR || lookAhead.getType() == TokenType::ASSIGN || lookAhead.getType() == TokenType::DOT) {
-        std::cout << "varidnest2 -> EPSILON" << std::endl;
-        outDerivation << "varidnest2 -> EPSILON\n";
-        return true;
-    }
-    else return false;
+
+    return success;
 }
 
-bool Parser::localVarDecl(){
-    if(lookAhead.getType() == TokenType::LOCAL){
-        if(match(TokenType::LOCAL) && varDecl()){
-            std::cout<<"localVarDecl -> local varDecl "<<std::endl;
-            outDerivation << "localVarDecl -> local varDecl\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
+bool Parser::indice() {
+    bool success = false;
+    if (!skipErrors("INDICE")) return false;
 
-bool Parser::relExpr(){
-    if(lookAhead.getType() == TokenType::OPENPAR || lookAhead.getType() == TokenType::FLOAT_VAL || lookAhead.getType() == TokenType::INTEGER_VAL
-        || lookAhead.getType() == TokenType::NOT || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF
-        || lookAhead.getType() == TokenType::ADD || lookAhead.getType() == TokenType::SUBT){
-        if(arithExpr() && relOp() && arithExpr()){
-            std::cout<<"relExpr -> arithExpr relOp arithExpr "<<std::endl;
-            outDerivation << "relExpr -> arithExpr relOp arithExpr\n";
-            return true;
+    if (checkFirstSet("INDICE", 0)) {
+        if (match(TokenType::OPENSQUARE) && arithexpr() && match(TokenType::CLOSESQUARE)) {
+            std::cout << "INDICE -> OPENSQUARE ARITHEXPR CLOSESQUARE" << std::endl;
+            outDerivation << "INDICE -> OPENSQUARE ARITHEXPR CLOSESQUARE \n";
+            success = true;
         }
-        else return false;
     }
-    else return false;
-};
+
+    return success;
+}
+
+bool Parser::idNest() {
+    bool success = false;
+
+    if (!skipErrors("IDNEST"))return false;
+
+    if (checkFirstSet("IDNEST", 0)) {
+        if (match(TokenType::DOT) && match(TokenType::ID) && idNest2()) {
+            std::cout << "IDNEST -> DOT ID IDNEST2" << std::endl;
+            outDerivation << "IDNEST -> DOT ID IDNEST2 \n";
+            success = true;
+        }
+    }
+
+    return success;
+}
+
+bool Parser::idNest2() {
+    bool success = false;
+
+    if (!skipErrors("IDNEST2")) return false;
+
+    if (checkFirstSet("IDNEST2", 0)) {
+        if (indices()) {
+            std::cout << "IDNEST2 -> INDICES" << std::endl;
+            outDerivation << "IDNEST2 -> INDICES \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("IDNEST2", 1)) {
+        if (match(TokenType::OPENPAR) && aParams() && match(TokenType::CLOSEPAR)) {
+            std::cout << "IDNEST2 -> OPENPAR APARAMS CLOSEPAR" << std::endl;
+            outDerivation << "IDNEST2 -> OPENPAR APARAMS CLOSEPAR \n";
+            success = true;
+        }
+    }
+    else success = false;
+    return success;
+}
+
+bool Parser::arraySize() {
+    bool success = false;
+    if (!skipErrors("ARRAYSIZE")) return false;
+
+    if (checkFirstSet("ARRAYSIZE", 0)) {
+        if (match(TokenType::OPENSQUARE) && arraySize2()) {
+            std::cout << "ARRAYSIZE -> OPENSQUARE ARRAYSIZE2" << std::endl;
+            outDerivation << "ARRAYSIZE -> OPENSQUARE ARRAYSIZE2 \n";
+            success = true;
+        }
+    }
+    return success;
+}
+
+bool Parser::arraySize2() {
+    bool success = false;
+    if (!skipErrors("ARRAYSIZE2"))return false;
+
+    if (checkFirstSet("ARRAYSIZE2", 0)) {
+        if (match(TokenType::CLOSESQUARE)) {
+            std::cout << "ARRAYSIZE2 -> CLOSESQUARE" << std::endl;
+            outDerivation << "ARRAYSIZE2 -> CLOSESQUARE \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("ARRAYSIZE2", 1)) {
+        if (match(TokenType::INTEGER_VAL) && match(TokenType::CLOSESQUARE)) {
+            std::cout << "ARRAYSIZE2 -> INTEGERVAL CLOSESQUARE" << std::endl;
+            outDerivation << "ARRAYSIZE2 -> INTEGERVAL CLOSESQUARE \n";
+            success = true;
+        }
+    }
+    
+    else {}
+    return success;
+}
+
+bool Parser::arraySizes() {
+    bool success = false;
+
+    if (!skipErrors("ARRAYSIZES"))return false;
+
+    if (checkFirstSet("ARRAYSIZES", 0)) {
+        if (arraySize() && arraySizes()) {
+            std::cout << "ARRAYSIZES -> ARRAYSIZE ARRAYSIZES " << std::endl;
+            outDerivation << "ARRAYSIZES -> ARRAYSIZE ARRAYSIZES \n";
+            success = true;
+        }
+    }
+    else if (checkFollowSet("ARRAYSIZES")) {
+        std::cout << "ARRAYSIZES -> EPSILON" << std::endl;
+        outDerivation << "ARRAYSIZES -> EPSILON \n";
+        success = true;
+    }
+    else {}
+    return success;
+}
+
+bool Parser::type() {
+    bool success = false;
+
+    if (!skipErrors("TYPE"))return false;
+
+    if (checkFirstSet("TYPE", 0)) {
+        if (match(TokenType::INT_T)) {
+            std::cout << "TYPE -> INT" << std::endl;
+            outDerivation << "TYPE -> INT \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("TYPE", 1)) {
+        if (match(TokenType::ID)) {
+            std::cout << "TYPE -> ID" << std::endl;
+            outDerivation << "TYPE -> ID \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("TYPE", 2)) {
+        if (match(TokenType::FLOAT_T)) {
+            std::cout << "TYPE -> FLOAT" << std::endl;
+            outDerivation << "TYPE -> FLOAT \n";
+            success = true;
+        }
+    }
+    else {}
+    return success;
+}
+
+bool Parser::returnType() {
+    bool success = false;
+    if (!skipErrors("RETURNTYPE"))return false;
+    if (checkFirstSet("RETURNTYPE", 0)) {
+        if (type()) {
+            std::cout << "RETURNTYPE -> TYPE" << std::endl;
+            outDerivation << "RETURNTYPE -> TYPE \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("RETURNTYPE", 1)) {
+        if (match(TokenType::VOID)) {
+            std::cout << "RETURNTYPE -> VOID" << std::endl;
+            outDerivation << "RETURNTYPE -> VOID \n";
+            success = true;
+        }
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::aParams() {
+    bool success = false;
+    if (!skipErrors("APARAMS"))return false;
+
+    if (checkFirstSet("APARAMS", 0)) {
+        if (expr() && reptaParams1()) {
+            std::cout << "APARAMS -> EXPR REPTAPARAMS1" << std::endl;
+            outDerivation << "APARAMS -> EXPR REPTAPARAMS1 \n";
+            success = true;
+        }
+    }
+    else if (checkFollowSet("APARAMS")) {
+        std::cout << "APARAMS -> EPSILON" << std::endl;
+        outDerivation << "APARAMS -> EPSILON \n";
+        success = true;
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::reptaParams1() {
+    bool success = false;
+    if (!skipErrors("REPTAPARAMS1"))return false;
+
+    if (checkFirstSet("REPTAPARAMS1", 0)) {
+        if (aParamsTail() && reptaParams1()) {
+            std::cout << "REPTAPARAMS1 -> APARAMSTAIL REPTAPARAMS" << std::endl;
+            outDerivation << "REPTAPARAMS1 -> APARAMSTAIL REPTAPARAMS \n";
+            success = true;
+        }
+
+    }
+    else if (checkFollowSet("REPTAPARAMS1")) {
+        std::cout << "REPTAPARAMS1 -> EPSILON " << std::endl;
+        outDerivation << "REPTAPARAMS1 -> EPSILON \n";
+        success = true;
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::aParamsTail() {
+    bool success = false;
+    if (!skipErrors("APARAMSTAIL"))return false;
+
+    if (checkFirstSet("APARAMSTAIL", 0)) {
+        if (match(TokenType::COMMA) && expr()) {
+            std::cout << "APARAMSTAIL -> COMMA EXPR " << std::endl;
+            outDerivation << "APARAMSTAIL -> COMMA EXPR \n";
+            success = true;
+        }
+    }
+    return success;
+}
+
+bool Parser::fParams() {
+    bool success = false;
+
+    if (!skipErrors("FPARAMS"))return false;
+
+    if (checkFirstSet("FPARAMS", 0)) {
+        if (match(TokenType::ID) && match(TokenType::COLON) && type() && arraySizes() && reptfParams1()) {
+            std::cout << "FPARAMS -> ID COLON TYPE ARRAYSIZES REPTFPARAMS1" << std::endl;
+            outDerivation << "FPARAMS -> ID COLON TYPE ARRAYSIZES REPTFPARAMS1 \n";
+            success = true;
+        }
+    }
+    else if (checkFollowSet("FPARAMS")) {
+        std::cout << "FPARAMS -> EPSILON " << std::endl;
+        outDerivation << "FPARAMS -> EPSILON \n";
+        success = true;
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::reptfParams1() {
+    bool success = false;
+
+    if (!skipErrors("REPTFPARAMS1"))return false;
+
+    if (checkFirstSet("REPTFPARAMS1", 0)) {
+        if (fParamstail() && reptfParams1()) {
+            std::cout << "REPTFPARAMS1 -> FPARAMSTAIL REPTFPARAMS1" << std::endl;
+            outDerivation << "REPTFPARAMS1 -> FPARAMSTAIL REPTFPARAMS1\n";
+            success = true;
+        }
+    }
+    else if (checkFollowSet("REPTFPARAMS1")) {
+        std::cout << "REPTFPARAMS1 -> EPSILON " << std::endl;
+        outDerivation << "REPTFPARAMS1 -> EPSILON \n";
+        success = true;
+    }
+    else {}
+    return success;
+}
+
+bool Parser::fParamstail() {
+    bool success = false;
+
+    if (!skipErrors("FPARAMSTAIL"))return false;
+
+    if (checkFirstSet("FPARAMSTAIL", 0)) {
+        if (match(TokenType::COMMA) && match(TokenType::ID) && match(TokenType::COLON) && type() && arraySizes()) {
+            std::cout << "FPARAMSTAIL -> COMMA ID COLON TYPE ARRAYSIZES" << std::endl;
+            outDerivation << "FPARAMSTAIL -> COMMA ID COLON TYPE ARRAYSIZES \n";
+            success = true;
+        }
+    }
+
+    return success;
+}
 
 bool Parser::assignOp(){
-    if(lookAhead.getType() == TokenType::ASSIGN){
-        if(match(TokenType::ASSIGN)){
-            std::cout<<"assignOp -> :="<<std::endl;
-            outDerivation << "assignOp -> :=\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::relOp(){
-    if(lookAhead.getType() == TokenType::GTEQ){
-        if(match(TokenType::GTEQ)){
-            std::cout<<"relOp -> >="<<std::endl;
-            outDerivation << "relOp -> >=\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::GT){
-        if(match(TokenType::GT)){
-            std::cout<<"relOp -> >"<<std::endl;
-            outDerivation << "relOp -> >\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::EQ){
-        if(match(TokenType::EQ)){
-            std::cout<<"relOp -> =="<<std::endl;
-            outDerivation << "relOp -> ==\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::NOTEQ){
-        if(match(TokenType::NOTEQ)){
-            std::cout<<"relOp -> <>"<<std::endl;
-            outDerivation << "relOp -> <>\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::LTEQ){
-        if(match(TokenType::LTEQ)){
-            std::cout<<"relOp -> <="<<std::endl;
-            outDerivation << "relOp -> <=\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::LT){
-        if(match(TokenType::LT)){
-            std::cout<<"relOp -> <"<<std::endl;
-            outDerivation << "relOp -> <\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::multOp(){
-    if(lookAhead.getType() == TokenType::AND){
-        if(match(TokenType::AND)){
-            std::cout<<"multOp -> and"<<std::endl;
-            outDerivation << "multOp -> and\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::DIV){
-        if(match(TokenType::DIV)){
-            std::cout<<"multOp -> /"<<std::endl;
-            outDerivation << "multOp -> /\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::MULT){
-        if(match(TokenType::MULT)){
-            std::cout<<"multOp -> *"<<std::endl;
-            outDerivation << "multOp -> *\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::addOp(){
-    if(lookAhead.getType() == TokenType::OR){
-        if(match(TokenType::OR)){
-            std::cout<<"addOp -> or"<<std::endl;
-            outDerivation << "addOp -> or\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::SUBT){
-        if(match(TokenType::SUBT)){
-            std::cout<<"addOp -> -"<<std::endl;
-            outDerivation << "addOp -> -\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::ADD){
-        if(match(TokenType::ADD)){
-            std::cout<<"addOp -> +"<<std::endl;
-            outDerivation << "addOp -> +\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::sign(){
-    if(lookAhead.getType() == TokenType::ADD){
-        if(match(TokenType::ADD)){
-            std::cout<<"sign -> +"<<std::endl;
-            outDerivation << "sign -> +\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::SUBT){
-        if(match(TokenType::SUBT)){
-            std::cout<<"sign -> -"<<std::endl;
-            outDerivation << "sign -> -\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
-bool Parser::statBlock(){
-    if(lookAhead.getType() == TokenType::IF || lookAhead.getType() == TokenType::READ || lookAhead.getType() == TokenType::RETURN
-        || lookAhead.getType() == TokenType::WHILE || lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF){
-        if(statement()){
-            std::cout<<"statBlock -> statement"<<std::endl;
-            outDerivation << "statBlock -> statement\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::OPENCURLY){
-        if(match(TokenType::OPENCURLY) && rept_statBlock1() && match(TokenType::CLOSECURLY)){
-            std::cout<<"statBlock -> { rept_statBlock1 }"<<std::endl;
-            outDerivation << "statBlock -> { rept_statBlock1 }\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::ELSE || lookAhead.getType() == TokenType::SEMICOLON){
-        std::cout<<"statBlock -> EPSILON"<<std::endl;
-        outDerivation << "statBlock -> EPSILON\n";
-        return true;
-    }
-    else return false;
-};
-bool Parser::rept_statBlock1(){
-    if(lookAhead.getType() == TokenType::IF || lookAhead.getType() == TokenType::READ || lookAhead.getType() == TokenType::RETURN
-        || lookAhead.getType() == TokenType::WHILE || lookAhead.getType() == TokenType::WRITE || lookAhead.getType() == TokenType::ID
-        || lookAhead.getType() == TokenType::SELF){
-        if(statement() && rept_statBlock1()){
-            std::cout<<"rept_statblock1 -> statement rept_statBlock1"<<std::endl;
-            outDerivation << "rept_statblock1 -> statement rept_statBlock1\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::CLOSECURLY){
-        std::cout<<"rept_statBlock1 -> EPSILON"<<std::endl; 
-        outDerivation << "rept_statBlock1 -> EPSILON\n";
-        return true;
-    }
-    else return false; 
-};
-bool Parser::statement(){
-    if(lookAhead.getType() == TokenType::ID || lookAhead.getType() == TokenType::SELF){
-        if(idOrSelf() && factor2() && VarOrFunc() && assignStat() && match(TokenType::SEMICOLON)){
-            std::cout<<"statement -> variable assignop expr;"<<std::endl;
-            outDerivation << "statement -> variable assignop expr\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::WRITE){
-        if(match(TokenType::WRITE) && match(TokenType::OPENPAR) && expr() && match(TokenType::CLOSEPAR)
-            && match(TokenType::SEMICOLON)){
-                std::cout<<"statement -> write (expr) ;"<<std::endl;
-                outDerivation << "statement -> write (expr) ;\n";
-                return true;
-            }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::WHILE){
-        if(match(TokenType::WHILE) && match(TokenType::OPENPAR) && relExpr() && match(TokenType::CLOSEPAR)
-            && statBlock() && match(TokenType::SEMICOLON)){
-                std::cout<<"statement -> while(relExpr) statBlock ;"<<std::endl;
-                outDerivation << "statement -> while(relExpr) statBlock ;\n";
-                return true;
-            }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::RETURN){
-        if(match(TokenType::RETURN) && match(TokenType::OPENPAR) && expr() && match(TokenType::CLOSEPAR)
-            && match(TokenType::SEMICOLON)){
-                std::cout<<"statement -> return (expr) ;"<<std::endl;
-                outDerivation << "statement -> return (expr) ;\n";
-                return true;
-            }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::READ){
-        if(match(TokenType::READ) && match(TokenType::OPENPAR) && variable() && match(TokenType::CLOSEPAR)
-            && match(TokenType::SEMICOLON)){
-                std::cout<<"statement -> read(variable) ;"<<std::endl;
-                outDerivation << "statement -> read(variable) ;\n";
-                return true;
-            }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::IF){
-        if(match(TokenType::IF) && match(TokenType::OPENPAR) && relExpr() && match(TokenType::CLOSEPAR)
-            && match(TokenType::THEN) && statBlock() && match(TokenType::ELSE) && statBlock() && match(TokenType::SEMICOLON)){
-                std::cout<<"statement -> if(relExpr) then statBlock else statBlock ;"<<std::endl;
-                outDerivation << "statement -> if(relExpr) then statBlock else statBlock ;\n";
-                return true;
-            }
-        else return false;
-    }
-    else return false;
-};
+    bool success = false;
 
-bool Parser::assignStat(){
-    if(lookAhead.getType() == TokenType::ASSIGN){
-        if(assignOp() && expr()){
-            std::cout<<"assignStat -> assignOp expr"<<std::endl;
-            outDerivation << "assignStat -> assignOp expr\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::SEMICOLON){
-        std::cout<<"assignStat -> EPSILON"<<std::endl;
-        outDerivation << "assignStat -> EPSILON\n";
-        return true;
+    if (!skipErrors("ASSIGNOP"))return false;
 
+    if (checkFirstSet("ASSIGNOP", 0)) {
+        if (match(TokenType::ASSIGN)) {
+            std::cout << "ASSIGNOP -> ASSIGN" << std::endl;
+            outDerivation << "ASSIGNOP -> ASSIGN \n";
+            success = true;
+        }
     }
-    else return false;
-};
+    return success;
+}
+
+bool Parser::relOp() {
+    bool success = false;
+
+    if (!skipErrors("RELOP"))return false;
+
+    if (checkFirstSet("RELOP", 0)) {
+        if (match(TokenType::NOTEQ)) {
+            std::cout << "RELOP -> NOTEQ " << std::endl;
+            outDerivation << "RELOP -> NOTEQ \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("RELOP", 1)) {
+        if (match(TokenType::LTEQ)) {
+            std::cout << "RELOP -> LTEQ " << std::endl;
+            outDerivation << "RELOP -> LTEQ \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("RELOP", 2)) {
+        if (match(TokenType::LT)) {
+            std::cout << "RELOP -> NOTEQ " << std::endl;
+            outDerivation << "RELOP -> NOTEQ \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("RELOP", 3)) {
+        if (match(TokenType::GTEQ)) {
+            std::cout << "RELOP -> GTEQ" << std::endl;
+            outDerivation << "RELOP -> GTEQ \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("RELOP", 4)) {
+        if (match(TokenType::GT)) {
+            std::cout << "RELOP -> GT" << std::endl;
+            outDerivation << "RELOP -> GT \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("RELOP", 5)) {
+        if (match(TokenType::EQ)) {
+            std::cout << "RELOP -> EQ " << std::endl;
+            outDerivation << "RELOP -> EQ \n";
+            success = true;
+        }
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::addOp() {
+    bool success = false;
+    if (!skipErrors("ADDOP"))return false;
+    
+    if (checkFirstSet("ADDOP", 0)) {
+        if (match(TokenType::ADD)) {
+            std::cout << "ADDOP -> ADD" << std::endl;
+            outDerivation << "ADDOP -> ADD \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("ADDOP", 1)) {
+        if (match(TokenType::OR)) {
+            std::cout << "ADDOP -> OR " << std::endl;
+            outDerivation << "ADDOP -> OR \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("ADDOP", 2)) {
+        if (match(TokenType::SUBT)) {
+            std::cout << "ADDOP -> SUBT " << std::endl;
+            outDerivation << "ADDOP -> SUBT \n";
+            success = true;
+        }
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::multOp() {
+    bool success = false;
+
+    if (!skipErrors("MULTOP"))return false;
+
+    if (checkFirstSet("MULTOP", 0)) {
+        if (match(TokenType::AND)) {
+            std::cout << "MULTOP -> AND " << std::endl;
+            outDerivation << "MULTOP -> AND \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("MULTOP", 1)) {
+        if (match(TokenType::DIV)) {
+            std::cout << "MULTOP -> DIV  " << std::endl;
+            outDerivation << "MULTOP -> DIV \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("MULTOP", 2)) {
+        if (match(TokenType::MULT)) {
+            std::cout << "MULTOP -> MULT  " << std::endl;
+            outDerivation << "MULTOP -> MULT \n";
+            success = true;
+        }
+    }
+    else {}
+
+    return success;
+}
+
+bool Parser::idOrSelf() {
+    bool success = false;
+
+    if (!skipErrors("IDORSELF"))return false;
+
+    if (checkFirstSet("IDORSELF", 0)) {
+        if (match(TokenType::SELF)) {
+            std::cout << "IDORSELF -> SELF" << std::endl;
+            outDerivation << "IDORSELF -> SELF \n";
+            success = true;
+        }
+    }
+    else if (checkFirstSet("IDORSELF", 1)) {
+        if (match(TokenType::ID)) {
+            std::cout << "IDORSELF -> ID" << std::endl;
+            outDerivation << "IDORSELF -> ID \n";
+            success = true;
+        }
+    }
+    else{}
+
+    return success;
+}
 
 
-bool Parser::visibility(){
-    if(lookAhead.getType() == TokenType::PUBLIC){
-        if(match(TokenType::PUBLIC)){
-            std::cout<<"visibility -> public"<<std::endl;
-            outDerivation << "visibility -> public\n";
-            return true;
-        }
-        else return false;
-    }
-    else if(lookAhead.getType() == TokenType::PRIVATE){
-        if(match(TokenType::PRIVATE)){
-            std::cout<<"visibility -> private"<<std::endl;
-            outDerivation << "visibility -> private\n";
-            return true;
-        }
-        else return false;
-    }
-    else return false;
-};
+
+
+
