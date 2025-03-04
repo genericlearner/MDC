@@ -213,11 +213,7 @@ bool Parser::start(){
             return false;
         }
     }
-    /*
-    else if(lookAhead.getType() == TokenType::COMMENT){
-        lookAhead.getType() = lexer.nextToken().getType();
-        return start();
-    }*/
+    
     else if(lookAhead.getType() == TokenType::ENDOFILE){
         std::cout<<"start->EOF"<<std::endl;
         outDerivation << "start->EOF \n";
