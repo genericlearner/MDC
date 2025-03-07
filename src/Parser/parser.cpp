@@ -124,6 +124,17 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
 }
 
 
+/**
+ * @brief Matches the current lookahead token with the expected token type.
+ *
+ * This function checks if the type of the current lookahead token matches the
+ * specified token type. If it matches, the function consumes the current token
+ * by advancing to the next token from the lexer and returns true. If it does
+ * not match, the function still advances to the next token but returns false.
+ *
+ * @param token The expected token type to match against the current lookahead token.
+ * @return true if the current lookahead token matches the specified token type, false otherwise.
+ */
 bool Parser::match(TokenType token){
     if(lookAhead.getType() == token){
         lookAhead = lexer.nextToken();
@@ -135,6 +146,18 @@ bool Parser::match(TokenType token){
     }
 };
 
+/**
+ * @brief Checks if the lookahead token type is in the first set of the given function name at the specified position.
+ * 
+ * This function verifies whether the type of the current lookahead token matches any of the token types
+ * in the first set of the specified function name at the given position. The first set is a map where
+ * the key is the function name and the value is a vector of vectors of token types.
+ * 
+ * @param funcName The name of the function whose first set is to be checked.
+ * @param pos The position in the first set vector to be checked.
+ * @return true If the lookahead token type matches any token type in the first set at the specified position.
+ * @return false If the lookahead token type does not match any token type in the first set at the specified position.
+ */
 bool Parser::checkFirstSet(std::string funcName, int pos){
     bool isValid = false;
     if (firstSet.find(funcName) != firstSet.end()) {
@@ -147,6 +170,16 @@ bool Parser::checkFirstSet(std::string funcName, int pos){
     return isValid;
 }
 
+/**
+ * @brief Checks if the lookahead token type is in the first set of the given function name.
+ * 
+ * This function iterates through the first set of the specified function name and checks if the
+ * type of the lookahead token matches any type in the first set. If a match is found, the function
+ * returns true. Otherwise, it returns false.
+ * 
+ * @param funcName The name of the function whose first set is to be checked.
+ * @return true if the lookahead token type is in the first set of the given function name, false otherwise.
+ */
 bool Parser::checkAllFirstSet(std::string funcName) {
     bool isValid = false;
     if (firstSet.find(funcName) != firstSet.end()) {
@@ -160,6 +193,15 @@ bool Parser::checkAllFirstSet(std::string funcName) {
     }
     return isValid;
 }
+/**
+ * @brief Checks if the current lookahead token is in the follow set of the given function.
+ * 
+ * This function iterates through the follow set of the specified function name and 
+ * checks if the type of the current lookahead token matches any of the types in the follow set.
+ * 
+ * @param funcName The name of the function whose follow set is to be checked.
+ * @return true if the lookahead token's type is in the follow set of the given function, false otherwise.
+ */
 bool Parser::checkFollowSet(std::string funcName){
     bool isValid = false;
     for (size_t i = 0; i < followSet[funcName].size(); i++) {
@@ -167,10 +209,30 @@ bool Parser::checkFollowSet(std::string funcName){
     }
     return isValid;
 }
+/**
+ * @brief Checks if the given function name is in the follow set.
+ * 
+ * This function determines whether the specified function name exists
+ * within the follow set, indicating that it can be derived from epsilon.
+ * 
+ * @param funcName The name of the function to check.
+ * @return true if the function name is in the follow set, false otherwise.
+ */
 bool Parser::epsilonCheck(std::string funcName) {
     return followSet.count(funcName) > 0;
 }
 
+/**
+ * @brief Skips errors in the parsing process by checking the first and follow sets of a given function name.
+ *
+ * This function attempts to handle syntax errors by checking if the current token is in the first set or if 
+ * an epsilon transition is possible for the given function name. If neither condition is met, it outputs a 
+ * syntax error message and continues to fetch the next token until a valid token is found in either the first 
+ * or follow set. If an epsilon transition is possible and the token is in the follow set, parsing is aborted.
+ *
+ * @param funcName The name of the function whose first and follow sets are to be checked.
+ * @return true if the error was successfully skipped and parsing can continue, false if parsing is aborted.
+ */
 bool Parser::skipErrors(std::string funcName) {
     if (checkAllFirstSet(funcName) || epsilonCheck(funcName)) {
         return true;
