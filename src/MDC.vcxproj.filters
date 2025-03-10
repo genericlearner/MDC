@@ -38,5 +38,146 @@
     <ClInclude Include="parser\parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="prog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="classList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="implDeflist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="funcDefList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="classDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="isaList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memberList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="visMemberDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="isa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="visibility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="implDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="implBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="attrDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="funcDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="funcDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="funcHead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="funcBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statementlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="localVarDeclList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="varDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="localVarDecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ifStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="readStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="returnStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="whileStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="writeStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="expr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="extraExpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arithExpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="relOp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="relExpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="term.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="addTermList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="addTermArithExpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sign.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="factor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="addFactorList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="recFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="addOp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="multOp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="floatLit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="intLit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="notFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="signFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
