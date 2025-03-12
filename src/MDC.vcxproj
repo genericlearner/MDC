@@ -98,10 +98,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ASTFactory.cpp" />
+    <ClCompile Include="compositeConcept.cpp" />
+    <ClCompile Include="compositeConceptToken.cpp" />
     <ClCompile Include="lexer\lexer.cpp" />
     <ClCompile Include="lexer\Token.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parser\parser.cpp" />
+    <ClCompile Include="AST.cpp" />
+    <ClCompile Include="tokenAST.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="addFactorList.h" />
@@ -109,9 +114,12 @@
     <ClInclude Include="addTermArithExpr.h" />
     <ClInclude Include="addTermList.h" />
     <ClInclude Include="arithExpr.h" />
+    <ClInclude Include="AST.h" />
+    <ClInclude Include="ASTFactory.h" />
     <ClInclude Include="attrDecl.h" />
     <ClInclude Include="classDecl.h" />
     <ClInclude Include="classList.h" />
+    <ClInclude Include="compositeConceptToken.h" />
     <ClInclude Include="expr.h" />
     <ClInclude Include="extraExpr.h" />
     <ClInclude Include="factor.h" />
@@ -136,6 +144,7 @@
     <ClInclude Include="memDecl.h" />
     <ClInclude Include="multOp.h" />
     <ClInclude Include="notFactor.h" />
+    <ClInclude Include="parserUtility.h" />
     <ClInclude Include="parser\parser.h" />
     <ClInclude Include="prog.h" />
     <ClInclude Include="readStat.h" />
@@ -149,6 +158,7 @@
     <ClInclude Include="statement.h" />
     <ClInclude Include="statementlist.h" />
     <ClInclude Include="term.h" />
+    <ClInclude Include="tokenAST.h" />
     <ClInclude Include="varDecl.h" />
     <ClInclude Include="visibility.h" />
     <ClInclude Include="visMemberDecl.h" />
