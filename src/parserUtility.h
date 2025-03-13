@@ -2,6 +2,7 @@
 #include <string>
 
 enum class compositeConcept {
+		START,
 		PROG,
 		CLASSLIST, 
 		IMPLDEFLIST,
@@ -14,6 +15,7 @@ enum class compositeConcept {
 		ISA,
 		VISIBILITY,
 		VISMEMBERDECLLIST,
+		VISMEMBERDECL,
 		MEMDECL,
 		IMPLBODYLIST,
 		IMPLBODY,
@@ -58,7 +60,7 @@ enum class compositeConcept {
 		APARAMSLIST,
 		APARAMS,
 		FLOAT_T,
-		INT,T,
+		INT_T,
 
 };
 
@@ -73,7 +75,7 @@ enum class atomicConcept {
 
 };
 
-class enumeratedDeclarations {
+class EnumeratedDeclarations {
 public:
-	static std::string compositeConceptToString(compositeConcept c)
+	static std::string compositeConceptToString(compositeConcept cc);
 };

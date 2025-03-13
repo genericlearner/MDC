@@ -3,6 +3,7 @@
 #include "Lexer/lexer.h"
 #include "Parser/parser.h"
 #include "Lexer/Token.h"
+#include "AST.h"
 
 std::string changeExtension(const std::string& filename, const std::string& newExtension){
     size_t pos = filename.rfind('.');
@@ -10,6 +11,19 @@ std::string changeExtension(const std::string& filename, const std::string& newE
         return filename.substr(0, pos) + newExtension;
     }
     return filename + newExtension;
+}
+
+void writeToDot(AST* ast, std::string path) {
+    std::ofstream file(path);
+    if (file.fail() || !ast)return;
+
+   
+
+    file << "AST Tree {\n";
+    file << ast->dotConvert();
+    file << "}\n";
+
+    file.close();
 }
 
 int main(int argc, char* argv []){
@@ -31,6 +45,7 @@ int main(int argc, char* argv []){
     const std::string syntaxErrorsFile = changeExtension(sourceFile, ".syntaxerrors");
     const std::string outputTokenFile = changeExtension(sourceFile, ".outlextokens");
     const std::string outputErrorFile = changeExtension(sourceFile, ".outlexerrors");
+    const std::string outASTFile = changeExtension(sourceFile, ".outast");
 
     std::ifstream inputStream(sourceFile);
     std::ofstream outDerivation(outDerivationFile);
@@ -67,6 +82,8 @@ int main(int argc, char* argv []){
     Parser *p = new Parser(inputStream, outDerivation, syntaxErrors, lexicalAnaylzer);
     std::cout<<"starting the parser "<<std::endl;
     p->startParse();
+
+    writeToDot(Parser->)
     
     
 

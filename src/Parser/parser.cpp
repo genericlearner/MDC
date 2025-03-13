@@ -1,5 +1,5 @@
 #include "parser.h"
-
+#include "../ASTFactory.h"
 
 Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream& syntaxErrors, Lexer& lexer)
     :source(source), outDerivation(outDerivation), syntaxErrors(syntaxErrors), lexer(lexer) {
@@ -124,6 +124,10 @@ Parser::Parser(std::ifstream& source, std::ostream& outDerivation, std::ofstream
 }
 
 
+
+AST* Parser::getast() {
+    return ast;
+}
 /**
  * @brief Matches the current lookahead token with the expected token type.
  *
@@ -263,10 +267,12 @@ bool Parser::startParse(){
 
 }
 
-bool Parser::start(){
+bool Parser::start(AST** startS){
     
     if(checkFirstSet("START", 0)) {
-        if(prog()){
+        AST* progS = nullptr;
+        if(prog(&progS)){
+            *startS = ASTFactory::makeFamily(compositeConcept::START, { progS });
             std::cout<<"start->prog"<<std::endl;
             outDerivation<<"Start -> prog \n";
             return true;
@@ -288,7 +294,7 @@ bool Parser::start(){
     else return false;
 };
 
-bool Parser::prog(){
+bool Parser::prog(AST** progS){
     bool success = false;
     if (!skipErrors("PROG"))return false;
     if(checkFirstSet("PROG", 0)) {

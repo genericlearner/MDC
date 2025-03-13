@@ -23,7 +23,9 @@ public:
 	AST* makeSiblings(AST* y);
 	void adoptChild(AST* y);
 
-	virtual void accept();
+	virtual std::string toString() = 0;
+	std::string dotConvert();
+	//virtual void accept();
 
 
 };

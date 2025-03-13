@@ -5,6 +5,8 @@
 #include "unordered_map"
 #include "vector"
 #include "../Lexer/lexer.h"
+#include "../AST.h"
+#include "../parserUtility.h"
 #include <fstream>
 #include <ostream>
 
@@ -16,6 +18,7 @@ class Parser{
         std::unordered_map<std::string, std::vector<TokenType>>followSet;
         Token lookAhead;
         Lexer& lexer;
+        AST* ast;
         bool checkFirstSet(std::string funcName, int pos);
         bool checkAllFirstSet(std::string funcName);
         bool checkFollowSet(std::string funcName);
@@ -28,8 +31,8 @@ class Parser{
         
         
 
-        bool start();
-        bool prog();
+        bool start(AST** startS);
+        bool prog(AST** progS);
         bool classimplfunc();
         bool vismemberdecl();
         bool classdecl();
@@ -108,6 +111,7 @@ class Parser{
         bool startParse();
         void writeDerivation();
         void writeError();
+        AST* getast();
 
 
 

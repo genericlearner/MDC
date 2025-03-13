@@ -1,18 +1,32 @@
 #include "AST.h"
 #include "ASTFactory.h"
 #include "Lexer/Token.h"
-
+#include <iostream>
+#include <sstream>
 
 
 AST::AST() {
 	rightSibling = nullptr;
 	leftMostChild = nullptr;
-	leftMostSibling = nullptr;
+	leftMostSibling = this;
 	parent = nullptr;
 }
 
 AST::~AST(){}
+std::string AST::dotConvert() {
+	std::stringstream ss;
+	AST* child = leftMostChild;
 
+	std::string curr = this->toString();
+
+	while (child != nullptr) {
+		ss << "\"" + curr + "\"->\"" + child->toString() + "\"\n";
+		ss << child->dotConvert();
+		child = child->rightSibling;
+	}
+
+	return ss.str();
+}
 std::vector<AST*> AST::getChildren() {
 	std::vector<AST*> children;
 	AST* child = leftMostChild;
