@@ -4,5 +4,5 @@
 class NotEqTo : public CompositeConceptTokenAST {
 public:
 	NotEqTo(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };

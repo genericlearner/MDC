@@ -4,5 +4,5 @@
 class Not : public CompositeConceptTokenAST {
 public:
 	Not(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };

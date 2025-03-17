@@ -106,9 +106,14 @@
     <ClCompile Include="And.cpp" />
     <ClCompile Include="AParamsList.cpp" />
     <ClCompile Include="arithExpr.cpp" />
+    <ClCompile Include="ArraySize.cpp" />
+    <ClCompile Include="ArraySizeList.cpp" />
+    <ClCompile Include="Assign.cpp" />
     <ClCompile Include="ASTFactory.cpp" />
     <ClCompile Include="attrDecl.cpp" />
     <ClCompile Include="classDecl.cpp" />
+    <ClCompile Include="ClassImplFunc.cpp" />
+    <ClCompile Include="ClassImplFuncList.cpp" />
     <ClCompile Include="classList.cpp" />
     <ClCompile Include="compositeConcept.cpp" />
     <ClCompile Include="compositeConcept.h" />
@@ -120,6 +125,9 @@
     <ClCompile Include="factor.cpp" />
     <ClCompile Include="FloatID.cpp" />
     <ClCompile Include="floatLit.cpp" />
+    <ClCompile Include="fParams.cpp" />
+    <ClCompile Include="fParams.h" />
+    <ClCompile Include="fParamsList.cpp" />
     <ClCompile Include="funcBody.cpp" />
     <ClCompile Include="funcDecl.cpp" />
     <ClCompile Include="funcDef.cpp" />
@@ -176,6 +184,7 @@
     <ClCompile Include="varDecl.cpp" />
     <ClCompile Include="visibility.cpp" />
     <ClCompile Include="VisMemberDecl.cpp" />
+    <ClCompile Include="VisMemberDeclList.cpp" />
     <ClCompile Include="Void.cpp" />
     <ClCompile Include="whileStat.cpp" />
     <ClCompile Include="writeStat.cpp" />
@@ -189,10 +198,15 @@
     <ClInclude Include="And.h" />
     <ClInclude Include="APaaramsList.h" />
     <ClInclude Include="arithExpr.h" />
+    <ClInclude Include="ArraySize.h" />
+    <ClInclude Include="ArraySizeList.h" />
+    <ClInclude Include="Assign.h" />
     <ClInclude Include="AST.h" />
     <ClInclude Include="ASTFactory.h" />
     <ClInclude Include="attrDecl.h" />
     <ClInclude Include="classDecl.h" />
+    <ClInclude Include="ClassImplFunc.h" />
+    <ClInclude Include="ClassImplFuncList.h" />
     <ClInclude Include="classList.h" />
     <ClInclude Include="compositeConceptToken.h" />
     <ClInclude Include="Divide.h" />
@@ -202,6 +216,7 @@
     <ClInclude Include="factor.h" />
     <ClInclude Include="FloatID.h" />
     <ClInclude Include="floatLit.h" />
+    <ClInclude Include="fParamsList.h" />
     <ClInclude Include="funcBody.h" />
     <ClInclude Include="funcDecl.h" />
     <ClInclude Include="funcDef.h" />
@@ -256,6 +271,7 @@
     <ClInclude Include="varDecl.h" />
     <ClInclude Include="visibility.h" />
     <ClInclude Include="visMemberDecl.h" />
+    <ClInclude Include="VisMemberDeclList.h" />
     <ClInclude Include="Void.h" />
     <ClInclude Include="whileStat.h" />
     <ClInclude Include="writeStat.h" />

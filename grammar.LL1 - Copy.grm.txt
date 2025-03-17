@@ -1,0 +1,81 @@
+makeNode - A
+makeFamily - B
+makeSiblings - C
+
+
+
+START -> PROG
+PROG -> CLASSIMPLFUNC B(Prog) PROG C(ClassImplFuncList) | EPSILON
+CLASSIMPLFUNC -> CLASSDECL B(ClassImplFunc) | IMPLDEF B(ClassImplFunc) | FUNCDEF B(ClassImplFunc)
+CLASSDECL -> class id A(class id) ISA1 lbrace VISMEMBERDECL B(classDecl) rbrace semicolon
+VISMEMBERDECL -> VISIBILITY MEMDECL  B(VisMemberDecl) VISMEMBERDECL C(VISMEMBERLIST) | EPSILON
+ISA1 -> isa id ISA2 B(ISA)| EPSILON
+ISA2 -> comma id ISA2 B(ISA2) | EPSILON
+IMPLDEF -> implementation id A(implementation id) lbrace IMPLBODY B(ImplDef) rbrace
+IMPLBODY -> FUNCDEF B(ImplBody)  IMPLBODY C(ImplBodyList) | EPSILON
+FUNCDEF -> FUNCHEAD FUNCBODY B(FuncDef)
+VISIBILITY -> public A(Public) B(Visibility) | private A(Private) B(Visibility)
+MEMDECL -> FUNCDECL B(MemDecl) | ATTRDECL B(MemDecl)
+FUNCDECL -> FUNCHEAD semicolon B(FuncDecl)
+FUNCHEAD -> function id A(func ID) lparen FPARAMS B rparen arrow RETURNTYPE B(FuncHead)
+| constructor lparen FPARAMS rparen B(FuncHead)
+FUNCBODY -> lbrace LOCALVARDECLORSTAT2 B(FuncBody) rbrace 
+LOCALVARDECLORSTAT -> LOCALVARDECL B(LocalVarDeclOrStat) | STATEMENT B(LocalVarDeclOrStat)
+LOCALVARDECLORSTAT2 -> LOCALVARDECLORSTAT LOCALVARDECLORSTAT2C(LocalVarDeclOrStat) | EPSILON
+ATTRDECL -> attribute VARDECL B(AttrDecl)
+LOCALVARDECL -> local VARDECL B(LocalVarDecl)
+VARDECL -> id A(Var Id) colon TYPE ARRAYSIZES B(VarDecl)semicolon
+STATEMENT -> FUNCALLORASSIGN semicolon
+| if lparen RELEXPR rparen then STATBLOCK else STATBLOCK B(IfStat) semicolon
+| while lparen RELEXPR rparen STATBLOCK B(whileStat) semicolon
+| read lparen VARIABLE rparen B(readStat)semicolon
+| write lparen EXPR rparen B(writeStat) semicolon
+| return lparen EXPR rparen B(returnStat) semicolon
+
+FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2 B(FunCallOrAssignStat)
+FUNCALLORASSIGN2 -> INDICES FUNCALLORASSIGN3 | lparen APARAMS rparen FUNCALLORASSIGN4
+FUNCALLORASSIGN3 -> ASSIGNOP EXPR | dot id FUNCALLORASSIGN2
+FUNCALLORASSIGN4 -> dot id FUNCALLORASSIGN2 | EPSILON
+STATBLOCK -> lbrace STATEMENTS B(StatBlock) rbrace | STATEMENT B(StatBlock) | EPSILON
+STATEMENTS -> STATEMENT STATEMENTS | EPSILON
+EXPR -> ARITHEXPR EXPR2 B(Expr)
+EXPR2 -> RELOP ARITHEXPR B(Expr2) | EPSILON
+RELEXPR -> ARITHEXPR RELOP ARITHEXPR B(RelExpr)
+ARITHEXPR -> TERM RIGHTRECARITHEXPR B(ArithExpr)
+RIGHTRECARITHEXPR -> ADDOP TERM RIGHTRECARITHEXPR | EPSILON
+SIGN -> plus A(plus) | minus A(minus)
+TERM -> FACTOR RIGHTRECTERM B(Term)
+RIGHTRECTERM -> MULTOP FACTOR RIGHTRECTERM | EPSILON
+FACTOR -> IDORSELF FACTOR2 REPTVARIABLEORFUNCTIONCALL B(Factor)
+| floatlit A(FloatLit) B(Factor)
+| intlit A(FloatLit) B(Factor)
+| lparen ARITHEXPR rparen B(Factor)
+| not FACTOR B(Factor)
+| SIGN FACTOR B(Factor)
+FACTOR2 -> lparen APARAMS rparen | INDICES
+INDICES -> INDICE INDICES B(IndixList) | EPSILON
+REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL | EPSILON
+VARIABLE -> IDORSELF VARIABLE2 B(Variable)
+VARIABLE2 -> INDICES REPTVARIABLE | lparen APARAMS rparen VARIDNEST
+REPTVARIABLE -> VARIDNEST REPTVARIABLE | EPSILON
+VARIDNEST -> dot id VARIDNEST2
+VARIDNEST2 -> lparen APARAMS rparen VARIDNEST | INDICES
+INDICE -> lsqbr ARITHEXPR rsqbr B(Indice)
+IDNEST -> dot id IDNEST2 B(Idnest)
+IDNEST2 -> lparen APARAMS rparen | INDICES
+ARRAYSIZE -> lsqbr ARRAYSIZE2
+ARRAYSIZE2 -> intlit rsqbr | rsqbr
+ARRAYSIZES -> ARRAYSIZE ARRAYSIZES B(ArraySizes) | EPSILON
+TYPE -> int A(Int Type)B(TYPE) | float A(Int Type)B(TYPE) | id A(Type ID) B(TYPE)
+RETURNTYPE -> TYPE B(returntype) | void B(ReturnType)
+APARAMS -> EXPR REPTAPARAMS1 B(Aparams) | EPSILON
+REPTAPARAMS1 -> APARAMSTAIL REPTAPARAMS1 | EPSILON
+APARAMSTAIL -> comma EXPR
+FPARAMS -> id A(Fparams ID) colon TYPE ARRAYSIZES REPTFPARAMS1 B(Fparams) | EPSILON
+REPTFPARAMS1 -> FPARAMSTAIL REPTFPARAMS1 | EPSILON
+FPARAMSTAIL -> comma id colon TYPE ARRAYSIZES
+ASSIGNOP -> assign
+RELOP -> eq | neq | lt | gt | lteq | gteq
+ADDOP -> plus A(plus)B(addop) | minus A(minus)B(addop) | or A(or)B(addop)
+MULTOP -> *A(mult)B(Multop) | /A(Div) B(Multop) | and A(and) B(multop)
+IDORSELF -> id A(id) B(IDORSELF) | self A(Self) B(IDORSELF)

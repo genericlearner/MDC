@@ -1,12 +1,12 @@
 #include "tokenAST.h"
 
-TokenAST::TokenAST(Token t):t(t){}
+TokenAST::TokenAST(Token token):token(token){}
 
 Token TokenAST::getToken() {
-	return t;
+	return token;
 }
 
 std::string TokenAST::getLexeme() {
-	return t.getLexeme();
+	return token.getLexeme();
 }
 

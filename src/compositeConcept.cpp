@@ -1,16 +1,16 @@
 #include "compositeConcept.h"
 #include <sstream>
 
-CompositeConceptAST::CompositeConceptAST(compositeConcept cc): AST(), cc(cc){}
+CompositeConceptAST::CompositeConceptAST(compositeConcept cconcept): AST(), concet(cconcept){}
 
 compositeConcept CompositeConceptAST::getConcept() {
-	return cc;
+	return concet;
 }
 
 std::string CompositeConceptAST::toString() {
 	std::stringstream ss;
 	ss << (void const*)this;
 
-	return EnumeratedDeclarations::compositeConceptToString(cc) + "(" + ss.str() + ")";
+	return EnumeratedDeclarations::compositeConceptToString(concet) + "(" + ss.str() + ")";
 
 }

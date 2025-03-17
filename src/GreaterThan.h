@@ -4,5 +4,5 @@
 class GreaterThan : public CompositeConceptTokenAST {
 public:
 	GreaterThan(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };

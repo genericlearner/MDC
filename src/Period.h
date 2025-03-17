@@ -4,5 +4,5 @@
 class Period : public CompositeConceptTokenAST {
 public:
 	Period(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };

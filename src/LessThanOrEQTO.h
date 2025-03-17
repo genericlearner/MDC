@@ -4,5 +4,5 @@
 class LessThanOrEqTo: public CompositeConceptTokenAST {
 public:
 	LessThanOrEqTo(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };

@@ -4,5 +4,5 @@
 class Divide : public  CompositeConceptTokenAST{
 public:
 	Divide(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };

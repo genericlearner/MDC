@@ -83,7 +83,7 @@ int main(int argc, char* argv []){
     std::cout<<"starting the parser "<<std::endl;
     p->startParse();
 
-    writeToDot(Parser->)
+    writeToDot(p->getast(), outASTFile);
     
     
 

@@ -3,5 +3,5 @@
 
 class VisMemberDecl : public CompositeConceptAST {
 public:
-	VisMemberDecl(compositeConcept c);
+	VisMemberDecl(compositeConcept cc);
 };

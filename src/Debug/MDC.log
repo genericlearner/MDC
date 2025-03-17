@@ -1,2 +1,87 @@
 ﻿  parser.cpp
-  MDC.vcxproj -> C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\Debug\MDC.exe
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(837,12): error C2660: 'Parser::variable': function does not take 1 arguments
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(77,14): message : see declaration of 'Parser::variable'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1147,12): error C2660: 'Parser::factor': function does not take 2 arguments
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(72,14): message : see declaration of 'Parser::factor'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1147,12): error C2660: 'Parser::rightrecterm': function does not take 2 arguments
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(71,14): message : see declaration of 'Parser::rightrecterm'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1180,53): error C2511: 'bool Parser::factor(AST **,AST *)': overloaded member function not found in 'Parser'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(13): message : see declaration of 'Parser'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1182,10): error C2352: 'Parser::skipErrors': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(265): message : see declaration of 'Parser::skipErrors'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1184,9): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1187,13): error C2352: 'Parser::sign': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1117): message : see declaration of 'Parser::sign'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1187,12): error C2660: 'Parser::factor': function does not take 2 arguments
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(72,14): message : see declaration of 'Parser::factor'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1191,56): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1191,56): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1191,56): error C2297: '<<': illegal, right operand has type 'const char [24]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1191,27): warning C4552: '<<': result of expression not used
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1195,14): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1199,13): error C2352: 'Parser::idOrSelf': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(99): message : see declaration of 'Parser::idOrSelf'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1199,36): error C2352: 'Parser::factor2': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(73): message : see declaration of 'Parser::factor2'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1199,49): error C2352: 'Parser::reptvariableorfunctioncall': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(76): message : see declaration of 'Parser::reptvariableorfunctioncall'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1201,88): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1201,88): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1201,88): error C2297: '<<': illegal, right operand has type 'const char [56]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1201,27): warning C4552: '<<': result of expression not used
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1205,14): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1207,13): error C2352: 'Parser::match': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(142): message : see declaration of 'Parser::match'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1207,12): error C2660: 'Parser::factor': function does not take 2 arguments
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(72,14): message : see declaration of 'Parser::factor'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1212,55): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1212,55): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1212,55): error C2297: '<<': illegal, right operand has type 'const char [23]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1212,27): warning C4552: '<<': result of expression not used
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1216,14): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1217,13): error C2352: 'Parser::match': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(142): message : see declaration of 'Parser::match'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1220,60): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1220,60): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1220,60): error C2297: '<<': illegal, right operand has type 'const char [28]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1220,27): warning C4552: '<<': result of expression not used
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1224,14): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1225,13): error C2352: 'Parser::match': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(142): message : see declaration of 'Parser::match'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1228,58): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1228,58): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1228,58): error C2297: '<<': illegal, right operand has type 'const char [26]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1228,27): warning C4552: '<<': result of expression not used
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1232,14): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1234,13): error C2352: 'Parser::match': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(142): message : see declaration of 'Parser::match'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1234,42): error C2352: 'Parser::arithexpr': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1072): message : see declaration of 'Parser::arithexpr'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1234,68): error C2352: 'Parser::match': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(142): message : see declaration of 'Parser::match'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1237,71): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1237,71): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1237,71): error C2297: '<<': illegal, right operand has type 'const char [39]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1237,27): warning C4552: '<<': result of expression not used
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1322,35): error C2511: 'bool Parser::variable(AST **)': overloaded member function not found in 'Parser'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(13): message : see declaration of 'Parser'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1324,10): error C2352: 'Parser::skipErrors': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(265): message : see declaration of 'Parser::skipErrors'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1326,9): error C2352: 'Parser::checkFirstSet': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(190): message : see declaration of 'Parser::checkFirstSet'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1329,13): error C2352: 'Parser::idOrSelf': illegal call of non-static member function
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(99): message : see declaration of 'Parser::idOrSelf'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1329,12): error C2660: 'Parser::variable2': function does not take 1 arguments
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.h(78,14): message : see declaration of 'Parser::variable2'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1331,65): error C2597: illegal reference to non-static member 'Parser::outDerivation'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1331,65): error C3867: 'Parser::outDerivation': non-standard syntax; use '&' to create a pointer to member
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1331,65): error C2297: '<<': illegal, right operand has type 'const char [33]'
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\parser\parser.cpp(1331,27): warning C4552: '<<': result of expression not used
+  AST.cpp
+  Generating Code...

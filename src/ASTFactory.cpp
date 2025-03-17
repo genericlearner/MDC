@@ -121,6 +121,14 @@
 #include "writeStat.h"
 #include "APaaramsList.h"
 #include "Start.h"
+#include "ClassImplFunc.h"
+#include "ClassImplFuncList.h"
+#include "fParams.h"
+#include "fParamsList.h"
+#include "VisMemberDeclList.h"
+#include "ArraySize.h"
+#include "ArraySizeList.h"
+#include "Assign.h"
 
 std::vector<AST*>treesProduced;
 
@@ -191,6 +199,8 @@ AST* ASTFactory::makeNode(Token token) {
 		case TokenType::DOT:
 			treesProduced.push_back(new Period(token));
 			break;
+		case TokenType::ASSIGN:
+			treesProduced.push_back(new Assign(token));
 
 	}
 	return treesProduced.back();
@@ -201,6 +211,12 @@ AST* ASTFactory::makeNode(compositeConcept cc)
 	switch (cc) {
 	case compositeConcept::START:
 		treesProduced.push_back(new Start(cc));
+		break;
+	case compositeConcept::CLASSIMPLFUNC:
+		treesProduced.push_back(new ClassImplFunc(cc));
+		break;
+	case compositeConcept::CLASSIMPLFUNCLIST:
+		treesProduced.push_back(new ClassImplFuncList(cc));
 		break;
 	case compositeConcept::ADDOP:
 		treesProduced.push_back(new addOp(cc));
@@ -318,21 +334,24 @@ AST* ASTFactory::makeNode(compositeConcept cc)
 	case compositeConcept::WRITESTAT:
 		treesProduced.push_back(new WriteStat(cc));
 		break;
-		/*
 	case compositeConcept::VISMEMBERDECLLIST:
 		treesProduced.push_back(new VisMemberDeclList(cc));
 		break;
-			
-	case compositeConcept::FACTOR2:
-		treesProduced.push_back(new factor2(cc);
-		break;
-		
 	case compositeConcept::FPARAMSLIST:
-		treesProduced.push_back(new fparamslist(cc));
+		treesProduced.push_back(new fParamsList(cc));
 		break;
-		*/
-
+	case compositeConcept::FPARAMS:
+		treesProduced.push_back(new fParams(cc));
+		break;
+	case compositeConcept::ARRAYSIZE:
+		treesProduced.push_back(new ArraySize(cc));
+		break;
+	case compositeConcept::ARRAYSIZELIST:
+		treesProduced.push_back(new ArraySizeList(cc));
+		break;
+	
 	}
+	return treesProduced.back();
 }
 
 AST* ASTFactory::makeFamily(compositeConcept cc, std::vector<AST*> children) {

@@ -5,9 +5,9 @@
 
 class TokenAST : public AST {
 private:
-	Token t;
+	Token token;
 public:
-	TokenAST(Token t);
+	TokenAST(Token token);
 	Token getToken();
 	std::string getLexeme();
 	virtual std::string toString() = 0;

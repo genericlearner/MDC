@@ -4,9 +4,9 @@
 #include <string>
 
 class CompositeConceptAST :public AST {
-	compositeConcept cc;
+	compositeConcept concet;
 public:
-	CompositeConceptAST(compositeConcept cc);
+	CompositeConceptAST(compositeConcept cconcept);
 	std::string toString();
 	compositeConcept getConcept();
 

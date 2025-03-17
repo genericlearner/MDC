@@ -5,5 +5,5 @@
 class And : public CompositeConceptTokenAST {
 public:
 	And(Token t);
-	virtual std::string toString() override;
+	//virtual std::string toString() override;
 };
