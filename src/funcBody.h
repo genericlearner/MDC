@@ -3,5 +3,5 @@
 
 class FuncBody : public CompositeConceptAST {
 public:
-	FuncBody(compositeConcept c);
+	FuncBody(compositeConcept cc);
 };

@@ -3,5 +3,5 @@
 
 class ImplBody : public CompositeConceptAST {
 public:
-	ImplBody(compositeConcept c);
+	ImplBody(compositeConcept cc);
 };

@@ -3,5 +3,5 @@
 
 class LocalVarDeclList : public CompositeConceptAST {
 public:
-	LocalVarDeclList(compositeConcept c);
+	LocalVarDeclList(compositeConcept cc);
 };

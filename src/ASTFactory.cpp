@@ -129,6 +129,7 @@
 #include "ArraySize.h"
 #include "ArraySizeList.h"
 #include "Assign.h"
+#include "AssignStat.h"
 
 std::vector<AST*>treesProduced;
 
@@ -350,7 +351,12 @@ AST* ASTFactory::makeNode(compositeConcept cc)
 		treesProduced.push_back(new ArraySizeList(cc));
 		break;
 	
+	
+	case compositeConcept::ASSIGNSTAT:
+		treesProduced.push_back(new AssignStat(cc));
+		break;
 	}
+	
 	return treesProduced.back();
 }
 

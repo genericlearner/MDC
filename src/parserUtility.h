@@ -4,6 +4,7 @@
 enum class compositeConcept {
 		START,
 		PROG,
+		ASSIGNSTAT,
 		CLASSIMPLFUNC,
 		CLASSIMPLFUNCLIST,
 		CLASSLIST, 

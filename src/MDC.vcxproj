@@ -109,6 +109,7 @@
     <ClCompile Include="ArraySize.cpp" />
     <ClCompile Include="ArraySizeList.cpp" />
     <ClCompile Include="Assign.cpp" />
+    <ClCompile Include="AssignStat.cpp" />
     <ClCompile Include="ASTFactory.cpp" />
     <ClCompile Include="attrDecl.cpp" />
     <ClCompile Include="classDecl.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="ArraySize.h" />
     <ClInclude Include="ArraySizeList.h" />
     <ClInclude Include="Assign.h" />
+    <ClInclude Include="AssignStat.h" />
     <ClInclude Include="AST.h" />
     <ClInclude Include="ASTFactory.h" />
     <ClInclude Include="attrDecl.h" />

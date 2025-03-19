@@ -1,8 +1,8 @@
 #pragma once
-#include "CompositeConcept.h"
+#include "compositeConcept.h"
 
 class fParams : public CompositeConceptAST
 {
 public:
-	fParams(compositeConcept c);
+	fParams(compositeConcept cc);
 };

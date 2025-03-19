@@ -3,5 +3,5 @@
 
 class ISAList : public CompositeConceptAST {
 public:
-	ISAList(compositeConcept c);
+	ISAList(compositeConcept cc);
 };

@@ -3,5 +3,5 @@
 
 class Term : public CompositeConceptAST {
 public:
-	Term(compositeConcept c);
+	Term(compositeConcept cc);
 };

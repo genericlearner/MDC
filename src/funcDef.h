@@ -3,5 +3,5 @@
 
 class FuncDef : public CompositeConceptAST {
 public:
-	FuncDef(compositeConcept c);
+	FuncDef(compositeConcept cc);
 };

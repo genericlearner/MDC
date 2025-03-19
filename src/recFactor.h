@@ -3,5 +3,5 @@
 
 class RecFactor : public CompositeConceptAST {
 public:
-	RecFactor(compositeConcept c);
+	RecFactor(compositeConcept cc);
 };

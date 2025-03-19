@@ -3,5 +3,5 @@
 
 class WriteStat : public CompositeConceptAST {
 public:
-	WriteStat(compositeConcept c);
+	WriteStat(compositeConcept cc);
 };

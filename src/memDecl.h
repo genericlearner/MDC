@@ -3,5 +3,5 @@
 
 class MemDecl : public CompositeConceptAST {
 public:
-	MemDecl(compositeConcept c);
+	MemDecl(compositeConcept cc);
 };

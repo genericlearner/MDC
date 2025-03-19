@@ -3,5 +3,5 @@
 
 class MultOp : public CompositeConceptAST {
 public:
-	MultOp(compositeConcept c);
+	MultOp(compositeConcept cc);
 };

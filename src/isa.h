@@ -3,5 +3,5 @@
 
 class ISA : public CompositeConceptAST {
 public:
-	ISA(compositeConcept c);
+	ISA(compositeConcept cc);
 };

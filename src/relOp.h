@@ -3,5 +3,5 @@
 
 class RelOp : public CompositeConceptAST {
 public:
-	RelOp(compositeConcept c);
+	RelOp(compositeConcept cc);
 };

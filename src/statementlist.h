@@ -3,5 +3,5 @@
 
 class StatementList : public CompositeConceptAST {
 public:
-	StatementList(compositeConcept c);
+	StatementList(compositeConcept cc);
 };

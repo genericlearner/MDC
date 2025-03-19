@@ -3,7 +3,7 @@
 
 class IntegerID : public TokenAST {
 public:
-	IntegerID(Token c);
+	IntegerID(Token t);
 
 	virtual std::string toString() override;
 };

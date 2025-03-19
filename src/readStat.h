@@ -3,5 +3,5 @@
 
 class ReadStat : public CompositeConceptAST {
 public:
-	ReadStat(compositeConcept c);
+	ReadStat(compositeConcept cc);
 };

@@ -3,5 +3,5 @@
 
 class FuncDecl : public CompositeConceptAST {
 public:
-	FuncDecl(compositeConcept c);
+	FuncDecl(compositeConcept cc);
 };

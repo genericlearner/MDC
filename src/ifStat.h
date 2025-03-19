@@ -3,5 +3,5 @@
 
 class IfStat : public CompositeConceptAST {
 public:
-	IfStat(compositeConcept c);
+	IfStat(compositeConcept cc);
 };

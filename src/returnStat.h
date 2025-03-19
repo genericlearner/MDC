@@ -3,5 +3,5 @@
 
 class ReturnStat : public CompositeConceptAST {
 public:
-	ReturnStat(compositeConcept c);
+	ReturnStat(compositeConcept cc);
 };

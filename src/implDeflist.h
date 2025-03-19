@@ -3,5 +3,5 @@
 
 class ImplDefList : public CompositeConceptAST {
 public:
-	ImplDefList(compositeConcept c);
+	ImplDefList(compositeConcept cc);
 };

@@ -4,7 +4,7 @@
 #include <string>
 
 class CompositeConceptAST :public AST {
-	compositeConcept concet;
+	compositeConcept concept;
 public:
 	CompositeConceptAST(compositeConcept cconcept);
 	std::string toString();

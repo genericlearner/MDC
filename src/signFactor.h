@@ -3,5 +3,5 @@
 
 class SignFactor : public CompositeConceptAST {
 public:
-	SignFactor(compositeConcept c);
+	SignFactor(compositeConcept cc);
 };

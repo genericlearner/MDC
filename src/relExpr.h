@@ -3,5 +3,5 @@
 
 class RelExpr : public CompositeConceptAST {
 public:
-	RelExpr(compositeConcept c);
+	RelExpr(compositeConcept cc);
 };

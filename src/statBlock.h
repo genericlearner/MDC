@@ -3,5 +3,5 @@
 
 class StatBlock : public CompositeConceptAST {
 public:
-	StatBlock(compositeConcept c);
+	StatBlock(compositeConcept cc);
 };

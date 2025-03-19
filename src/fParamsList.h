@@ -4,5 +4,5 @@
 class fParamsList : public CompositeConceptAST
 {
 public:
-	fParamsList(compositeConcept c);
+	fParamsList(compositeConcept cc);
 };

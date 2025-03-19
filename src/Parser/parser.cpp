@@ -868,7 +868,7 @@ bool Parser::funcallorassign(AST** funcOrAssignStatS) {
     if (!skipErrors("FUNCALLORASSIGN")) return false;
     if (checkFirstSet("FUNCALLORASSIGN", 0)) {
         AST* idorSelf = nullptr;
-        if (idOrSelf(&idorSelf) && funcallorassign2()) {
+        if (idOrSelf(&idorSelf) && funcallorassign2(funcOrAssignStatS, attrStack.top())) {
             std::cout << "FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2" << std::endl;
             outDerivation << "FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2 \n";
             success = true;
@@ -879,12 +879,15 @@ bool Parser::funcallorassign(AST** funcOrAssignStatS) {
     return success;
 }
 
-bool Parser::funcallorassign2() {
+bool Parser::funcallorassign2(AST** funcOrAssignStatSNest, AST* leftVar) {
     bool success = false;
     if (!skipErrors("FUNCALLORASSIGN2")) return false;
     if (checkFirstSet("FUNCALLORASSIGN2", 0)) {
         AST* indiceRept = nullptr;
-        if (indices(&indiceRept) && funcasllorassign3()) {
+        AST* varOrFuncNest = nullptr;
+        if (indices(&indiceRept) && funcasllorassign3(&varOrFuncNest, leftVar)) {
+            AST* varChild = leftVar->makeSiblings(ASTFactory::makeFamily(compositeConcept::ARRAYSIZELIST, { indiceRept }));
+            leftVar = ASTFactory::makeFamily(compositeConcept::VARIABLE, { varChild });
             std::cout << "FUNCALLORASSIGN2 -> INDICES FUNCALLORASSIGN3" << std::endl;
             outDerivation << "FUNCALLORASSIGN2 -> INDICES FUNCALLORASSIGN3 \n";
             success = true;
@@ -893,7 +896,9 @@ bool Parser::funcallorassign2() {
     }
     else if (checkFirstSet("FUNCALLORASSIGN2", 1)) {
         AST* aParamsS = nullptr;
-        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && funcallorassign4()) {
+        AST* funCallNest = nullptr;
+        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && funcallorassign4(&funCallNest, leftVar)) {
+            AST* funCallS = ASTFactory::makeFamily(compositeConcept::FUNCALLORASSIGNSTAT, { leftVar, aParamsS });
             std::cout << "FUNCALLORASSIGN2 -> OPENPAR AAPARMS CLOSEPAR FUNCALLORASSIGN4" << std::endl;
             outDerivation << "FUNCALLORASSIGN2 -> OPENPAR AAPARMS CLOSEPAR FUNCALLORASSIGN4 \n";
             success = true;
@@ -904,20 +909,28 @@ bool Parser::funcallorassign2() {
     return success;
 }
 
-bool Parser::funcasllorassign3() {
+bool Parser::funcasllorassign3(AST** assignOrNest, AST* leftVar) {
     bool success = false;
     if (!skipErrors("FUNCALLORASSIGN3")) return false;
     if (checkFirstSet("FUNCALLORASSIGN3", 0)) {
         AST* assignOpAST = nullptr;
         AST* exprS = nullptr;
         if (assignOp(&assignOpAST) && expr(&exprS)) {
+            *assignOrNest = ASTFactory::makeFamily(compositeConcept::ASSIGNSTAT, { assignOpAST, exprS });
             std::cout << "FUNCALLORASSIGN3 -> ASSIGNOP EXPR" << std::endl;
             outDerivation << "FUNCALLORASSIGN3 -> ASSIGNOP EXPR \n";
             success = true;
         }
     }
     else if (checkFirstSet("FUNCALLORASSIGN3", 1)) {
-        if (match(TokenType::DOT) && match(TokenType::ID) && funcallorassign2()) {
+        AST* funcOrAssignNest = nullptr;
+        if (match(TokenType::DOT) && match(TokenType::ID) && funcallorassign2(&funcOrAssignNest, attrStack.top())) {
+            AST* varID = attrStack.top(); attrStack.pop();
+            AST* dot = attrStack.top(); attrStack.pop();
+            ASTFactory::makeFamily(dot, { leftVar, funcOrAssignNest});
+            *assignOrNest = funcOrAssignNest;
+
+
             std::cout << "FUNCALLORASSIGN3 -> DOT ID FUNCALLORASSIGN2" << std::endl;
             outDerivation << "FUNCALLORASSIGN3 -> DOT ID FUNCALLORASSIGN2 \n";
             success = true;
@@ -927,11 +940,17 @@ bool Parser::funcasllorassign3() {
     return success;
 }
 
-bool Parser::funcallorassign4() {
+bool Parser::funcallorassign4(AST** funcNest, AST* leftVar) {
     bool success = false;
     if (!skipErrors("FUNCALLORASSIGN4")) return false;
     if (checkFirstSet("FUNCALLORASSIGN4", 0)) {
-        if (match(TokenType::DOT) && match(TokenType::ID) && funcallorassign2()) {
+        AST* funcOrAssignNest = nullptr;
+        if (match(TokenType::DOT) && match(TokenType::ID) && funcallorassign2(&funcOrAssignNest, attrStack.top())) {
+            AST* varID = attrStack.top(); attrStack.pop();
+            AST* dot = attrStack.top(); attrStack.pop();
+            ASTFactory::makeFamily(dot, { leftVar, funcOrAssignNest });
+            *funcNest = funcOrAssignNest;
+
             std::cout << "FUNCALLORASSIGN4 -> DOT ID FUNCALLORASSIGN2" << std::endl;
             outDerivation << "FUNCALLORASSIGN4 -> DOT ID FUNCALLORASSIGN2 \n";
             success = true;
@@ -1155,13 +1174,19 @@ bool Parser::term(AST** termS) {
     return success;
 }
 
-bool Parser::rightrecterm() {
+bool Parser::rightrecterm(AST** termTail, AST* leftFactor) {
     bool success = false;
     if (!skipErrors("RIGHTRECTERM")) return false;
 
     if (checkFirstSet("RIGHTRECTERM", 0)) {
         AST* multOpAST = nullptr;
-        if (multOp(&multOpAST) && factor() && rightrecterm()) {
+        AST* rightFactor = nullptr;
+        AST* termTailRest = nullptr;
+        if (multOp(&multOpAST) && factor(&rightFactor, nullptr) && rightrecterm(&termTailRest, nullptr)) {
+
+            ASTFactory::makeFamily(multOpAST, { leftFactor, termTailRest });
+            *termTail = multOpAST;
+
             std::cout << "RIGHTRECTERM -> MULTOP FACTOR RIGHTRECTERM" << std::endl;
             outDerivation << "RIGHTRECTERM -> MULTOP FACTOR RIGHTRECTERM \n";
             success = true;
@@ -1195,8 +1220,8 @@ bool Parser::factor(AST** factorS, AST* leftFactor) {
     else if (checkFirstSet("FACTOR", 1)) {
         AST* idorSelf = nullptr;
         AST* factor2S = nullptr;
-
-        if (idOrSelf(&idorSelf) && factor2() && reptvariableorfunctioncall()) {
+        AST* factoRest = nullptr;
+        if (idOrSelf(&idorSelf) && factor2(&factor2S, idorSelf) && reptvariableorfunctioncall(&factoRest, nullptr)) {
             std::cout << "FACTOR -> IDORSELF FACTOR2 REPTVARIABLEORFUNCTIONCALL" << std::endl;
             outDerivation << "FACTOR -> IDORSELF FACTOR2 REPTVARIABLEORFUNCTIONCALL \n";
             success = true;
@@ -1242,14 +1267,22 @@ bool Parser::factor(AST** factorS, AST* leftFactor) {
     return success;
 }
 
-bool Parser::factor2() {
+bool Parser::factor2(AST** factorContinue, AST* leftVar) {
     bool success = false;
 
     if (!skipErrors("FACTOR2"))return false;
 
     if (checkFirstSet("FACTOR2", 0)) {
         AST* indiceRept = nullptr;
+        AST* funcOrVarNest = nullptr;
         if (indices(&indiceRept)) {
+            AST* indiceList = nullptr;
+            if (indiceRept) {
+                indiceList = ASTFactory::makeFamily(compositeConcept::ARRAYSIZELIST, { indiceRept });
+            }
+            AST* varS = ASTFactory::makeFamily(compositeConcept::VARORFUNCTIONCALLLIST, { leftVar, indiceList });
+            *factorContinue = varS;
+
             std::cout << "FACOTR2 -> INDICES" << std::endl;
             outDerivation << "FACOTR2 -> INDICES \n";
             success = true;
@@ -1259,6 +1292,8 @@ bool Parser::factor2() {
     else if (checkFirstSet("FACTOR2", 1)) {
         AST* aParamsS = nullptr;
         if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR)) {
+            AST* funcCall = ASTFactory::makeFamily(compositeConcept::VARORFUNCTIONCALLLIST, { leftVar, aParamsS });
+            *factorContinue = funcCall;
             std::cout << "FACTOR2 -> OPENPAR APARAMS CLOSEPAR" << std::endl;
             outDerivation << "FACTOR2 -> OPENPAR APARAMS CLOSEPAR \n";
             success = true;
@@ -1299,12 +1334,15 @@ bool Parser::indices(AST** indiceRept) {
     return success;
 }
 
-bool Parser::reptvariableorfunctioncall() {
+bool Parser::reptvariableorfunctioncall(AST** varOrFunc, AST* left) {
     bool success = false;
     if (!skipErrors("REPTVARIABLEORFUNCTIONCALL"))return false;
 
     if (checkFirstSet("REPTVARIABLEORFUNCTIONCALL", 0)) {
-        if (idNest() && reptvariableorfunctioncall()) {
+        AST* varOrFuncNest = nullptr;
+        AST* varOrFuncRest = nullptr;
+        if (idNest(&varOrFuncNest, nullptr) && reptvariableorfunctioncall(&varOrFuncRest, varOrFuncNest)) {
+            *varOrFunc = varOrFuncRest;
             std::cout << "REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL" << std::endl;
             outDerivation << "REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL \n";
             success = true;
@@ -1326,7 +1364,9 @@ bool Parser::variable(AST** varS) {
     if (checkFirstSet("VARIABLE", 0)) {
         AST* idorSelf = nullptr;
         AST* varRest = nullptr;
-        if (idOrSelf(&idorSelf) && variable2(&varRest)) {
+        if (idOrSelf(&idorSelf) && variable2(&varRest, attrStack.top())) {
+            AST* varID = attrStack.top(); attrStack.pop();
+            *varS = varRest;
             std::cout << "VARIABLE -> IDORSELF VARIABLE2" << std::endl;
             outDerivation << "VARIABLE -> IDORSELF VARIABLE2 \n";
             success = true;
@@ -1335,12 +1375,18 @@ bool Parser::variable(AST** varS) {
     return success;
 }
 
-bool Parser::variable2() {
+bool Parser::variable2(AST** varRestS, AST* leftVar) {
     bool success = false;
     if (!skipErrors("VARIABLE2"))return false;
     if (checkFirstSet("VARIABLE2", 0)) {
         AST* indiceRept = nullptr;
-        if (indices(&indiceRept) && reptvariable()) {
+        AST* varIdTail = nullptr;
+        if (indices(&indiceRept) && reptvariable(&varIdTail, leftVar)) {
+
+            if (indiceRept) {
+                leftVar->makeSiblings(indiceRept);
+            }
+            *varRestS = varIdTail;
             std::cout << "VARIABLE2 -> INDICES REPTVARIABLE" << std::endl;
             outDerivation << "VARIABLE2 -> INDICES REPTVARIABLE \n";
             success = true;
@@ -1348,7 +1394,11 @@ bool Parser::variable2() {
     }
     else if (checkFirstSet("VARIABLE2", 1)) {
         AST* aParamsS = nullptr;
-        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && varIdNest()) {
+        AST* varNest = nullptr;
+        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && varIdNest(&varNest, leftVar)) {
+            varNest->makeSiblings(aParamsS);
+            *varRestS = varNest;
+
             std::cout << "VARIABLE2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST" << std::endl;
             outDerivation << "VARIABLE2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST \n";
             success = true;
@@ -1359,11 +1409,16 @@ bool Parser::variable2() {
     return success;
 }
 
-bool Parser::reptvariable() {
+bool Parser::reptvariable(AST** varIdTailS, AST* leftVarId) {
     bool success = false;
     if (!skipErrors("REPTVARIABLE"))return false;
     if (checkFirstSet("REPTVARIABLE", 0)) {
-        if (varIdNest() && reptvariable()) {
+        AST* varNest = nullptr;
+        AST* reptVar = nullptr;
+        if (varIdNest(&varNest, leftVarId) && reptvariable(&reptVar, leftVarId)) {
+            varNest->makeSiblings(reptVar);
+            *varIdTailS = varNest;
+    
             std::cout << "REPTVARIABLE -> VARIDNEST REPTVARIABLE" << std::endl;
             outDerivation << "REPTVARIABLE -> VARIDNEST REPTVARIABLE \n";
             success = true;
@@ -1377,11 +1432,17 @@ bool Parser::reptvariable() {
     return success;
 }
 
-bool Parser::varIdNest() {
+bool Parser::varIdNest(AST** varNest, AST* leftVarId) {
     bool success = false;
     if (!skipErrors("VARIDNEST"))return false;
+
     if (checkFirstSet("VARIDNEST", 0)) {
-        if (match(TokenType::DOT) && match(TokenType::ID) && varIdNest2()) {
+        AST* varIDNest = nullptr;
+        if (match(TokenType::DOT) && match(TokenType::ID) && varIdNest2(&varIDNest, attrStack.top())) {
+            AST* rhsID = attrStack.top(); attrStack.pop();
+            AST* dot = attrStack.top(); attrStack.pop();
+            ASTFactory::makeFamily(dot, { leftVarId, varIDNest });
+            *varNest = dot;
             std::cout << "VARIDNEST -> DOT ID VARIDEST2" << std::endl;
             outDerivation << "VARIDNEST -> DOT ID VARIDEST2 \n";
             success = true;
@@ -1390,26 +1451,38 @@ bool Parser::varIdNest() {
     return success;
 }
 
-bool Parser::varIdNest2() {
+bool Parser::varIdNest2(AST** varNestTail, AST* leftVarId) {
     bool success = false;
     if (!skipErrors("VARIDNEST2"))return false;
 
     if (checkFirstSet("VARIDNEST2", 0)) {
         AST* indiceRept = nullptr;
+            
         if (indices(&indiceRept)) {
+            AST* indiceList = nullptr;
+            if (indiceRept) {
+                indiceList = ASTFactory::makeFamily(compositeConcept::ARRAYSIZELIST, { indiceRept });
+            }
+            AST* varS = ASTFactory::makeFamily(compositeConcept::VARORFUNCTIONCALLLIST, { leftVarId, indiceList });
+            *varNestTail = varS;
+
             std::cout << "VARIDNEST2 -> INDICES " << std::endl;
             outDerivation << "VARIDNEST2 -> INDICES \n";
             success = true;
         }
+        
     }
     else if (checkFirstSet("VARIDNEST2", 1)) {
         AST* aParamsS = nullptr;
-        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && varIdNest()) {
+        AST* varNest = nullptr;
+        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && varIdNest(&varNest, attrStack.top())) {
+
             std::cout << "VARIDNEST2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST" << std::endl;
             outDerivation << "VARIDNEST2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST \n";
             success = true;
         }
     }
+    else {};
 
     return success;
 }
@@ -1431,13 +1504,18 @@ bool Parser::indice(AST** indiceAST) {
     return success;
 }
 
-bool Parser::idNest() {
+bool Parser::idNest(AST** IDNest, AST* leftVar) {
     bool success = false;
 
     if (!skipErrors("IDNEST"))return false;
 
     if (checkFirstSet("IDNEST", 0)) {
-        if (match(TokenType::DOT) && match(TokenType::ID) && idNest2()) {
+        AST* idNestTail = nullptr;
+        if (match(TokenType::DOT) && match(TokenType::ID) && idNest2(&idNestTail, attrStack.top())) {
+            AST* rhsID = attrStack.top(); attrStack.pop();
+            AST* dot = attrStack.top(); attrStack.pop();
+            ASTFactory::makeFamily(dot, { leftVar, idNestTail });
+            *IDNest = dot;
             std::cout << "IDNEST -> DOT ID IDNEST2" << std::endl;
             outDerivation << "IDNEST -> DOT ID IDNEST2 \n";
             success = true;
@@ -1447,22 +1525,35 @@ bool Parser::idNest() {
     return success;
 }
 
-bool Parser::idNest2() {
+bool Parser::idNest2(AST** idNest, AST* leftVar) {
     bool success = false;
 
     if (!skipErrors("IDNEST2")) return false;
 
     if (checkFirstSet("IDNEST2", 0)) {
+            
         AST* indiceRept = nullptr;
         if (indices(&indiceRept)) {
+            AST* indiceList = nullptr;
+            if (indiceRept) {
+                indiceList = ASTFactory::makeFamily(compositeConcept::ARRAYSIZELIST, { indiceRept });
+            }
+            AST* varS = ASTFactory::makeFamily(compositeConcept::VARORFUNCTIONCALLLIST, { leftVar, indiceList });
+            *idNest = varS;
             std::cout << "IDNEST2 -> INDICES" << std::endl;
             outDerivation << "IDNEST2 -> INDICES \n";
             success = true;
+
+
         }
     }
     else if (checkFirstSet("IDNEST2", 1)) {
         AST* aParamsS = nullptr;
         if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR)) {
+            
+            AST* funcCall = ASTFactory::makeFamily(compositeConcept::VARORFUNCTIONCALLLIST, { leftVar, aParamsS });
+            *idNest = funcCall;
+        
             std::cout << "IDNEST2 -> OPENPAR APARAMS CLOSEPAR" << std::endl;
             outDerivation << "IDNEST2 -> OPENPAR APARAMS CLOSEPAR \n";
             success = true;

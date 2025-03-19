@@ -4,5 +4,5 @@
 
 class Sign : public CompositeConceptAST {
 public:
-	Sign(compositeConcept c);
+	Sign(compositeConcept cc);
 };

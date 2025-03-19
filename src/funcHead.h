@@ -3,5 +3,5 @@
 
 class FuncHead : public CompositeConceptAST {
 public:
-	FuncHead(compositeConcept c);
+	FuncHead(compositeConcept cc);
 };

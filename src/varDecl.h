@@ -3,5 +3,5 @@
 
 class VarDecl : public CompositeConceptAST {
 public:
-	VarDecl(compositeConcept c);
+	VarDecl(compositeConcept cc);
 };

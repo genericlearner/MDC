@@ -3,5 +3,5 @@
 
 class NotFactor : public CompositeConceptAST {
 public:
-	NotFactor(compositeConcept c);
+	NotFactor(compositeConcept cc);
 };

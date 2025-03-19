@@ -3,5 +3,5 @@
 
 class Prog : public CompositeConceptAST {
 public:
-	Prog(compositeConcept c);
+	Prog(compositeConcept cc);
 };

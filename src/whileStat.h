@@ -3,5 +3,5 @@
 
 class WhileStat : public CompositeConceptAST {
 public:
-	WhileStat(compositeConcept c);
+	WhileStat(compositeConcept cc);
 };
