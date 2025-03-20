@@ -1,6 +1,6 @@
 #pragma once
 #pragma once
-#include "compositeConcept.h"
+#include "CompositeConcept.h"
 
 class ClassImplFuncList : public CompositeConceptAST {
 public:

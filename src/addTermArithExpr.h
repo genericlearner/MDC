@@ -1,6 +1,6 @@
 #pragma once
 
-#include "compositeConcept.h"
+#include "CompositeConcept.h"
 
 class addTermArithExpr : public CompositeConceptAST {
 public:

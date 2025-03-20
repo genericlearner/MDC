@@ -42,10 +42,10 @@
     <ClCompile Include="parserUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="compositeConcept.h">
+    <ClCompile Include="CompositeConcept.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="compositeConcept.cpp">
+    <ClCompile Include="CompositeConcept.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="writeStat.cpp">

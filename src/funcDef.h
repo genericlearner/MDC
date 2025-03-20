@@ -1,5 +1,5 @@
 #pragma once
-#include "compositeConcept.h"
+#include "CompositeConcept.h"
 
 class FuncDef : public CompositeConceptAST {
 public:

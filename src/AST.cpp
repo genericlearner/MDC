@@ -12,21 +12,11 @@ AST::AST() {
 	parent = nullptr;
 }
 
-AST::~AST(){}
-std::string AST::dotConvert() {
-	std::stringstream ss;
-	AST* child = leftMostChild;
+AST::~AST(){
+	std::cout << "deleting objects" << std::endl;
 
-	std::string curr = this->toString();
-
-	while (child != nullptr) {
-		ss << "\"" + curr + "\"->\"" + child->toString() + "\"\n";
-		ss << child->dotConvert();
-		child = child->rightSibling;
-	}
-
-	return ss.str();
 }
+
 std::vector<AST*> AST::getChildren() {
 	std::vector<AST*> children;
 	AST* child = leftMostChild;
@@ -50,26 +40,49 @@ AST* AST::getChild(int c) {
 	return child;
 }
 
+std::string AST::dotConvert() {
+	std::stringstream ss;
+	 
+	  
+	AST* child = leftMostChild;
+
+	std::string curr = this->toString();
+
+	while (child != nullptr) {
+		ss << "\"" + curr + "\"->\"" + child->toString() + "\"\n";
+		ss << child->dotConvert();
+		child = child->rightSibling;
+	}
+
+	return ss.str();
+}
+
+
+
+
 AST* AST::makeSiblings(AST* y) {
 	if (!y) {
 		return nullptr;
 	}
 
-	AST* sibs = this;
-	while (sibs->rightSibling != nullptr) {
-		sibs = sibs->rightSibling;
+	// find the rightmode node in this sibling list
+	AST* xsibs = this;
+	while (xsibs->rightSibling != nullptr) {
+		xsibs = xsibs->rightSibling;
 	}
 
+	// join the lists
 	AST* ysibs = y->leftMostSibling;
-	sibs->rightSibling = ysibs;
+	xsibs->rightSibling = ysibs;
 
-	ysibs->leftMostSibling = sibs->leftMostSibling;
-	ysibs->parent = sibs->parent;
+	// set points for the new siblings
+	ysibs->leftMostSibling = xsibs->leftMostSibling;
+	ysibs->parent = xsibs->parent;
 
 	while (ysibs->rightSibling != nullptr) {
 		ysibs = ysibs->rightSibling;
-		ysibs->leftMostSibling = sibs->leftMostSibling;
-		ysibs->parent = sibs->parent;
+		ysibs->leftMostSibling = xsibs->leftMostSibling;
+		ysibs->parent = xsibs->parent;
 	}
 
 	return ysibs;

@@ -165,6 +165,12 @@ bool Parser::match(TokenType token){
         case TokenType::MULT:
         case TokenType::DIV:
         case TokenType::ASSIGN:
+        case TokenType::VOID:
+        case TokenType::NOT:
+        case TokenType::DOT:
+        case TokenType::SELF:
+
+
             attrStack.push(ASTFactory::makeNode(lastToken));
         }
         return true;
@@ -172,7 +178,7 @@ bool Parser::match(TokenType token){
     else{
         lookAhead = lexer.nextToken();
         return false;
-    }
+    } 
 };
 
 /**
@@ -282,14 +288,16 @@ bool Parser::skipErrors(std::string funcName) {
 bool Parser::startParse(){
     std::cout<<"Started Parsing"<<std::endl;
     outDerivation << "Started Parsing \n";
-    AST* startS;
+    AST* startS = nullptr;
     if(start(&startS) && match(TokenType::ENDOFILE)){
         std::cout<<""<<std::endl;
         outDerivation << "Parsing Ended \n";
+        ast = startS;
         return true;}
     else { 
         std::cout << "Syntax error: "<<lookAhead.getLexeme() <<" Type: "<<lookAhead.getType() << " on line "<<lookAhead.getLine() << std::endl;
         return false; }
+    
 
 }
 
@@ -298,7 +306,8 @@ bool Parser::start(AST** startS){
     if(checkFirstSet("START", 0)) {
         AST* progS = nullptr;
         if(prog(&progS)){
-            *startS = ASTFactory::makeFamily(compositeConcept::START, { progS });
+            AST* progSub = ASTFactory::makeFamily(compositeConcept::PROG, { progS });
+            *startS = ASTFactory::makeFamily(compositeConcept::START, { progSub });
             std::cout<<"start->prog"<<std::endl;
             outDerivation<<"Start -> prog \n";
             return true;
@@ -325,13 +334,14 @@ bool Parser::prog(AST** progS){
     if (!skipErrors("PROG"))return false;
     if(checkFirstSet("PROG", 0)) {
         AST* classImplFuncS = nullptr;
-        AST* progSiblings = nullptr;
-        if(classimplfunc(&classImplFuncS) && prog(&progSiblings)){
-            AST* classimplfuncList = ASTFactory::makeFamily(compositeConcept::CLASSIMPLFUNC, { classImplFuncS });
-            *progS = ASTFactory::makeFamily(compositeConcept::PROG, { classimplfuncList });
-            if (progSiblings) {
-                (*progS)->makeSiblings(progSiblings);
+        AST* classImplFuncSiblings = nullptr;
+        if(classimplfunc(&classImplFuncS) && prog(&classImplFuncSiblings)){
+
+            if (classImplFuncSiblings) {
+                classImplFuncS->makeSiblings(classImplFuncSiblings);
             }
+            *progS = ASTFactory::makeFamily(compositeConcept::CLASSIMPLFUNCLIST, { classImplFuncS });
+            
             std::cout << "PROG-> CLASSIMPLFUNC PROG" << std::endl;
             outDerivation << "PROG-> CLASSIMPLFUNC PROG \n";
             success = true;
@@ -537,8 +547,7 @@ bool Parser::funcdef(AST** funcDefS) {
         AST* funcHead = nullptr;
         AST* funcBody = nullptr;
         if (funchead(&funcHead) && funcbody(&funcBody)) {
-            funcHead->makeSiblings(funcBody);
-            *funcDefS = funcHead;
+            *funcDefS = ASTFactory::makeFamily(compositeConcept::FUNCDEF, { funcHead, funcBody });
             std::cout << "FUNCDEF -> FUNCHEAD FUNCBODY" << std::endl;
             outDerivation << "FUNCDEF -> FUNCHEAD FUNCBODY \n";
             success = true;
@@ -642,7 +651,7 @@ bool Parser::funchead(AST** funcHead) {
         if (match(TokenType::FUNCTION) && match(TokenType::ID) && match(TokenType::OPENPAR) && fParams(&fParamsAST) && match(TokenType::CLOSEPAR) &&
             match(TokenType::ARROW) && returnType(&returnTypeAST)) {
             AST* funcID = attrStack.top(); 
-            attrStack.pop();
+            attrStack.pop(); 
 
             *funcHead = ASTFactory::makeFamily(compositeConcept::FUNCHEAD, { funcID, fParamsAST, returnTypeAST });
             std::cout << "FUNCTION ID OPENPAR FPARAMS CLOSEPAR ARROW RETURNTYPE" << std::endl;
@@ -661,9 +670,11 @@ bool Parser::funcbody(AST** funcBodyS) {
     if (checkFirstSet("FUNCBODY", 0)) {
         AST* LocalVarDeclOrStat = nullptr;
         if (match(TokenType::OPENCURLY) && localvardeclorstat2(&LocalVarDeclOrStat) && match(TokenType::CLOSECURLY)) {
+            AST* LocalVarDeclOrStatList = nullptr;
             if (LocalVarDeclOrStat) {
-                AST* LocalVarDeclOrStatList = ASTFactory::makeFamily(compositeConcept::LOCALVARDECLLIST, { LocalVarDeclOrStat });
+                LocalVarDeclOrStatList = ASTFactory::makeFamily(compositeConcept::LOCALVARDECLORSTATLIST, { LocalVarDeclOrStat });
             }
+            *funcBodyS = ASTFactory::makeFamily(compositeConcept::FUNCBODY, { LocalVarDeclOrStatList });
             std::cout << "OPENPAR LOCALVARDECLORSTAT2 CLOSEPAR" << std::endl;
             outDerivation << "OPENPAR LOCALVARDECLORSTAT2 CLOSEPAR \n";
             success = true;
@@ -678,7 +689,7 @@ bool Parser::localvardeclorstat(AST** LocalVarDeclOrStat) {
     bool success = false;
     if (!skipErrors("LOCALVARDECLORSTAT")) return false;
     if (checkFirstSet("LOCALVARDECLORSTAT", 0)) {
-        AST* localVarDecl = nullptr;
+        AST* localVarDecl = nullptr; 
         if (localvardecl(&localVarDecl)) {
             *LocalVarDeclOrStat = localVarDecl;
             std::cout << "LOCALVARDECLORSTAT -> LOCALVARDECL" << std::endl;
@@ -707,8 +718,12 @@ bool Parser::localvardeclorstat2(AST** LocalVarDeclOrStat) {
     if (checkFirstSet("LOCALVARDECLORSTAT2", 0)) {
         AST* LocalVarDeclOrStatSiblings = nullptr;
         if (localvardeclorstat(LocalVarDeclOrStat) && localvardeclorstat2(&LocalVarDeclOrStatSiblings)) {
-            if (LocalVarDeclOrStatSiblings) {
-                (*LocalVarDeclOrStat)->makeSiblings(LocalVarDeclOrStatSiblings);
+            //NOTE: WORK ON THIS ISSUE
+            
+            if (LocalVarDeclOrStat != nullptr) {
+                if (LocalVarDeclOrStatSiblings != nullptr) {
+                    (*LocalVarDeclOrStat)->makeSiblings(LocalVarDeclOrStatSiblings);
+                }
             }
 
             std::cout << "LOCALVARDECLORSTAT2 -> LOCALVARDECLORSTAT LOCALVARDECLORSTAT2" << std::endl;
@@ -868,7 +883,7 @@ bool Parser::funcallorassign(AST** funcOrAssignStatS) {
     if (!skipErrors("FUNCALLORASSIGN")) return false;
     if (checkFirstSet("FUNCALLORASSIGN", 0)) {
         AST* idorSelf = nullptr;
-        if (idOrSelf(&idorSelf) && funcallorassign2(funcOrAssignStatS, attrStack.top())) {
+        if (idOrSelf(&idorSelf) && funcallorassign2(funcOrAssignStatS, idorSelf)) {
             std::cout << "FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2" << std::endl;
             outDerivation << "FUNCALLORASSIGN -> IDORSELF FUNCALLORASSIGN2 \n";
             success = true;
@@ -1364,7 +1379,7 @@ bool Parser::variable(AST** varS) {
     if (checkFirstSet("VARIABLE", 0)) {
         AST* idorSelf = nullptr;
         AST* varRest = nullptr;
-        if (idOrSelf(&idorSelf) && variable2(&varRest, attrStack.top())) {
+        if (idOrSelf(&idorSelf) && variable2(&varRest, idorSelf)) {
             AST* varID = attrStack.top(); attrStack.pop();
             *varS = varRest;
             std::cout << "VARIABLE -> IDORSELF VARIABLE2" << std::endl;
@@ -1475,7 +1490,7 @@ bool Parser::varIdNest2(AST** varNestTail, AST* leftVarId) {
     else if (checkFirstSet("VARIDNEST2", 1)) {
         AST* aParamsS = nullptr;
         AST* varNest = nullptr;
-        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && varIdNest(&varNest, attrStack.top())) {
+        if (match(TokenType::OPENPAR) && aParams(&aParamsS) && match(TokenType::CLOSEPAR) && varIdNest(&varNest, aParamsS)) {
 
             std::cout << "VARIDNEST2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST" << std::endl;
             outDerivation << "VARIDNEST2 -> OPENPAR APARAMS CLOSEPAR VARIDNEST \n";
@@ -1630,7 +1645,7 @@ bool Parser::arraySizes(AST** arraySizeAST) {
     }
     else {}
     return success;
-}
+} 
 
 bool Parser::type(AST** typeAST) {
     bool success = false;

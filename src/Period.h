@@ -1,5 +1,5 @@
 #pragma once
-#include "compositeConceptToken.h"
+#include "CompositeConceptToken.h"
 
 class Period : public CompositeConceptTokenAST {
 public:

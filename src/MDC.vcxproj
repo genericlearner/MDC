@@ -116,8 +116,8 @@
     <ClCompile Include="ClassImplFunc.cpp" />
     <ClCompile Include="ClassImplFuncList.cpp" />
     <ClCompile Include="classList.cpp" />
-    <ClCompile Include="compositeConcept.cpp" />
-    <ClCompile Include="compositeConcept.h" />
+    <ClCompile Include="CompositeConcept.cpp" />
+    <ClCompile Include="CompositeConcept.h" />
     <ClCompile Include="compositeConceptToken.cpp" />
     <ClCompile Include="Divide.cpp" />
     <ClCompile Include="EqTo.cpp" />
