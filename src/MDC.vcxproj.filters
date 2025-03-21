@@ -288,6 +288,9 @@
     <ClCompile Include="AssignStat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Variable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer\lexer.h">
@@ -546,6 +549,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssignStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Variable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

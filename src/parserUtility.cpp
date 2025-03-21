@@ -83,7 +83,7 @@ std::string EnumeratedDeclarations::compositeConceptToString(compositeConcept cc
         str = "STATEMENTLIST";
         break;
     case compositeConcept::LOCALVARDECLORSTATLIST:
-        str = "LOCALVARDECLLIST";
+        str = "LOCALVARDECLORSTATLIST";
         break;
     case compositeConcept::LOCALVARDECL:
         str = "LOCALVARDECL";

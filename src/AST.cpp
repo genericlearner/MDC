@@ -63,7 +63,7 @@ std::string AST::dotConvert() {
 AST* AST::makeSiblings(AST* y) {
 	if (!y) {
 		return nullptr;
-	}
+	} 
 
 	// find the rightmode node in this sibling list
 	AST* xsibs = this;

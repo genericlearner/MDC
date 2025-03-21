@@ -130,6 +130,7 @@
 #include "ArraySizeList.h"
 #include "Assign.h"
 #include "AssignStat.h"
+#include "Variable.h"
 
 std::vector<AST*>treesProduced;
 
@@ -281,7 +282,7 @@ AST* ASTFactory::makeNode(compositeConcept cc)
 	case compositeConcept::LOCALVARDECL:
 		treesProduced.push_back(new LocalVarDecl(cc));
 		break;
-	case compositeConcept::LOCALVARDECLLIST:
+	case compositeConcept::LOCALVARDECLORSTATLIST:
 		treesProduced.push_back(new LocalVarDeclList(cc));
 		break;
 	case compositeConcept::MEMBERLIST:
@@ -349,6 +350,9 @@ AST* ASTFactory::makeNode(compositeConcept cc)
 		break;
 	case compositeConcept::ARRAYSIZELIST:
 		treesProduced.push_back(new ArraySizeList(cc));
+		break;
+	case compositeConcept::VARIABLE:
+		treesProduced.push_back(new Variable(cc));
 		break;
 	
 	

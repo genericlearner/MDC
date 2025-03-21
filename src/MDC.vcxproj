@@ -183,6 +183,7 @@
     <ClCompile Include="term.cpp" />
     <ClCompile Include="tokenAST.cpp" />
     <ClCompile Include="varDecl.cpp" />
+    <ClCompile Include="Variable.cpp" />
     <ClCompile Include="visibility.cpp" />
     <ClCompile Include="VisMemberDecl.cpp" />
     <ClCompile Include="VisMemberDeclList.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="term.h" />
     <ClInclude Include="tokenAST.h" />
     <ClInclude Include="varDecl.h" />
+    <ClInclude Include="Variable.h" />
     <ClInclude Include="visibility.h" />
     <ClInclude Include="visMemberDecl.h" />
     <ClInclude Include="VisMemberDeclList.h" />
