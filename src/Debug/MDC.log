@@ -1,2 +1,10 @@
-﻿  parser.cpp
+﻿  ClassEntry.cpp
+  ParamEntry.cpp
+  SymbolTable.cpp
+  SymbolTableEntry.cpp
+  TempEntry.cpp
+  VisibilityEntry.cpp
+  Generating Code...
+Debug\compositeConcept.obj : warning LNK4042: object specified more than once; extras ignored
+Debug\fParams.obj : warning LNK4042: object specified more than once; extras ignored
   MDC.vcxproj -> C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\Debug\MDC.exe

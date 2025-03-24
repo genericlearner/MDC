@@ -19,7 +19,7 @@ void writeToDot(AST* ast, std::string path) {
 
    
 
-    file << "AST Tree {\n";
+    file << "ASTTree {\n";
     file << ast->dotConvert();
     file << "}\n";
 

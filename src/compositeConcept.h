@@ -3,7 +3,7 @@
 #include "parserUtility.h"
 #include <string>
 
-class CompositeConceptAST :public AST {
+class CompositeConceptAST : public AST {
 	compositeConcept concept;
 public:
 	CompositeConceptAST(compositeConcept cconcept);

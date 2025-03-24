@@ -131,6 +131,9 @@
 #include "Assign.h"
 #include "AssignStat.h"
 #include "Variable.h"
+#include "FuncCall.h"
+#include "Indice.h"
+#include "IndiceList.h"
 
 std::vector<AST*>treesProduced;
 
@@ -164,6 +167,7 @@ AST* ASTFactory::makeNode(Token token) {
 			break;
 		case TokenType::EQ:
 			treesProduced.push_back(new EqTo(token));
+			break;
 		case TokenType::NOTEQ:
 			treesProduced.push_back(new NotEqTo(token));
 			break;
@@ -354,11 +358,17 @@ AST* ASTFactory::makeNode(compositeConcept cc)
 	case compositeConcept::VARIABLE:
 		treesProduced.push_back(new Variable(cc));
 		break;
-	
-	
 	case compositeConcept::ASSIGNSTAT:
 		treesProduced.push_back(new AssignStat(cc));
 		break;
+	case compositeConcept::FUNCCALL:
+		treesProduced.push_back(new FuncCall(cc));
+		break;
+	case compositeConcept::INDICELIST:
+		treesProduced.push_back(new IndiceList(cc));
+		break;
+	case compositeConcept::INDICE:
+		treesProduced.push_back(new Indice(cc));
 	}
 	
 	return treesProduced.back();

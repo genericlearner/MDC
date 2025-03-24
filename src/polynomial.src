@@ -31,6 +31,7 @@ implementation QUADRATIC {
   {
     local result: float;
     //Using Horner's method
+    result[0] := temp[1][2];
     result := a;
     result := result * x + b;
     result := result * x + c;
@@ -69,7 +70,7 @@ function main() => void
   local f1: LINEAR;
   local f2: QUADRATIC;
   local counter: int;
-  f1 := f1.build(2, 3.5);
+  f1 := f1.f2.f3[3].build(2, 3.5);
   f2 := f2.build(-2.0, 1.0, 0.0);
   counter := 1;
 	

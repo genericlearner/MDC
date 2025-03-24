@@ -66,6 +66,9 @@ enum class compositeConcept {
 		APARAMS,
 		FLOAT_T,
 		INT_T,
+		INDICE,
+		INDICELIST,
+		FUNCCALL,
 
 };
 

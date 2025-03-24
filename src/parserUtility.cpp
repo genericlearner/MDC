@@ -183,6 +183,22 @@ std::string EnumeratedDeclarations::compositeConceptToString(compositeConcept cc
         break;
     case compositeConcept::FPARAMS:
         str = "FPARAMS";
+        break;
+    case compositeConcept::ASSIGNSTAT:
+        str = "ASSIGNSTAT";
+        break;
+    case compositeConcept::ARRAYSIZELIST:
+        str = "INDICELIST";
+        break;
+    case compositeConcept::INDICELIST:
+        str = "INDICELIST";
+        break;
+    case compositeConcept::INDICE:
+        str = "INDICE";
+        break;
+    case compositeConcept::FUNCCALL:
+        str = "FUNCTIONCALL";
+        break;
     default:
         str = "UNKNOWN";
         break;
