@@ -6,7 +6,16 @@ CompositeConceptAST::CompositeConceptAST(compositeConcept cconcept): AST(), conc
 compositeConcept CompositeConceptAST::getConcept() {
 	return concept;
 }
+void CompositeConceptAST::accept(Visitor* visitor, bool depthSearch) {
+	if (depthSearch) {
+		AST* child = leftMostChild;
 
+		while (child != nullptr) {
+			child->accept(visitor);
+			child = child->rightSibling;
+		}
+	}
+}
 
 
 std::string CompositeConceptAST::toString() {

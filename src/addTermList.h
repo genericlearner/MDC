@@ -4,4 +4,5 @@
 class addTermList : public CompositeConceptAST {
 public:
 	addTermList(compositeConcept c);
+	virtual void accept(Visitor* visitor, bool depthSearch = true)override;
 };

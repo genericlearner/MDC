@@ -170,6 +170,7 @@ public:
 	virtual void visit(FuncCall* v) = 0;
 	virtual void visit(IndiceList* v) = 0;
 	virtual void visit(Indice* v) = 0;
+	virtual void visit(Self* v) = 0;
 
 	void outError(std::string err, int line);
 	std::vector<std::string> getError() { return errors; }

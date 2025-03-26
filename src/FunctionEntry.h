@@ -15,6 +15,8 @@ public:
 	std::vector<std::tuple<std::string, std::string, std::vector<int>>>paramList;
 	virtual std::string toStr() override;
 	virtual std::string toDot() override;
+	virtual int compSize() override;
 	virtual bool compare(FunctionEntry* fEntry);
+	
 
 };

@@ -99,9 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Add.cpp" />
-    <ClCompile Include="addFactorList.cpp" />
     <ClCompile Include="addOp.cpp" />
-    <ClCompile Include="addTermArithExpr.cpp" />
     <ClCompile Include="addTermList.cpp" />
     <ClCompile Include="And.cpp" />
     <ClCompile Include="AParamsList.cpp" />
@@ -188,6 +186,7 @@
     <ClCompile Include="Subt.cpp" />
     <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="SymbolTableEntry.cpp" />
+    <ClCompile Include="SymbolTableHelper.cpp" />
     <ClCompile Include="SymbolTableVisitor.cpp" />
     <ClCompile Include="TempEntry.cpp" />
     <ClCompile Include="term.cpp" />
@@ -206,9 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Add.h" />
-    <ClInclude Include="addFactorList.h" />
     <ClInclude Include="addOp.h" />
-    <ClInclude Include="addTermArithExpr.h" />
     <ClInclude Include="addTermList.h" />
     <ClInclude Include="And.h" />
     <ClInclude Include="APaaramsList.h" />

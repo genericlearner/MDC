@@ -1,5 +1,10 @@
 #include "FloatID.h"
 #include <sstream>
+#include "Visitor.h"
+
+void FloatID::accept(Visitor* visitor, bool depthSearch) {
+	visitor->visit(this);
+}
 FloatID::FloatID(Token t):CompositeConceptTokenAST(t){}
 
 std::string FloatID::toString()

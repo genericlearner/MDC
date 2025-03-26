@@ -5,4 +5,5 @@ class ID : public TokenAST {
 public:
 	ID(Token t);
 	virtual std::string toString() override;
+	virtual void accept(Visitor* visitor, bool depthSearch = true)override;
 };

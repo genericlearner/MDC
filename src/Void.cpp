@@ -1,6 +1,10 @@
 #include "Void.h"
 #include <sstream>
+#include "Visitor.h"
 
+void Void::accept(Visitor* visitor, bool depthSearch) {
+	visitor->visit(this);
+}
 Void::Void(Token t): TokenAST(t){}
 
 std::string Void::toString() {

@@ -2,7 +2,7 @@
 #include <sstream>
 
 FunctionEntry::FunctionEntry() {
-
+	contClass = nullptr;
 }
 std::string FunctionEntry::signString() {
 	std::stringstream ss;
@@ -37,6 +37,10 @@ bool FunctionEntry::compare(FunctionEntry* fEntry) {
 		return duplicate;
 	}
 	return false;
+}
+
+int FunctionEntry::compSize() {
+	return 0;
 }
 
 std::string FunctionEntry::toStr() {

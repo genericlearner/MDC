@@ -10,4 +10,6 @@ public:
 	std::string toString();
 	compositeConcept getConcept();
 
+	virtual void accept(Visitor* visitor, bool depthSearch = true)override;
+
 };

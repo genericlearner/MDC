@@ -13,4 +13,4 @@ public:
 	virtual std::string toDot() override;
 
 	virtual int compSize() override;
-}
+};

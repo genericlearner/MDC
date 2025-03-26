@@ -1,15 +1,24 @@
 #include "AST.h"
 #include "ASTFactory.h"
 #include "Lexer/Token.h"
+#include "SymbolTableEntry.h"
+#include "VariableEntry.h"
+#include "FunctionEntry.h"
+#include "ClassEntry.h"
+#include "ParamEntry.h"
 #include <iostream>
 #include <sstream>
 
 
-AST::AST() {
-	rightSibling = nullptr;
-	leftMostChild = nullptr;
-	leftMostSibling = this;
-	parent = nullptr;
+AST::AST():
+	rightSibling(nullptr),
+	leftMostChild(nullptr),
+	leftMostSibling(this),
+	parent(nullptr),
+
+	symbolRecord(nullptr),
+	symbolTable(nullptr)
+{
 }
 
 AST::~AST(){
@@ -57,8 +66,92 @@ std::string AST::dotConvert() {
 	return ss.str();
 }
 
+void AST::setSymbolTable(SymbolTable* symbolTable) {
+	this->symbolTable = symbolTable;
+	this->symbolTable->setName(toString());
+	this->symbolTable->setNode(this);
+}
+std::vector<ParamEntry*>AST::searchParam(std::string name) {
+	std::vector<ParamEntry*>res;
 
+	if (symbolTable) {
+		if (ParamEntry* pr = symbolTable->findParRec(name)) {
+			res.emplace_back(pr);
+		}
+	}
+	if (parent) {
+		std::vector<ParamEntry*>parRes = parent->searchParam(name);
+		res.insert(res.end(), parRes.begin(), parRes.end());
+	}
+	return res;
+}
+std::vector<VariableEntry*> AST::searchVariabe(std::string name) {
+	std::vector<VariableEntry*>res;
 
+	if (FunctionEntry* functionRec = dynamic_cast<FunctionEntry*>(symbolRecord)) {
+		if (functionRec && functionRec->contClass) {
+			functionRec->contClass->findVariableRec(name);
+		}
+	}
+
+	if (symbolTable) {
+		if (VariableEntry* vr = symbolTable->findVariableRec(name)) {
+			res.emplace_back(vr);
+		}
+	}
+	if (parent) {
+		std::vector<VariableEntry*> parentRes = parent->searchVariabe(name);
+		res.insert(res.end(), parentRes.begin(), parentRes.end());
+	}
+	return res;
+}
+
+std::vector<FunctionEntry*>AST::searchFunction(std::string name) {
+	std::vector<FunctionEntry*>res;
+
+	if (symbolTable) {
+		std::vector<FunctionEntry*>functionEntryInTable = symbolTable->findFunctionRec(name);
+		if (functionEntryInTable.size() > 0) {
+			res.insert(res.end(), functionEntryInTable.begin(), functionEntryInTable.end());
+		}
+	}
+
+	if (parent) {
+		std::vector<FunctionEntry*>parentRes = parent->searchFunction(name);
+		res.insert(res.end(), parentRes.begin(), parentRes.end());
+
+	}
+}
+
+ClassEntry* AST::searchClass(std::string name) {
+	if (symbolTable) {
+		ClassEntry* res = symbolTable->findClassRec(name);
+		if (res) {
+			return res;
+		}
+	}
+
+	if (parent) {
+		return parent->searchClass(name);
+	}
+
+	return nullptr;
+}
+
+void AST::insertIntoTable(SymbolTableEntry* data) {
+	SymbolTable* table = getClosestTable();
+	table->insertRec(data);
+}
+
+SymbolTable* AST::getClosestTable() {
+	if (symbolTable) {
+		return symbolTable;
+	}
+	else if (parent) {
+		return parent->getClosestTable();
+	}
+	else return nullptr;
+}
 
 AST* AST::makeSiblings(AST* y) {
 	if (!y) {

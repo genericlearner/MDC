@@ -7,4 +7,5 @@ class IntLit : public TokenAST {
 public:
 	IntLit(Token t);
 	virtual std::string toString() override;
+	virtual void accept(Visitor* visitor, bool depthSearch = true)override;
 };

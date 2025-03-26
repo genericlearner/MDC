@@ -8,4 +8,6 @@ public:
 	CompositeConceptTokenAST(Token t);
 
 	virtual std::string toString() override;
+	virtual void accept(Visitor* visitor, bool deptSearch = true)override;
+
 };
