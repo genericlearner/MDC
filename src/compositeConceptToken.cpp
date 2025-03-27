@@ -1,6 +1,7 @@
 #include "compositeConceptToken.h"
 
 CompositeConceptTokenAST::CompositeConceptTokenAST(Token t):TokenAST(t){}
+
 void CompositeConceptTokenAST::accept(Visitor* visitor, bool depthSearch) {
 	if (depthSearch) {
 		AST* child = leftMostChild;

@@ -2,6 +2,7 @@
 #include "Visitor.h"
 
 void RecFactor::accept(Visitor* visitor, bool depthSearch) {
+	CompositeConceptAST::accept(visitor, depthSearch);
 	visitor->visit(this);
 }
 RecFactor::RecFactor(compositeConcept cc) : CompositeConceptAST(cc) {}

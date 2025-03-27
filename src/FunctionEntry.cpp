@@ -26,7 +26,7 @@ std::string FunctionEntry::signString() {
 bool FunctionEntry::compare(FunctionEntry* fEntry) {
 	if (name == fEntry->name && returnType == fEntry->returnType && paramList.size() == fEntry->paramList.size()) {
 		bool duplicate = true;
-		for (int i = 0; i < paramList.size(); i++) {
+		for (size_t i = 0; i < paramList.size(); i++) {
 			auto t1 = paramList[i];
 			auto t2 = fEntry->paramList[i];
 
@@ -47,5 +47,5 @@ std::string FunctionEntry::toStr() {
 	return "function :" + name + "-" + signString();
 }
 std::string FunctionEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>function</TD><TD>" + returnType + ":" + signString()  + std::to_string(offset) + "</TD><TD PORT=\"" + "function-" + name + "-" + signString() + "\">+</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>function</TD><TD>" + returnType + ":" + signString()+ "</TD><TD>" + "</TD><TD PORT=\"" + "function-" + name + "-" + signString() + "\">+</TD></TR>\n";
 }

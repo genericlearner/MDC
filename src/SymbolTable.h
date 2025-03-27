@@ -10,6 +10,7 @@ class FunctionEntry;
 class ParamEntry;
 class VariableEntry;
 class TempEntry;
+class ImplementationEntry;
 
 class SymbolTable {
 
@@ -27,6 +28,7 @@ public:
 	std::vector<ParamEntry*> getParRec();
 	std::vector<VariableEntry*> getVarRec();
 	std::vector<TempEntry*> getTempRec();
+	std::vector<ImplementationEntry*>getImplementationRec();
 	
 	ClassEntry* findClassRec(std::string name);
 	std::vector<FunctionEntry*>findFunctionRec(std::string name);
@@ -34,6 +36,7 @@ public:
 	TempEntry* findTempRec(std::string nam);
 	VariableEntry* findVariableRec(std::string name);
 	SymbolTableEntry* findVarOrParRec(std::string name);
+	ImplementationEntry* findImplementationRec(std::string name);
 
 	std::string getName() { return name; };
 	void setName(std::string name) { this->name = name; }

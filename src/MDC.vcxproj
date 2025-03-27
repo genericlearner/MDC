@@ -142,6 +142,7 @@
     <ClCompile Include="ImplBody.cpp" />
     <ClCompile Include="ImplDef.cpp" />
     <ClCompile Include="ImplDefList.cpp" />
+    <ClCompile Include="ImplementationEntry.cpp" />
     <ClCompile Include="Indice.cpp" />
     <ClCompile Include="IndiceList.cpp" />
     <ClCompile Include="IntegerID.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="TempEntry.cpp" />
     <ClCompile Include="term.cpp" />
     <ClCompile Include="tokenAST.cpp" />
+    <ClCompile Include="TypeCheckingVisitor.cpp" />
     <ClCompile Include="varDecl.cpp" />
     <ClCompile Include="Variable.cpp" />
     <ClCompile Include="VariableEntry.cpp" />
@@ -245,6 +247,7 @@
     <ClInclude Include="implBody.h" />
     <ClInclude Include="implDef.h" />
     <ClInclude Include="implDeflist.h" />
+    <ClInclude Include="ImplementationEntry.h" />
     <ClInclude Include="Indice.h" />
     <ClInclude Include="IndiceList.h" />
     <ClInclude Include="IntegerID.h" />
@@ -292,6 +295,7 @@
     <ClInclude Include="TempEntry.h" />
     <ClInclude Include="term.h" />
     <ClInclude Include="tokenAST.h" />
+    <ClInclude Include="TypeCheckingVisitor.h" />
     <ClInclude Include="varDecl.h" />
     <ClInclude Include="Variable.h" />
     <ClInclude Include="VariableEntry.h" />

@@ -1,7 +1,7 @@
 #pragma once
 #include "compositeConceptToken.h"
 
-class FloatID : public CompositeConceptTokenAST {
+class FloatID : public TokenAST {
 public:
 	FloatID(Token t);
 	virtual std::string toString() override;

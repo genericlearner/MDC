@@ -1,6 +1,7 @@
 #include "SymbolTableHelper.h"
 
-
+std::vector<SymbolTableEntry*>SymbolTableHelper::recRef;
+std::vector<SymbolTable*>SymbolTableHelper::tableRef;
 SymbolTable* SymbolTableHelper::createSymbolTable() {
 	SymbolTable* table = new SymbolTable();
 	tableRef.push_back(table);
@@ -33,6 +34,12 @@ TempEntry* SymbolTableHelper::createSymbolTempRec() {
 
 ParamEntry* SymbolTableHelper::createSymbolParamRec() {
 	ParamEntry* rec = new ParamEntry();
+	recRef.push_back(rec);
+	return rec;
+}
+
+ImplementationEntry* SymbolTableHelper::createSymbolImplementationRec() {
+	ImplementationEntry* rec = new ImplementationEntry();
 	recRef.push_back(rec);
 	return rec;
 }

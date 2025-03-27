@@ -107,6 +107,7 @@ public:
 	virtual void visit(Private* v) = 0;
 	virtual void visit(EqTo* v) = 0;
 	virtual void visit(NotEqTo* v) = 0;
+	virtual void visit(Not* v) = 0;
 	virtual void visit(LessThan* v) = 0;
 	virtual void visit(LessThanOrEqTo* v) = 0;
 	virtual void visit(GreaterThan* v) = 0;

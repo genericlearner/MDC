@@ -3,6 +3,8 @@
 #include "Lexer/lexer.h"
 #include "Parser/parser.h"
 #include "Lexer/Token.h"
+#include "SymbolTableVisitor.h"
+
 #include "AST.h"
 
 std::string changeExtension(const std::string& filename, const std::string& newExtension){
@@ -21,6 +23,21 @@ void writeToDot(AST* ast, std::string path) {
 
     file << "ASTTree {\n";
     file << ast->dotConvert();
+    file << "}\n";
+
+    file.close();
+}
+
+void writeSymbolTable(AST* tree, std::string path) {
+    AST* ast_node = tree->getChild(0);
+
+    std::ofstream file(path);
+
+    if (file.fail() || !ast_node) { return; };
+
+    file << "strict digraph structs {\n";
+    file << "\tnode [shape=plaintext]";
+    file << ast_node->getSymbolTable()->toDot();
     file << "}\n";
 
     file.close();
@@ -46,12 +63,14 @@ int main(int argc, char* argv []){
     const std::string outputTokenFile = changeExtension(sourceFile, ".outlextokens");
     const std::string outputErrorFile = changeExtension(sourceFile, ".outlexerrors");
     const std::string outASTFile = changeExtension(sourceFile, ".outast");
+    const std::string outSymbolFile = changeExtension(sourceFile, ".outsymbol");
 
     std::ifstream inputStream(sourceFile);
     std::ofstream outDerivation(outDerivationFile);
     std::ofstream syntaxErrors(syntaxErrorsFile);
     std::ofstream outputToken(outputTokenFile);
     std::ofstream outputError(outputErrorFile);
+    
 
     if(!inputStream.is_open()){
         std::cout << argv[1] << std::endl;
@@ -81,10 +100,19 @@ int main(int argc, char* argv []){
 
     Parser *p = new Parser(inputStream, outDerivation, syntaxErrors, lexicalAnaylzer);
     std::cout<<"starting the parser "<<std::endl;
+    SymbolTableVisitor* symbolTableVisitor = new SymbolTableVisitor();
     p->startParse();
+   
+    p->getast()->accept(symbolTableVisitor);
+
 
     writeToDot(p->getast(), outASTFile);
+    writeSymbolTable(p->getast(), outSymbolFile);
     
+    delete p;
+    delete symbolTableVisitor;
+    p = nullptr;
+    symbolTableVisitor = nullptr;
     
 
 }

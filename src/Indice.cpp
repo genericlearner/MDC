@@ -2,6 +2,7 @@
 #include "Visitor.h"
 
 void Indice::accept(Visitor* visitor, bool depthSearch) {
+	CompositeConceptAST::accept(visitor, depthSearch);
 	visitor->visit(this);
 }
 Indice::Indice(compositeConcept cc) : CompositeConceptAST(cc) {}

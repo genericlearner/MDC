@@ -66,6 +66,11 @@ std::string AST::dotConvert() {
 	return ss.str();
 }
 
+/*
+void AST::accept(Visitor* visitor, bool depthSearch)
+{
+}*/
+
 void AST::setSymbolTable(SymbolTable* symbolTable) {
 	this->symbolTable = symbolTable;
 	this->symbolTable->setName(toString());
@@ -121,6 +126,7 @@ std::vector<FunctionEntry*>AST::searchFunction(std::string name) {
 		res.insert(res.end(), parentRes.begin(), parentRes.end());
 
 	}
+	return res;
 }
 
 ClassEntry* AST::searchClass(std::string name) {

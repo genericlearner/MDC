@@ -4,6 +4,7 @@
 ID::ID(Token t):TokenAST(t){}
 void ID::accept(Visitor* visitor, bool handleDepthSearch)
 {
+	
 	visitor->visit(this);
 }
 std::string ID::toString()

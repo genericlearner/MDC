@@ -2,6 +2,7 @@
 #include "Visitor.h"
 
 void RelExpr::accept(Visitor* visitor, bool depthSearch) {
+	CompositeConceptAST::accept(visitor, depthSearch);
 	visitor->visit(this);
 }
 RelExpr::RelExpr(compositeConcept cc) : CompositeConceptAST(cc) {}

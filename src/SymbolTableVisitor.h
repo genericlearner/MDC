@@ -1,6 +1,7 @@
 #pragma once
 #include "Visitor.h"
 class SymbolTableVisitor : public Visitor {
+public:
 	SymbolTableVisitor();
 
 	virtual void visit(CompositeConceptAST* v) override;
@@ -15,6 +16,7 @@ class SymbolTableVisitor : public Visitor {
 	virtual void visit(Private* v) override;
 	virtual void visit(EqTo* v) override;
 	virtual void visit(NotEqTo* v) override;
+	virtual void visit(Not* v)override;
 	virtual void visit(LessThan* v) override;
 	virtual void visit(LessThanOrEqTo* v) override;
 	virtual void visit(GreaterThan* v) override;
@@ -78,4 +80,5 @@ class SymbolTableVisitor : public Visitor {
 	virtual void visit(FuncCall* v) override;
 	virtual void visit(IndiceList* v) override;
 	virtual void visit(Indice* v) override;
+	virtual void visit(Self* v)override;
 };

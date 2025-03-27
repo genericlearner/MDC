@@ -6,12 +6,13 @@
 #include "TempEntry.h"
 #include "VariableEntry.h"
 #include "ParamEntry.h"
+#include "ImplementationEntry.h"
 #include <vector>
 
 
 class SymbolTableHelper {
-	static vector<SymbolTableEntry*>recRef;
-	static vector<SymbolTable*>tableRef;
+	static std::vector<SymbolTableEntry*>recRef;
+	static std::vector<SymbolTable*>tableRef;
 
 public:
 	static SymbolTable* createSymbolTable();
@@ -21,5 +22,6 @@ public:
 	static FunctionEntry* createSymbolFunctionRec();
 	static TempEntry* createSymbolTempRec();
 	static ParamEntry* createSymbolParamRec();
+	static ImplementationEntry* createSymbolImplementationRec();
 
 };

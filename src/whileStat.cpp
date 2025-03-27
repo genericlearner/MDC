@@ -1,8 +1,8 @@
 #include "whileStat.h"
-
 #include "Visitor.h"
 
-void Add::WhileStat(Visitor* visitor, bool depthSearch) {
+WhileStat::WhileStat(compositeConcept cc) : CompositeConceptAST(cc) {}
+void WhileStat::accept(Visitor* visitor, bool depthSearch) {
+	CompositeConceptAST::accept(visitor, depthSearch);
 	visitor->visit(this);
 }
-WhileStat::WhileStat(compositeConcept cc) : CompositeConceptAST(cc) {}

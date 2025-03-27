@@ -2,6 +2,7 @@
 #include "Visitor.h"
 
 void ClassImplFuncList::accept(Visitor* visitor, bool depthSearch) {
+	CompositeConceptAST::accept(visitor, depthSearch);
 	visitor->visit(this);
 }
 ClassImplFuncList::ClassImplFuncList(compositeConcept cc) : CompositeConceptAST(cc) {}

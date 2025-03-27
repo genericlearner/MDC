@@ -3,6 +3,7 @@
 #include "Visitor.h"
 
 void FloatLit::accept(Visitor* visitor, bool depthSearch) {
+	
 	visitor->visit(this);
 }
 FloatLit::FloatLit(Token t) : TokenAST(t) {}

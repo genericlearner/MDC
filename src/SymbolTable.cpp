@@ -4,6 +4,7 @@
 #include "FunctionEntry.h"
 #include "ParamEntry.h"
 #include "VariableEntry.h"
+#include "ImplementationEntry.h"
 #include "TempEntry.h"
 #include <sstream>
 
@@ -72,13 +73,26 @@ std::vector<TempEntry*>SymbolTable::getTempRec() {
 
 	for (SymbolTableEntry* entry : table) {
 		TempEntry* cast = dynamic_cast<TempEntry*>(entry);
-		symbolEntries.push_back(cast);
+		
 		if (cast != nullptr) {
 			symbolEntries.push_back(cast);
 		}
 	}
 	return symbolEntries;
 
+}
+
+std::vector<ImplementationEntry*>SymbolTable::getImplementationRec() {
+	std::vector<ImplementationEntry*>symbolEntries;
+
+	for (SymbolTableEntry* entry : table) {
+		ImplementationEntry* cast = dynamic_cast<ImplementationEntry*>(entry);
+		
+		if (cast != nullptr) {
+			symbolEntries.push_back(cast);
+		}
+	}
+	return symbolEntries;
 }
 
 ClassEntry* SymbolTable::findClassRec(std::string name) {
@@ -145,7 +159,19 @@ TempEntry* SymbolTable::findTempRec(std::string name) {
 	}
 	return foundTemp;
 }
+ImplementationEntry* SymbolTable::findImplementationRec(std::string name) {
+	std::vector<ImplementationEntry*>symbolEntries = getImplementationRec();
 
+	ImplementationEntry* foundImpl = nullptr;
+
+	for (ImplementationEntry* entry : symbolEntries) {
+		if (entry->name == name) {
+			foundImpl = entry;
+			break;
+		}
+	}
+	return foundImpl;
+}
 SymbolTableEntry* SymbolTable::findVarOrParRec(std::string name) {
 	if (SymbolTableEntry* parRec = findParRec(name)) {
 		return parRec;
@@ -155,6 +181,8 @@ SymbolTableEntry* SymbolTable::findVarOrParRec(std::string name) {
 	}
 	else return nullptr;
 }
+
+
 
 int SymbolTable::compOffset() {
 	return 0;
@@ -170,16 +198,21 @@ std::string SymbolTable::toDot()
 
 	currentTable << "\"" + name + "\"" + " [label=<\n"
 		<< "<TABLE BORDER = \"0\" CELLBORDER = \"1\" CELLSPACING = \"0\">\n"
-		<< "<TR><TD COLSPAN = \"3\">" + name + "</TD><TD COLSPAN=\"3\">" + std::to_string(compOffset()) + "</TD></TR>\n"
-		<< "<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Size</TD><TD>Offset</TD><TD>Link</TD></TR>\n";
+		<< "<TR><TD COLSPAN = \"4\">" + name + "</TD></TR>\n"
+		<< "<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>\n";
 
 	std::stringstream other;
 
 	for (SymbolTableEntry* entry : table) {
-		currentTable << entry->toDot();
-		if (entry->link && (dynamic_cast<ClassEntry*>(entry) || dynamic_cast<FunctionEntry*>(entry))) {
-			other << entry->link->toDot();
-			other << "\"" << name << "\"" << ":\"" << entry->toStr() << "\"->\"" << entry->link->name << "\"\n";
+		if (entry != nullptr) {
+			currentTable << entry->toDot();
+			if (entry->link && (dynamic_cast<ClassEntry*>(entry) || dynamic_cast<FunctionEntry*>(entry)||dynamic_cast<ImplementationEntry*>(entry))) {
+				other << entry->link->toDot();
+				other << "\"" << name << "\"" << ":\"" << entry->toStr() << "\"->\"" << entry->link->name << "\"\n";
+			}
+		}
+		else {
+			other << "ERROR";
 		}
 	}
 

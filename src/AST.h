@@ -3,6 +3,7 @@
 #include <vector>
 #include "SymbolTable.h"
 #include "SymbolTableEntry.h"
+#include <iostream>
 class Visitor;
 
 class AST {
@@ -39,8 +40,13 @@ public:
 	SymbolTableEntry* getSymbolRec() { return symbolRecord; }
 	void setSymbolRec(SymbolTableEntry* data) { this->symbolRecord = data; }
 
-	SymbolTable* getSymbolTable() { return symbolTable; }
-	void setSymbolTable(SymbolTable* symbolTable) { this->symbolTable = symbolTable; }
+	SymbolTable* getSymbolTable() { 
+		if (symbolTable == nullptr) {
+			std::cout << "Table is null" << std::endl;
+			return nullptr;
+		}
+		return symbolTable; }
+	void setSymbolTable(SymbolTable* symbolTable);
 
 	std::string getType() { return type; }
 	void setType(std::string type) { this->type = type; }
