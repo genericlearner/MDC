@@ -1,2 +1,5 @@
-﻿  SymbolTableVisitor.cpp
+﻿  TypeCheckingVisitor.cpp
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\TypeCheckingVisitor.cpp(256,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\TypeCheckingVisitor.cpp(280,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\TypeCheckingVisitor.cpp(327,23): warning C4018: '<': signed/unsigned mismatch
   MDC.vcxproj -> C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\src\Debug\MDC.exe

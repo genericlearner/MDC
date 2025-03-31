@@ -212,7 +212,7 @@ std::string SymbolTable::toDot()
 			}
 		}
 		else {
-			other << "ERROR";
+			other <<"Error";
 		}
 	}
 

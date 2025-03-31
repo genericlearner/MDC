@@ -1,0 +1,135 @@
+strict digraph structs {
+	node [shape=plaintext]"PROG(00994558)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">PROG(00994558)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>POLYNOMIAL</TD><TD>class</TD><TD></TD><TD PORT="class-POLYNOMIAL">+</TD></TR>
+<TR><TD>LINEAR</TD><TD>class</TD><TD></TD><TD PORT="class-LINEAR">+</TD></TR>
+<TR><TD>QUADRATIC</TD><TD>class</TD><TD></TD><TD PORT="class-QUADRATIC">+</TD></TR>
+<TR><TD>main</TD><TD>function</TD><TD>void: </TD><TD PORT="function-main-">+</TD></TR>
+<TR><TD>main</TD><TD>function</TD><TD>void: </TD><TD PORT="function-main-">+</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096ACA8)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">CLASSDECL(0096ACA8)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>evaluate</TD><TD>function</TD><TD>float: float, </TD><TD PORT="function-evaluate-float, ">+</TD></TR>
+</TABLE>>];
+"FUNCDEF(00973B68)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(00973B68)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>x</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096ACA8)":"function :evaluate-float, "->"FUNCDEF(00973B68)"
+"PROG(00994558)":"Class :POLYNOMIAL"->"CLASSDECL(0096ACA8)"
+"CLASSDECL(0096E068)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">CLASSDECL(0096E068)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>POLYNOMIAL</TD><TD>class</TD><TD></TD><TD PORT="class-POLYNOMIAL">+</TD></TR>
+<TR><TD>a</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+<TR><TD>b</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+<TR><TD>build</TD><TD>function</TD><TD>LINEAR: float, float, </TD><TD PORT="function-build-float, float, ">+</TD></TR>
+<TR><TD>evaluate</TD><TD>function</TD><TD>float: float, </TD><TD PORT="function-evaluate-float, ">+</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096ACA8)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">CLASSDECL(0096ACA8)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>evaluate</TD><TD>function</TD><TD>float: float, </TD><TD PORT="function-evaluate-float, ">+</TD></TR>
+</TABLE>>];
+"FUNCDEF(00973B68)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(00973B68)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>x</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096ACA8)":"function :evaluate-float, "->"FUNCDEF(00973B68)"
+"CLASSDECL(0096E068)":"Class :POLYNOMIAL"->"CLASSDECL(0096ACA8)"
+"FUNCDEF(0097C708)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(0097C708)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>A</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>B</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>new_function</TD><TD>variable</TD><TD>LINEAR0</TD><TD PORT="variable-LINEAR">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096E068)":"function :build-float, float, "->"FUNCDEF(0097C708)"
+"FUNCDEF(0097E4C8)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(0097E4C8)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>x</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>result</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096E068)":"function :evaluate-float, "->"FUNCDEF(0097E4C8)"
+"PROG(00994558)":"Class :LINEAR"->"CLASSDECL(0096E068)"
+"CLASSDECL(00974938)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">CLASSDECL(00974938)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>POLYNOMIAL</TD><TD>class</TD><TD></TD><TD PORT="class-POLYNOMIAL">+</TD></TR>
+<TR><TD>a</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+<TR><TD>b</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+<TR><TD>c</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+<TR><TD>build</TD><TD>function</TD><TD>QUADRATIC: float, float, float, </TD><TD PORT="function-build-float, float, float, ">+</TD></TR>
+<TR><TD>evaluate</TD><TD>function</TD><TD>float: float, </TD><TD PORT="function-evaluate-float, ">+</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096ACA8)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">CLASSDECL(0096ACA8)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>evaluate</TD><TD>function</TD><TD>float: float, </TD><TD PORT="function-evaluate-float, ">+</TD></TR>
+</TABLE>>];
+"FUNCDEF(00973B68)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(00973B68)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>x</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(0096ACA8)":"function :evaluate-float, "->"FUNCDEF(00973B68)"
+"CLASSDECL(00974938)":"Class :POLYNOMIAL"->"CLASSDECL(0096ACA8)"
+"FUNCDEF(0097CE78)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(0097CE78)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>A</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>B</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>C</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>new_function</TD><TD>variable</TD><TD>QUADRATIC0</TD><TD PORT="variable-QUADRATIC">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(00974938)":"function :build-float, float, float, "->"FUNCDEF(0097CE78)"
+"FUNCDEF(00974E00)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(00974E00)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>x</TD><TD>parameter</TD><TD>float</TD><TD PORT="parameter-float">/</TD></TR>
+<TR><TD>result</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+</TABLE>>];
+"CLASSDECL(00974938)":"function :evaluate-float, "->"FUNCDEF(00974E00)"
+"PROG(00994558)":"Class :QUADRATIC"->"CLASSDECL(00974938)"
+"FUNCDEF(009945E0)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(009945E0)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+<TR><TD>f1</TD><TD>variable</TD><TD>LINEAR0</TD><TD PORT="variable-LINEAR">/</TD></TR>
+<TR><TD>f2</TD><TD>variable</TD><TD>QUADRATIC0</TD><TD PORT="variable-QUADRATIC">/</TD></TR>
+<TR><TD>counter</TD><TD>variable</TD><TD>int0</TD><TD PORT="variable-int">/</TD></TR>
+<TR><TD>a</TD><TD>variable</TD><TD>a0</TD><TD PORT="variable-a">/</TD></TR>
+<TR><TD>c</TD><TD>variable</TD><TD>C0</TD><TD PORT="variable-C">/</TD></TR>
+<TR><TD>f1</TD><TD>variable</TD><TD>LINEAR0</TD><TD PORT="variable-LINEAR">/</TD></TR>
+<TR><TD>f2</TD><TD>variable</TD><TD>QUADRATIC0</TD><TD PORT="variable-QUADRATIC">/</TD></TR>
+<TR><TD>counter</TD><TD>variable</TD><TD>integer0</TD><TD PORT="variable-integer">/</TD></TR>
+<TR><TD>counter</TD><TD>variable</TD><TD>float0</TD><TD PORT="variable-float">/</TD></TR>
+<TR><TD>i</TD><TD>variable</TD><TD>integer[2]0</TD><TD PORT="variable-integer[2]">/</TD></TR>
+<TR><TD>j</TD><TD>variable</TD><TD>integer[1]0</TD><TD PORT="variable-integer[1]">/</TD></TR>
+</TABLE>>];
+"PROG(00994558)":"function :main-"->"FUNCDEF(009945E0)"
+"FUNCDEF(00994118)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "4">FUNCDEF(00994118)</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>
+</TABLE>>];
+"PROG(00994558)":"function :main-"->"FUNCDEF(00994118)"
+}

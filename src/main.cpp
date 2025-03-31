@@ -4,6 +4,7 @@
 #include "Parser/parser.h"
 #include "Lexer/Token.h"
 #include "SymbolTableVisitor.h"
+#include "TypeCheckingVisitor.h"
 
 #include "AST.h"
 
@@ -43,6 +44,20 @@ void writeSymbolTable(AST* tree, std::string path) {
     file.close();
 }
 
+void writeSemanticError(std::vector<std::string>errors, std::string path) {
+    std::ofstream file(path);
+
+    if (file.is_open()) {
+        for (std::string s : errors) {
+            file << s << std::endl;;
+        }
+        file.close();
+    }
+    else {
+        std::cout << "couldnt open semantic error file" << std::endl;
+    }
+}
+
 int main(int argc, char* argv []){
     if(argc < 2){
         std::cerr << "Usage: "<<argv[0]<<" sourcefile"<<std::endl;
@@ -64,12 +79,14 @@ int main(int argc, char* argv []){
     const std::string outputErrorFile = changeExtension(sourceFile, ".outlexerrors");
     const std::string outASTFile = changeExtension(sourceFile, ".outast");
     const std::string outSymbolFile = changeExtension(sourceFile, ".outsymbol");
+    const std::string outSemanticErrorFile = changeExtension(sourceFile, ".outsemanticerrors");
 
     std::ifstream inputStream(sourceFile);
     std::ofstream outDerivation(outDerivationFile);
     std::ofstream syntaxErrors(syntaxErrorsFile);
     std::ofstream outputToken(outputTokenFile);
     std::ofstream outputError(outputErrorFile);
+    
     
 
     if(!inputStream.is_open()){
@@ -101,14 +118,16 @@ int main(int argc, char* argv []){
     Parser *p = new Parser(inputStream, outDerivation, syntaxErrors, lexicalAnaylzer);
     std::cout<<"starting the parser "<<std::endl;
     SymbolTableVisitor* symbolTableVisitor = new SymbolTableVisitor();
+    TypeCheckingVisitor* typeCheckerVisitor = new TypeCheckingVisitor();
     p->startParse();
    
-    p->getast()->accept(symbolTableVisitor);
-
-
-    writeToDot(p->getast(), outASTFile);
-    writeSymbolTable(p->getast(), outSymbolFile);
     
+    writeToDot(p->getast(), outASTFile);
+    p->getast()->accept(symbolTableVisitor);
+    p->getast()->accept(typeCheckerVisitor);
+    writeSymbolTable(p->getast(), outSymbolFile);
+    writeSemanticError(symbolTableVisitor->getError(), outSemanticErrorFile);
+    writeSemanticError(typeCheckerVisitor->getError(), outSemanticErrorFile);
     delete p;
     delete symbolTableVisitor;
     p = nullptr;

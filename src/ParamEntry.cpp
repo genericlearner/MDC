@@ -26,7 +26,7 @@ std::string ParamEntry::toStr() {
 }
 
 std::string ParamEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>parameter</TD><TD>" + generateSign() + "</TD><TD>"  + "</TD><TD>" + std::to_string(offset) + "</TD><TD PORT=\"" + "parameter-" + generateSign() + "\">/</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>parameter</TD><TD>" + generateSign() + "</TD><TD PORT=\"" + "parameter-" + generateSign() + "\">/</TD></TR>\n";
 }
 
 int ParamEntry::compSize() {

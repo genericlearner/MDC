@@ -165,7 +165,7 @@ void SymbolTableVisitor::visit(ClassDecl* v) {
 
 		std::vector<AST*>classDeclBody = children[2]->getChildren();
 		for (AST* visMemberDecl : classDeclBody) {
-			table->insertRec(visMemberDecl->getChildren().back()->getSymbolRec());
+			table->insertRec(visMemberDecl->getSymbolRec());
 		}
 	}
 	else if (children.size() == 2) {
@@ -183,6 +183,7 @@ void SymbolTableVisitor::visit(ClassList* v) {}
 void SymbolTableVisitor::visit(Expr* v) {}
 void SymbolTableVisitor::visit(ExtraExpr* v) {}
 void SymbolTableVisitor::visit(FuncBody* v) {
+	/*
 	std::vector<AST*>children = v->getChildren();
 	std::vector<AST*>varDeclList;
 	if (children[0] != nullptr) {
@@ -201,7 +202,7 @@ void SymbolTableVisitor::visit(FuncBody* v) {
 				}
 			}
 		}
-	}
+	}*/
 }
 void SymbolTableVisitor::visit(FuncDecl* v) {
 	std::vector<AST*>children = v->getChildren();
@@ -239,8 +240,8 @@ void SymbolTableVisitor::visit(FuncDef* v) {
 		if (localVarDeclOrStatList.size() > 0) {
 			std::vector<AST*>statementOrVar=localVarDeclOrStatList[0]->getChildren();
 			for (size_t i = 0; i < statementOrVar.size(); i++) {
-				if (dynamic_cast<VarDecl*>(statementOrVar[i])) {
-					varDeclList.push_back(statementOrVar[i]);
+				if (dynamic_cast<LocalVarDecl*>(statementOrVar[i])) {
+					varDeclList.push_back(statementOrVar[i]->getChild(0));
 				}
 			}
 
@@ -255,6 +256,11 @@ void SymbolTableVisitor::visit(FuncDef* v) {
 				fEntry->paramList.push_back(std::make_tuple(param->type, param->name, param->arrInd));
 			}
 
+		}
+		else if (fHeadChildren.size() == 2) {
+			fEntry->name = fHeadChildren[0]->getData();
+			fEntry->returnType = fHeadChildren[1]->getData();
+			
 		}
 
 		for (AST* stat : varDeclList) {
@@ -336,10 +342,10 @@ void SymbolTableVisitor::visit(Prog* v) {
 			for (FunctionEntry* func : res) {
 				//int line = ((TokenAST*)classOrImplOrFunc->getChild(0)->getChild(0)->)
 				if (func->compare(functionSymbol)) {
-					outError("Redefinition of Function" + functionSymbol->name, 0);
+					outError("Redefinition of Function: " + functionSymbol->name, 0);
 				}
 				else {
-					outError("Overloading of Function" + functionSymbol->name, 0);
+					outError("Overloading of Function: " + functionSymbol->name, 0);
 				}
 			}
 			progTable->insertRec(function->getSymbolRec());
@@ -412,7 +418,7 @@ void SymbolTableVisitor::visit(Prog* v) {
 					VariableEntry* shadowRec = classRecord->link->findVariableRec(varRecord->name);
 
 					if (shadowRec) {
-						outError("Shadow Inherited Member variable:" + classDecl->getSymbolRec()->name + "::" + varRecord->name + "::" + classRecord->name + " " + shadowRec->name, 0);
+						outError("Shadow Inherited Member variable: " + classDecl->getSymbolRec()->name + "::" + varRecord->name + "::" + classRecord->name + " " + shadowRec->name, 0);
 					}
 				}
 				for (FunctionEntry* funcRecord : funcRecs) {
@@ -420,7 +426,7 @@ void SymbolTableVisitor::visit(Prog* v) {
 
 					for (FunctionEntry* shadow : shadowRec) {
 						if (funcRecord->compare(shadow)) {
-							outError("Shadow Member Function" + classDecl->getSymbolRec()->name + " " + funcRecord->name + "Shadows" + classRecord->name + " " + shadow->name, 0);
+							outError("Shadow Member Function: " + classDecl->getSymbolRec()->name + " " + funcRecord->name + "Shadows" + classRecord->name + " " + shadow->name, 0);
 						}
 					}
 				}

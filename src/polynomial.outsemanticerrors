@@ -1,0 +1,19 @@
+Line 25: return statement does not match return type declared by function: evaluate
+Line 35: Wrong number of indices in the array: result
+Line 35: Use of undeclared variable: temp
+Line 37: Incompatible operand type for Multiplication "float"and right operand "
+Line 38: Incompatible operand type for Multiplication "float"and right operand "
+Line 47: Incompatible operand type for Multiplication ""and right operand "int
+Line 77: Use of undeclared variable: f3
+Line 80: Use of undeclared classa
+Line 81: Use of undeclared classC
+Line 84: Use of undeclared classinteger
+Line 86: Use of undeclared classinteger
+Line 87: Use of undeclared classinteger
+Line 92: Function not found: undefined
+Line 94: Function not found: f
+Line 95: Function not found: f
+Line 96: Array Indice0is not int typei
+Line 97: Wrong number of indices in the array: i
+Line 98: Function not found: f3
+Line 99: dot operator used on non class typecounter

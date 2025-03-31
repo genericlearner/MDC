@@ -47,5 +47,5 @@ std::string FunctionEntry::toStr() {
 	return "function :" + name + "-" + signString();
 }
 std::string FunctionEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>function</TD><TD>" + returnType + ":" + signString()+ "</TD><TD>" + "</TD><TD PORT=\"" + "function-" + name + "-" + signString() + "\">+</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>function</TD><TD>" + returnType + ": " + signString()+ "</TD><TD PORT=\"" + "function-" + name + "-" + signString() + "\">+</TD></TR>\n";
 }
