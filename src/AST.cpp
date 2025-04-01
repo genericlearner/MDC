@@ -93,15 +93,25 @@ std::vector<ParamEntry*>AST::searchParam(std::string name) {
 std::vector<VariableEntry*> AST::searchVariabe(std::string name) {
 	std::vector<VariableEntry*>res;
 
-	if (FunctionEntry* functionRec = dynamic_cast<FunctionEntry*>(symbolRecord)) {
-		if (functionRec && functionRec->contClass) {
-			functionRec->contClass->findVariableRec(name);
-		}
-	}
+	//if (FunctionEntry* functionRec = dynamic_cast<FunctionEntry*>(symbolRecord)) {
+	//	if (functionRec && functionRec->contClass) {
+	//		functionRec->contClass->findVariableRec(name);
+	//	}
+	//}
 
 	if (symbolTable) {
 		if (VariableEntry* vr = symbolTable->findVariableRec(name)) {
 			res.emplace_back(vr);
+		}
+	}
+	// If not found, check if we are inside a method and search class variables
+	if (symbolRecord && dynamic_cast<FunctionEntry*>(symbolRecord)) {
+		FunctionEntry* functionEntry = dynamic_cast<FunctionEntry*>(symbolRecord);
+		if (functionEntry->contClass) {  // Check if function is inside a class
+			VariableEntry* classVar = functionEntry->contClass->findVariableRec(name);
+			if (classVar) {
+				res.emplace_back(classVar);
+			}
 		}
 	}
 	if (parent) {

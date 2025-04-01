@@ -1,0 +1,40 @@
+Line 0: Multiple Declared class member: b
+Line 0: Multiple Declared data member: counter
+Line 0: Multiple Classes DeclaredPOLYNOMIAL
+Line 0: Circular inheritance detected: E <-> D
+Line 0: Circular inheritance detected: C <-> E
+Line 0: Circular inheritance detected: D <-> C
+Line 0: ISA unmatchedE
+Line 0: ISA unmatchedC
+Line 0: ISA unmatchedD
+Line 0: [ERROR] Redefinition of Function: f
+Line 0: [WARNING] Overloading of Function: f
+Line 0: [WARNING] Overloading of Function: f
+Line 0: Function Defined but not declaredbuild2
+Line 0: Function Definition Not found: POLYNOMIAL evaluate2
+Line 0: Function Definition Not found: POLYNOMIAL evaluate
+Line 0: Function Definition Not found: POLYNOMIAL evaluate
+Line 0: Shadow Member Function: LINEAR evaluateShadowsPOLYNOMIAL evaluate
+Line 0: Shadow Member Function: QUADRATIC evaluateShadowsPOLYNOMIAL evaluate
+Line 79: Incompatible operand type for Multiplication "float"and right operand "int
+Line 79: Incompatible operand type for Addition "float"and right operand "
+Line 0: Incompatible operand type for Assignment "float"and right operand "
+Line 0: Incompatible operand type for Assignment "float"and right operand "
+Line 82: return statement does not match return type declared by function: build
+Line 0: Incompatible operand type for Assignment ""and right operand "
+Line 0: Incompatible operand type for Assignment ""and right operand "
+Line 0: Incompatible operand type for Assignment ""and right operand "
+Line 104: Use of undeclared classa
+Line 0: Incompatible operand type for Assignment "LINEAR"and right operand "
+Line 0: Incompatible operand type for Assignment "QUADRATIC"and right operand "
+Line 0: Incompatible operand type for Assignment ""and right operand "
+Line 0: Incompatible operand type for Assignment "int"and right operand "
+Line 116: Function not found: undefined
+Line 0: Incompatible operand type for Assignment "int"and right operand "
+Line 118: [ERROR]Function Call With Wrong Number Of Parameters: f
+Line 118: [ERROR]Function Call With Wrong Parameters: f
+Line 119: [ERROR]Function Call With Wrong Parameters: f
+Line 120: Array Indice0is not int typei
+Line 121: Wrong number of indices in the array: i
+Line 123: dot operator used on non class typecounter
+Line 0: Incompatible operand type for Assignment ""and right operand "

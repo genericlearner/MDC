@@ -126,8 +126,14 @@ int main(int argc, char* argv []){
     p->getast()->accept(symbolTableVisitor);
     p->getast()->accept(typeCheckerVisitor);
     writeSymbolTable(p->getast(), outSymbolFile);
-    writeSemanticError(symbolTableVisitor->getError(), outSemanticErrorFile);
-    writeSemanticError(typeCheckerVisitor->getError(), outSemanticErrorFile);
+    std::vector<std::string> allErrors = symbolTableVisitor->getError();
+    std::vector<std::string> typeErrors = typeCheckerVisitor->getError();
+
+    // Append type errors to allErrors
+    allErrors.insert(allErrors.end(), typeErrors.begin(), typeErrors.end());
+
+    // Write once, ensuring no double append
+    writeSemanticError(allErrors, outSemanticErrorFile);
     delete p;
     delete symbolTableVisitor;
     p = nullptr;

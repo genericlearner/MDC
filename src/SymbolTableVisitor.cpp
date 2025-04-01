@@ -1,7 +1,9 @@
 #include "SymbolTableVisitor.h"
 #include <vector>
 #include "SymbolTableHelper.h"
-
+#include <unordered_map>
+#include <unordered_set>
+#include <functional>
 SymbolTableVisitor::SymbolTableVisitor(){
 
 }
@@ -109,18 +111,69 @@ void SymbolTableVisitor::visit(ClassImplFuncList* v) {
 
 		}
 	}
+	// Collect class declarations and build inheritance map
+	std::unordered_map<std::string, std::vector<std::string>> inheritanceMap;
+	for (AST* child : childrenAll) {
+		if (auto* classDecl = dynamic_cast<ClassDecl*>(child)) {
+			inheritanceMap[classDecl->getSymbolRec()->name] = {}; // Initialize map entry
+		}
+	}
 
+	// Build inheritance map
+	for (AST* child : childrenAll) {
+		if (auto* classDecl = dynamic_cast<ClassDecl*>(child)) {
+			std::vector<ClassEntry*> isaList = classDecl->getSymbolTable()->getClassRec();
+			for (ClassEntry* isa : isaList) {
+				inheritanceMap[classDecl->getSymbolRec()->name].push_back(isa->name);
+			}
+		}
+	}
+
+	// Detect circular inheritance
+	std::unordered_set<std::string> visited;
+	std::unordered_set<std::string> recStack;
+
+	std::function<bool(const std::string&)> hasCycle = [&](const std::string& className) -> bool {
+		if (recStack.count(className)) return true;  // Cycle detected
+		if (visited.count(className)) return false; // Already checked
+
+		visited.insert(className);
+		recStack.insert(className);
+
+		for (const std::string& parent : inheritanceMap[className]) {
+			if (hasCycle(parent)) {
+				outError("Circular inheritance detected: " + className + " <-> " + parent, 0);
+				return true;
+			}
+		}
+
+		recStack.erase(className); // Backtrack
+		return false;
+	};
+
+	// Apply cycle detection on all class declarations
+	for (const auto& [className, _] : inheritanceMap) {
+		if (!visited.count(className)) {
+			hasCycle(className);
+		}
+	}
 	for (AST* classDecl : children) {
+		
 		std::vector<ClassEntry*>isaList = classDecl->getSymbolTable()->getClassRec();
 		for (ClassEntry* isa : isaList) {
 			if (classDecl->getSymbolRec()->name == isa->name) {
 				outError("self inhritance", 0);
 			}
 
+
 			bool isaMatch = false;
 
 			for (AST* classCompare : children) {
 				if (classCompare->getSymbolRec()->name == isa->name) {
+
+					if (recStack.count(isa->name)) {
+						continue;
+					}
 					isa->link = classCompare->getSymbolTable();
 					isaMatch = true;
 				}
@@ -304,7 +357,29 @@ void SymbolTableVisitor::visit(ISAList* v) {
 	}
 }
 void SymbolTableVisitor::visit(LocalVarDecl* v) {}
-void SymbolTableVisitor::visit(LocalVarDeclList* v) {}
+void SymbolTableVisitor::visit(LocalVarDeclList* v) {
+	std::vector<AST*>children = v->getChildren();
+	std::vector<AST*>varDeclList;
+	std::unordered_set<std::string>multi_var;
+		for (size_t i = 0; i < children.size(); i++) {
+			std::vector<AST*>localVar = children[i]->getChildren();
+			if (dynamic_cast<VarDecl*>(localVar[0])) {
+				varDeclList.push_back(localVar[0]);
+			}
+
+		}
+		for (AST* varDecl : varDeclList) {
+			for (AST* varDeclComp : varDeclList) {
+				if (varDecl != varDeclComp && varDecl->getSymbolRec()->name == varDeclComp->getSymbolRec()->name 
+					&& multi_var.count(varDecl->getSymbolRec()->name)==0) {
+					multi_var.insert(varDecl->getSymbolRec()->name);
+					outError("Multiple Declared data member: " + varDecl->getSymbolRec()->name, 0);
+				}
+			}
+		}
+	
+
+}
 void SymbolTableVisitor::visit(MemberList* v) {}
 void SymbolTableVisitor::visit(MemDecl* v) {}
 void SymbolTableVisitor::visit(Prog* v) {
@@ -342,10 +417,10 @@ void SymbolTableVisitor::visit(Prog* v) {
 			for (FunctionEntry* func : res) {
 				//int line = ((TokenAST*)classOrImplOrFunc->getChild(0)->getChild(0)->)
 				if (func->compare(functionSymbol)) {
-					outError("Redefinition of Function: " + functionSymbol->name, 0);
+					outError("[ERROR] Redefinition of Function: " + functionSymbol->name, 0);
 				}
 				else {
-					outError("Overloading of Function: " + functionSymbol->name, 0);
+					outError("[WARNING] Overloading of Function: " + functionSymbol->name, 0);
 				}
 			}
 			progTable->insertRec(function->getSymbolRec());
@@ -374,6 +449,7 @@ void SymbolTableVisitor::visit(Prog* v) {
 										overloadOrMatch->link = funcDef->link;
 										matchFound = true;
 									}
+									funcDef->contClass = classTable;
 									implementationSymbol->contClass = classTable;
 								}
 								if (!matchFound) {
@@ -414,6 +490,9 @@ void SymbolTableVisitor::visit(Prog* v) {
 			std::vector<VariableEntry*>varRecs = classSymbolTable->getVarRec();
 
 			for (ClassEntry* classRecord : classRecs) {
+				if (classRecord->link == nullptr) {
+					continue;
+				}
 				for (VariableEntry* varRecord : varRecs) {
 					VariableEntry* shadowRec = classRecord->link->findVariableRec(varRecord->name);
 
@@ -499,7 +578,26 @@ void SymbolTableVisitor::visit(VisMemberDecl* v) {
 void SymbolTableVisitor::visit(WhileStat* v) {}
 void SymbolTableVisitor::visit(WriteStat* v) {}
 void SymbolTableVisitor::visit(VisMemberDeclList* v) {
-	
+	std::vector<AST*>children = v->getChildren();
+	std::vector<AST*>varDeclList;
+	std::unordered_set<std::string>multi_var;
+	for (size_t i = 0; i < children.size(); i++) {
+		std::vector<AST*>attrDecl = children[i]->getChildren();
+		std::vector<AST*>varDecl = attrDecl[1]->getChildren();
+		if (dynamic_cast<VarDecl*>(varDecl[0])) {
+			varDeclList.push_back(varDecl[0]);
+		}
+
+	}
+	for (AST* varDecl : varDeclList) {
+		for (AST* varDeclComp : varDeclList) {
+			if (varDecl != varDeclComp && varDecl->getSymbolRec()->name == varDeclComp->getSymbolRec()->name
+				&& multi_var.count(varDecl->getSymbolRec()->name) == 0) {
+				multi_var.insert(varDecl->getSymbolRec()->name);
+				outError("Multiple Declared class member: " + varDecl->getSymbolRec()->name, 0);
+			}
+		}
+	}
 	
 }
 void SymbolTableVisitor::visit(fParamsList* v) {}

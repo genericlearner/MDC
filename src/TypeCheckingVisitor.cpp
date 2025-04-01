@@ -17,10 +17,15 @@ void TypeCheckingVisitor::visit(FloatID* v) {}
 void TypeCheckingVisitor::visit(IntegerID* v) {}
 void TypeCheckingVisitor::visit(ID* v) {
 	std::vector<VariableEntry*>variables = v->searchVariabe(v->getData());
-
+	std::vector<ParamEntry*>params = v->searchParam(v->getData());
 	if (variables.size() > 0) {
+
 		v->setType(variables[0]->type);
 	}
+	else if (params.size() > 0) {
+		v->setType(params[0]->type);
+	}
+	
 
 }
 void TypeCheckingVisitor::visit(Void* v) {}
@@ -161,17 +166,14 @@ void TypeCheckingVisitor::visit(Period* v) {
 			if (!classRec && (res[0]->type == "float" || res[0]->type == "int")) {
 				outError("dot operator used on non class type" + res[0]->name, v->getToken().getLine());
 			}
+			else {
+				v->setType(children[1]->getType());
+			}
 		}
 	}
 }
 void TypeCheckingVisitor::visit(Assign* v) {
-	std::vector<AST*>operands = v->getChildren();
-
-	if (operands.size() == 2) {
-		if (operands[0]->getType() != operands[1]->getType()) {
-			outError("Incompatible operand type for == \"" + operands[0]->getType() + "\"and right operand \"" + operands[1]->getType(), v->getToken().getLine());
-		}
-	}
+	
 }
 void TypeCheckingVisitor::visit(Start* v) {}
 void TypeCheckingVisitor::visit(ClassImplFunc* v) {}
@@ -223,6 +225,10 @@ void TypeCheckingVisitor::visit(VarDecl* v) {
 			outError("Use of undeclared class" + varRec->type, ((TokenAST*)v->getChild(1))->getToken().getLine());
 		}
 	}
+
+	if (VariableEntry* varRec = (VariableEntry*)v->getSymbolRec()) {
+
+	}
 	/*
 	VariableEntry* varRec = (VariableEntry*)v->getSymbolRec();
 	if (ClassEntry* classRec = v->getClosestTable()->findClassRec(varRec->type)) {
@@ -235,7 +241,13 @@ void TypeCheckingVisitor::visit(WhileStat* v) {}
 void TypeCheckingVisitor::visit(WriteStat* v) {}
 void TypeCheckingVisitor::visit(VisMemberDeclList* v) {}
 void TypeCheckingVisitor::visit(fParamsList* v) {}
-void TypeCheckingVisitor::visit(fParams* v) {}
+void TypeCheckingVisitor::visit(fParams* v) {
+	std::vector<ParamEntry*>params = v->searchParam(v->getData());
+
+	if (params.size() > 0) {
+		v->setType(params[0]->type);
+	}
+}
 void TypeCheckingVisitor::visit(ArraySize* v) {}
 void TypeCheckingVisitor::visit(ArraySizeList* v) {}
 void TypeCheckingVisitor::visit(Variable* v) {
@@ -253,7 +265,7 @@ void TypeCheckingVisitor::visit(Variable* v) {
 			if (children.size() == 2) {
 				std::vector<AST*>indices = children[1]->getChildren();
 				if (indices.size() == varRec->arrayDimension.size()) {
-					for (int i = 0; i < indices.size(); i++) {
+					for (size_t i = 0; i < indices.size(); i++) {
 
 						AST* ind = indices[i];
 
@@ -277,7 +289,7 @@ void TypeCheckingVisitor::visit(Variable* v) {
 			if (children.size() == 2) {
 				std::vector<AST*>indices = children[1]->getChildren();
 				if (indices.size() == parRec->arrInd.size()) {
-					for (int i = 0; i < indices.size(); i++) {
+					for (size_t i = 0; i < indices.size(); i++) {
 
 						AST* ind = indices[i];
 
@@ -297,7 +309,19 @@ void TypeCheckingVisitor::visit(Variable* v) {
 		}
 	}
 }
-void TypeCheckingVisitor::visit(AssignStat* v) {}
+void TypeCheckingVisitor::visit(AssignStat* v) {
+	std::vector<AST*>operands = v->getChildren();
+
+
+	if (operands.size() == 3) {
+		if (operands[0]->getType() != operands[2]->getType()) {
+			outError("Incompatible operand type for Assignment \"" + operands[0]->getType() + "\"and right operand \"" + operands[1]->getType(), 0);
+		}
+		else {
+			v->setType(operands[0]->getType());
+		}
+	}
+}
 void TypeCheckingVisitor::visit(FuncCall* v) {
 	
 	if (!dynamic_cast<Period*>(v->parent)) {
@@ -324,7 +348,7 @@ void TypeCheckingVisitor::visit(FuncCall* v) {
 				isSameNumParamList = true;
 				bool paramMatch = true;
 
-				for (int i = 0; i < f->paramList.size(); i++) {
+				for (size_t i = 0; i < f->paramList.size(); i++) {
 					AST* aParam = paramList[i];
 
 					if (paramList[i]->getType() != std::get<0>(f->paramList[i])) {
@@ -344,6 +368,7 @@ void TypeCheckingVisitor::visit(FuncCall* v) {
 		if (!isSameParamList) {
 			outError("[ERROR]Function Call With Wrong Parameters: " + fName, ((TokenAST*)v->getChild(0))->getToken().getLine());
 		}
+		
 
 
 	}
