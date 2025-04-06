@@ -9,5 +9,6 @@ public:
 
 	virtual std::string toString() override;
 	virtual void accept(Visitor* visitor, bool deptSearch = true)override;
+	virtual std::string getAssemblyData() override;
 
 };

@@ -17,3 +17,7 @@ std::string CompositeConceptTokenAST::toString() {
 	ss << (void const*)this;
 	return getLexeme() + "(" + ss.str() + ")";
 }
+
+std::string CompositeConceptTokenAST::getAssemblyData() {
+	return AST::getAssemblyData();
+}

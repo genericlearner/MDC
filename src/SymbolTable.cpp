@@ -185,11 +185,29 @@ SymbolTableEntry* SymbolTable::findVarOrParRec(std::string name) {
 
 
 int SymbolTable::compOffset() {
-	return 0;
+	int offset = 0;
+	for (SymbolTableEntry* entry : table) {
+		entry->offset = offset;
+
+		int entrySize = entry->compSize();
+
+		if (entrySize == 0 && entry->link != nullptr) {
+			offset -= entry->link->compSize();
+		}
+		else {
+			offset -= entrySize;
+		}
+	}
+	return offset;
 }
 
 int SymbolTable::compSize() {
-	return 0;
+	int size = 0;
+
+	for (SymbolTableEntry* entry : table) {
+		size += entry->compSize();
+	}
+	return size;
 }
 
 std::string SymbolTable::toDot()
@@ -198,21 +216,16 @@ std::string SymbolTable::toDot()
 
 	currentTable << "\"" + name + "\"" + " [label=<\n"
 		<< "<TABLE BORDER = \"0\" CELLBORDER = \"1\" CELLSPACING = \"0\">\n"
-		<< "<TR><TD COLSPAN = \"4\">" + name + "</TD></TR>\n"
-		<< "<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Link</TD></TR>\n";
+		<< "<TR><TD COLSPAN = \"3\">" + name + "</TD><TD COLSPAN=\"3\">" + std::to_string(compOffset()) + "</TD></TR>\n"
+		<< "<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Size</TD><TD>Offset</TD><TD>Link</TD></TR>\n";
 
 	std::stringstream other;
 
 	for (SymbolTableEntry* entry : table) {
-		if (entry != nullptr) {
-			currentTable << entry->toDot();
-			if (entry->link && (dynamic_cast<ClassEntry*>(entry) || dynamic_cast<FunctionEntry*>(entry)||dynamic_cast<ImplementationEntry*>(entry))) {
-				other << entry->link->toDot();
-				other << "\"" << name << "\"" << ":\"" << entry->toStr() << "\"->\"" << entry->link->name << "\"\n";
-			}
-		}
-		else {
-			other <<"Error";
+		currentTable << entry->toDot();
+		if (entry->link && (dynamic_cast<ClassEntry*>(entry) || dynamic_cast<FunctionEntry*>(entry))) {
+			other << entry->link->toDot();
+			other << "\"" << name << "\"" << ":\"" << entry->toStr() << "\"->\"" << entry->link->name << "\"\n";
 		}
 	}
 

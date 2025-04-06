@@ -11,6 +11,8 @@ private:
 	std::string data;
 	std::string type;
 
+	std::string assemblyData;
+
 	SymbolTable* symbolTable;
 	SymbolTableEntry* symbolRecord;
 
@@ -36,6 +38,10 @@ public:
 
 	virtual std::string getData() { return data; }
 	virtual void setData(std::string data) { this->data = data; }
+
+	virtual std::string getAssemblyData() { return assemblyData; }
+	virtual void setAssemblyData(std::string data) { this->data = data; }
+
 
 	SymbolTableEntry* getSymbolRec() { return symbolRecord; }
 	void setSymbolRec(SymbolTableEntry* data) { this->symbolRecord = data; }

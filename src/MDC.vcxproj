@@ -124,6 +124,7 @@
     <ClCompile Include="compositeConcept.cpp" />
     <ClCompile Include="compositeConcept.h" />
     <ClCompile Include="compositeConceptToken.cpp" />
+    <ClCompile Include="CreateTempVariablesVisitor.cpp" />
     <ClCompile Include="Divide.cpp" />
     <ClCompile Include="EqTo.cpp" />
     <ClCompile Include="expr.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="funcDeflist.cpp" />
     <ClCompile Include="funcHead.cpp" />
     <ClCompile Include="FunctionEntry.cpp" />
+    <ClCompile Include="GenerateLabel.cpp" />
     <ClCompile Include="greaterThan.cpp" />
     <ClCompile Include="GreaterThanOrEqTo.cpp" />
     <ClCompile Include="ID.cpp" />
@@ -164,6 +166,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="memberList.cpp" />
     <ClCompile Include="memDecl.cpp" />
+    <ClCompile Include="MoonAssemblyVisitor.cpp" />
     <ClCompile Include="Multiply.cpp" />
     <ClCompile Include="multOp.cpp" />
     <ClCompile Include="Not.cpp" />
@@ -231,6 +234,7 @@
     <ClInclude Include="ClassImplFuncList.h" />
     <ClInclude Include="classList.h" />
     <ClInclude Include="compositeConceptToken.h" />
+    <ClInclude Include="CreateTempVariablesVisitor.h" />
     <ClInclude Include="Divide.h" />
     <ClInclude Include="EQTO.h" />
     <ClInclude Include="expr.h" />
@@ -246,6 +250,7 @@
     <ClInclude Include="funcDefList.h" />
     <ClInclude Include="funcHead.h" />
     <ClInclude Include="FunctionEntry.h" />
+    <ClInclude Include="GenerateLabel.h" />
     <ClInclude Include="GreaterThan.h" />
     <ClInclude Include="GreaterThanOrEQTO.h" />
     <ClInclude Include="ID.h" />
@@ -268,6 +273,7 @@
     <ClInclude Include="localVarDeclList.h" />
     <ClInclude Include="memberList.h" />
     <ClInclude Include="memDecl.h" />
+    <ClInclude Include="MoonAssemblyVisitor.h" />
     <ClInclude Include="Multiply.h" />
     <ClInclude Include="multOp.h" />
     <ClInclude Include="Not.h" />
@@ -289,6 +295,7 @@
     <ClInclude Include="Self.h" />
     <ClInclude Include="sign.h" />
     <ClInclude Include="signFactor.h" />
+    <ClInclude Include="SizeCalculateVisitor.h" />
     <ClInclude Include="Start.h" />
     <ClInclude Include="statBlock.h" />
     <ClInclude Include="statement.h" />

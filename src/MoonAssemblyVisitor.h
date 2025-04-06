@@ -1,0 +1,111 @@
+#pragma once
+#include "Visitor.h"
+#include "GenerateLabel.h"
+#include <vector>
+#include <stack>
+#include <deque>
+
+class MoonAssemblyVisitor : public Visitor {
+	GenerateLabel gl;
+	const int returnAddrSize = 4;
+
+	std::vector<std::string>reserveOps;
+	std::deque<std::string>codeOps;
+
+	std::vector<std::deque<std::string>>functions;
+
+	std::stack<std::string>registers;
+
+	std::string zeroReg;
+	std::string returnAddrReg;
+	std::string stackFramePointerReg;
+
+	int getStackOffset(SymbolTable* table);
+	std::string getRegister();
+	std::string loadVariable(AST* node, SymbolTable* table);
+
+	void visitChildren(AST* parent);
+
+public:
+	MoonAssemblyVisitor();
+
+	std::vector<std::string>getCode();
+
+	virtual void visit(CompositeConceptAST* v) override;
+
+	virtual void visit(IntLit* v) override;
+	virtual void visit(FloatLit* v) override;
+	virtual void visit(FloatID* v) override;
+	virtual void visit(IntegerID* v) override;
+	virtual void visit(ID* v) override;
+	virtual void visit(Void* v) override;
+	virtual void visit(Public* v) override;
+	virtual void visit(Private* v) override;
+	virtual void visit(EqTo* v) override;
+	virtual void visit(NotEqTo* v) override;
+	virtual void visit(Not* v) override;
+	virtual void visit(LessThan* v) override;
+	virtual void visit(LessThanOrEqTo* v) override;
+	virtual void visit(GreaterThan* v) override;
+	virtual void visit(GreaterThanOrEqTo* v) override;
+	virtual void visit(Add* v) override;
+	virtual void visit(Subt* v) override;
+	virtual void visit(Multiply* v) override;
+	virtual void visit(Divide* v) override;
+	virtual void visit(Or* v) override;
+	virtual void visit(And* v) override;
+	virtual void visit(Period* v) override;
+	virtual void visit(Assign* v) override;
+	virtual void visit(Start* v) override;
+	virtual void visit(ClassImplFunc* v) override;
+	virtual void visit(ClassImplFuncList* v) override;
+	virtual void visit(addOp* v) override;
+	virtual void visit(addTermList* v) override;
+	virtual void visit(AParamsList* v) override;
+	virtual void visit(ArithExpr* v) override;
+	virtual void visit(AttrDecl* v) override;
+	virtual void visit(ClassDecl* v) override;
+	virtual void visit(ClassList* v) override;
+	virtual void visit(Expr* v) override;
+	virtual void visit(ExtraExpr* v) override;
+	virtual void visit(FuncBody* v) override;
+	virtual void visit(FuncDecl* v) override;
+	virtual void visit(FuncDef* v) override;
+	virtual void visit(FuncDefList* v) override;
+	virtual void visit(FuncHead* v) override;
+	virtual void visit(IfStat* v) override;
+	virtual void visit(ImplBody* v) override;
+	virtual void visit(ImplDef* v) override;
+	virtual void visit(ImplDefList* v) override;
+	virtual void visit(ISA* v) override;
+	virtual void visit(ISAList* v) override;
+	virtual void visit(LocalVarDecl* v) override;
+	virtual void visit(LocalVarDeclList* v) override;
+	virtual void visit(MemberList* v) override;
+	virtual void visit(MemDecl* v) override;
+	virtual void visit(Prog* v) override;
+	virtual void visit(ReadStat* v) override;
+	virtual void visit(ReturnStat* v) override;
+	virtual void visit(SignFactor* v) override;
+	virtual void visit(Sign* v) override;
+	virtual void visit(StatBlock* v) override;
+	virtual void visit(Statement* v) override;
+	virtual void visit(StatementList* v) override;
+	virtual void visit(Term* v) override;
+	virtual void visit(VarDecl* v) override;
+	virtual void visit(Visibility* v) override;
+	virtual void visit(VisMemberDecl* v) override;
+	virtual void visit(WhileStat* v) override;
+	virtual void visit(WriteStat* v) override;
+	virtual void visit(VisMemberDeclList* v) override;
+	virtual void visit(fParamsList* v) override;
+	virtual void visit(fParams* v) override;
+	virtual void visit(ArraySize* v) override;
+	virtual void visit(ArraySizeList* v) override;
+	virtual void visit(Variable* v) override;
+	virtual void visit(AssignStat* v) override;
+	virtual void visit(FuncCall* v) override;
+	virtual void visit(IndiceList* v) override;
+	virtual void visit(Indice* v) override;
+	virtual void visit(Self* v) override;
+};
