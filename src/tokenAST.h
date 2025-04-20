@@ -12,4 +12,5 @@ public:
 	std::string getLexeme();
 	virtual std::string toString() = 0;
 	virtual std::string getData() override;
+	virtual std::string getAssemblyData() override;
 };

@@ -2,10 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>polynomial.src</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\General_Tests\Semantic_Analyzer\polynomial\polynomial.src"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>polynomial.src</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"C:\Users\umara\OneDrive\Desktop\University\COMP 442\MDC\General_Tests\Semantic_Analyzer\polynomial\polynomial.src"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

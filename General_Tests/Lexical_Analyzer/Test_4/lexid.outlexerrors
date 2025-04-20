@@ -1,0 +1,5 @@
+Lexecial Error: INVALID_ID: "_abc"at line: 11
+Lexecial Error: INVALID_ID: "_$abcd"at line: 12
+Lexecial Error: INVALID_NUM: "1abc"at line: 17
+Lexecial Error: INVALID_ID: "_1abc"at line: 22
+Lexecial Error: INVALID_NUM: "1_abc"at line: 22

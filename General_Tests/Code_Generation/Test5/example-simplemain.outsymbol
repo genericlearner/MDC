@@ -1,0 +1,25 @@
+strict digraph structs {
+	node [shape=plaintext]"PROG(00E4CBE0)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "3">PROG(00E4CBE0)</TD><TD COLSPAN="3">-44</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Size</TD><TD>Offset</TD><TD>Link</TD></TR>
+<TR><TD>main</TD><TD>function</TD><TD>void:</TD><TD>44</TD><TD>0</TD><TD PORT="function-main-">+</TD></TR>
+</TABLE>>];
+"FUNCDEF(00E4D900)" [label=<
+<TABLE BORDER = "0" CELLBORDER = "1" CELLSPACING = "0">
+<TR><TD COLSPAN = "3">FUNCDEF(00E4D900)</TD><TD COLSPAN="3">-44</TD></TR>
+<TR><TD>Name</TD><TD>Kind</TD><TD>Type</TD><TD>Size</TD><TD>Offset</TD><TD>Link</TD></TR>
+<TR><TD>x</TD><TD>variable</TD><TD>int</TD><TD>4</TD><TD>0</TD><TD PORT="variable-int">/</TD></TR>
+<TR><TD>y</TD><TD>variable</TD><TD>int</TD><TD>4</TD><TD>-4</TD><TD PORT="variable-int">/</TD></TR>
+<TR><TD>z</TD><TD>variable</TD><TD>int</TD><TD>4</TD><TD>-8</TD><TD PORT="variable-int">/</TD></TR>
+<TR><TD>t0</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-12</TD><TD PORT="tempvar-t0int">/</TD></TR>
+<TR><TD>t1</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-16</TD><TD PORT="tempvar-t1int">/</TD></TR>
+<TR><TD>t2</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-20</TD><TD PORT="tempvar-t2int">/</TD></TR>
+<TR><TD>t3</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-24</TD><TD PORT="tempvar-t3int">/</TD></TR>
+<TR><TD>t4</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-28</TD><TD PORT="tempvar-t4int">/</TD></TR>
+<TR><TD>t5</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-32</TD><TD PORT="tempvar-t5int">/</TD></TR>
+<TR><TD>t6</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-36</TD><TD PORT="tempvar-t6int">/</TD></TR>
+<TR><TD>t7</TD><TD>temporary variable</TD><TD>int</TD><TD>4</TD><TD>-40</TD><TD PORT="tempvar-t7int">/</TD></TR>
+</TABLE>>];
+"PROG(00E4CBE0)":"function-main-"->"FUNCDEF(00E4D900)"
+}

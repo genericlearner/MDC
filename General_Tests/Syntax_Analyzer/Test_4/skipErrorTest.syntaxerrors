@@ -1,0 +1,2 @@
+syntax error on line 3 at : { expected: ID, CLOSECURLY, SELF, WHILE, IF, READ, WRITE, RETURN, LOCAL, 
+syntax error on line 4 at : ; expected: ID, CLOSECURLY, SELF, WHILE, IF, READ, WRITE, RETURN, LOCAL, 

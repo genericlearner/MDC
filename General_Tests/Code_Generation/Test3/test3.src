@@ -1,0 +1,17 @@
+function main() => void{
+    local n: int;
+    n := 0;
+    read(n);
+    if(n == 0)
+    then{
+        n:= n+1;
+    }
+    else{
+
+    };
+
+    while(n<=5){
+        write(n);
+        n:= n+1;
+    };
+}

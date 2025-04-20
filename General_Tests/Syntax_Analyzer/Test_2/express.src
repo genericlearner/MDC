@@ -1,0 +1,188 @@
+class class1{
+    public attribute member1: float;
+};
+
+function main()=>void{
+    //add subt
+    l1 := r1 + r2;
+    l1 := r1 - r2;
+    // multiply, divide
+
+    l2 := r1 * r2;
+    l2 := r1/ r2;
+
+    //relop
+    l3 := r1 < r2;
+    l4 := r1 > r2;
+    l5 := r1 <= r2;
+    l6 := r1 >= r2;
+    l7 := r1 == r2;
+    l8 := r1 <> r2;
+
+    //add and mult
+    l9 := r1 + r2 * r3;
+    l10 := r1 * r2 + r3;
+
+    //mult and relop
+    l11 := r1 * r2 > r3;
+
+    //add and mult and relop
+    l12 := r1 + r2 * r3 > r4
+
+    //parentheses
+    l13 := (r1+r2)* r3;
+
+    //nestd parenhteses
+    r14 := (r1 + (r2-r3))*r4;
+    //not
+    //r15 := not r1;
+
+    //sign
+    r16 := -r1;
+    r17 := -r1;
+
+    //literals
+    r18 := 10*20+30;
+
+    //variable + idnest
+    r19 := r1.r2 +r3[10];
+
+    //function calls
+    r20 := r1() + r2.r3();
+
+
+    //all
+    //r21 := not ((r1 +(r2() - (r3 * ( r4(2) / 2 ))))* 10 > r5.r6);
+    
+}
+
+/*
+    classes
+    --------------------------------------
+| | no class declaration
+| | class declaration
+| | multiple class declarations
+| | no data member declaration
+| | data member declaration
+| | multiple data member declaration
+| | no member function declaration
+| | member function declaration
+| | multiple member function declaration
+| | no member
+| | no inherited class
+| | one inherited class
+| | multiple inherited classes
+| | private member specifier
+| | public member specifier
+
+    functions: definitions
+    --------------------------------------
+| | no main function definition
+| | main function definition
+| | no free function definition
+| | free function definition
+| | multiple free function definitions
+| | no member function definition
+| | member function definition
+| | multiple member function definitions
+| | return type: void
+| | return type: integer
+| | return type: float
+| | return type: id
+| | return type: array (not allowed)
+
+    functions: formal parameters
+    --------------------------------------
+| | type: integer
+| | type: float
+| | type: id
+| | type: 1-dim array 
+| | type: n-dim array
+| | type: array (with size)
+| | type: array (without size)
+
+    functions: calls
+    --------------------------------------
+| | free function call
+| | member function call
+| | parameters:0
+| | parameters:1
+| | parameters:n
+| | array parameter - 1-dim
+| | array parameter - n-dim
+| | array parameter - with size
+| | array parameter - without size
+| | function call as statement
+| | function call as expression factor
+| | expression as parameter
+
+    variable declaration
+    --------------------------------------
+| | type: integer
+| | type: float
+| | type: string
+| | type: id
+| | type: 1-dim array 
+| | type: n-dim array
+| | type: array (with size)
+| | type: array (without size)
+
+    function body: local variable declarations
+    --------------------------------------
+| | no local variable declarations
+| | local variable declarations
+| | intertwined statements and variable declarations
+
+    function body: statements
+    --------------------------------------
+| | no statement
+| | 1 statement
+| | n statements
+| | if statement
+| | if: empty then or else blocks
+| | if: 1-statement then or else blocks
+| | if: n-statements then or else blocks
+| | while statement
+| | while: empty block
+| | while: 1-statement block
+| | while: n-statement block
+| | read(<variable>) statement
+| | write(<expr>) statement
+| | return(<expr>) statement
+| | assignment statement
+
+    variable + idnest
+    --------------------------------------
+| | id
+| | id.id
+| | id.id(id)
+| | id(id).id
+| | id(id).id()
+| | id.id[id]
+| | id[id].id
+| | id[id].id[id]
+| | id.id[id][id]
+| | id[id][id].id
+| | id[id][id].id[id][id]
+| | id(id).id[id]
+| | id(id).id[id][id]
+| | expression as array index
+
+    expressions
+    --------------------------------------
+|X| single variable
+|X| involving addop
+|X| involving multop
+|X| involving relop
+|X| involving addop + multop
+|X| involving multop + relop
+|X| involving addop + multop + relop
+|X| involving parentheses
+|X| involving nested parenhteses
+|X| involving not
+|X| involving sign
+|X| involving literals
+|X| involving variable + idnest
+|X| involving function calls
+|X| involving all the above in one expression
+*/

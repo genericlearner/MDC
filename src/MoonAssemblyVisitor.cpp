@@ -1,5 +1,6 @@
 #include "MoonAssemblyVisitor.h"
 #include "SymbolTableHelper.h"
+
 #include <iostream>
 
 
@@ -52,7 +53,7 @@ std::string MoonAssemblyVisitor::loadVariable(AST* node, SymbolTable* table) {
 
 			std::vector<AST*>indiceChildren = children[1]->getChildren();
 
-			for (int i = 0; i < indiceChildren.size(); i++) {
+			for (size_t i = 0; i < indiceChildren.size(); i++) {
 				if (i == arraySize.size() - 1) {
 					offset += std::stoi(indiceChildren[i]->getData()) * tSize;
 				}
@@ -61,21 +62,21 @@ std::string MoonAssemblyVisitor::loadVariable(AST* node, SymbolTable* table) {
 				}
 			}
 		}
-		codeOps.push_back("\tlw" + reg + "," + std::to_string(var->getOffset() - offset) + "(" + stackFramePointerReg + ")");
+		codeOps.push_back("\tlw " + reg + "," + std::to_string(var->getOffset() - offset) + "(" + stackFramePointerReg + ")");
 	}
 
 	if (FuncCall* funcCallNode = dynamic_cast<FuncCall*>(node)) {
 		TempEntry* tempEntry = table->findTempRec(funcCallNode->getAssemblyData());
 
-		codeOps.push_back("\tlw" + reg + "," + std::to_string(tempEntry->getOffset()) + "(" + stackFramePointerReg + ")");
+		codeOps.push_back("\tlw " + reg + "," + std::to_string(tempEntry->getOffset()) + "(" + stackFramePointerReg + ")");
 	}
 	else if (CompositeConceptTokenAST* opType = dynamic_cast<CompositeConceptTokenAST*>(node)) {
 		SymbolTableEntry* tempEentry = table->findTempRec(opType->getAssemblyData());
 
-		codeOps.push_back("\tlw" + reg + "," + std::to_string(tempEentry->getOffset()) + "(" + stackFramePointerReg + ")");
+		codeOps.push_back("\tlw " + reg + "," + std::to_string(tempEentry->getOffset()) + "(" + stackFramePointerReg + ")");
 	}
 	else if (TokenAST* specType = dynamic_cast<TokenAST*>(node)) {
-		codeOps.push_back("\taddi" + reg + "," + zeroReg + "," + specType->getAssemblyData());
+		codeOps.push_back("\taddi " + reg + "," + zeroReg + "," + specType->getAssemblyData());
 	}
 	return reg;
 }
@@ -108,7 +109,7 @@ MoonAssemblyVisitor::MoonAssemblyVisitor() {
 	registers.push("r10");
 	registers.push("r11");
 	registers.push("r12");
-	registers.push("r13");
+	//registers.push("r13");
 
 }
 
@@ -137,7 +138,7 @@ void MoonAssemblyVisitor:: visit(Public* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(Private* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(EqTo* v) {
 	visitChildren(v);
-	codeOps.push_back("equal operation compare");
+	codeOps.push_back("% equal operation compare");
 	std::vector<std::string>registersUsed;
 
 	SymbolTable* table = v->getClosestTable();
@@ -150,10 +151,10 @@ void MoonAssemblyVisitor:: visit(EqTo* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tceq" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tceq " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin(); 
 		reg != registersUsed.rend(); 
@@ -165,7 +166,7 @@ void MoonAssemblyVisitor:: visit(EqTo* v) {
 }
 void MoonAssemblyVisitor:: visit(NotEqTo* v) {
 	visitChildren(v);
-	codeOps.push_back("Not equal operation compare");
+	codeOps.push_back("% Not equal operation compare");
 	std::vector<std::string>registersUsed;
 
 	SymbolTable* table = v->getClosestTable();
@@ -178,10 +179,10 @@ void MoonAssemblyVisitor:: visit(NotEqTo* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tcne" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tcne " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -204,19 +205,19 @@ void MoonAssemblyVisitor:: visit(Not* v) {
 
 	TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
 	
-	codeOps.push_back("\tbnz" + opReg + "," + zeroLabel);
-	codeOps.push_back("\taddi" + opReg + "," + zeroReg + ",1");
-	codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + opReg);
+	codeOps.push_back("\tbnz " + opReg + "," + zeroLabel);
+	codeOps.push_back("\taddi " + opReg + "," + zeroReg + ",1");
+	codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + opReg);
 
-	codeOps.push_back("\tj" + endNotLabel);
+	codeOps.push_back("\tj " + endNotLabel);
 
-	codeOps.push_back(zeroLabel + "\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + zeroReg);
+	codeOps.push_back(zeroLabel + "\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + zeroReg);
 
 	registers.push(opReg);
 }
 void MoonAssemblyVisitor:: visit(LessThan* v) {
 	visitChildren(v);
-	codeOps.push_back("Less than operation compare");
+	codeOps.push_back("% Less than operation compare");
 	std::vector<std::string>registersUsed;
 
 	SymbolTable* table = v->getClosestTable();
@@ -229,10 +230,10 @@ void MoonAssemblyVisitor:: visit(LessThan* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tclt" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tclt " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -243,7 +244,7 @@ void MoonAssemblyVisitor:: visit(LessThan* v) {
 }
 void MoonAssemblyVisitor:: visit(LessThanOrEqTo* v) {
 	visitChildren(v);
-	codeOps.push_back("Less than or equal to operation compare");
+	codeOps.push_back("% Less than or equal to operation compare");
 	std::vector<std::string>registersUsed;
 
 	SymbolTable* table = v->getClosestTable();
@@ -256,10 +257,10 @@ void MoonAssemblyVisitor:: visit(LessThanOrEqTo* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tcle" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tcle " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -270,7 +271,7 @@ void MoonAssemblyVisitor:: visit(LessThanOrEqTo* v) {
 }
 void MoonAssemblyVisitor:: visit(GreaterThan* v) {
 	visitChildren(v);
-	codeOps.push_back("Greater than operation compare");
+	codeOps.push_back("% Greater than operation compare");
 	std::vector<std::string>registersUsed;
 
 	SymbolTable* table = v->getClosestTable();
@@ -283,10 +284,10 @@ void MoonAssemblyVisitor:: visit(GreaterThan* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tcgt" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tcgt " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -297,7 +298,7 @@ void MoonAssemblyVisitor:: visit(GreaterThan* v) {
 }
 void MoonAssemblyVisitor:: visit(GreaterThanOrEqTo* v) {
 	visitChildren(v);
-	codeOps.push_back("Greater than or equal to operation compare");
+	codeOps.push_back("% Greater than or equal to operation compare");
 	std::vector<std::string>registersUsed;
 
 	SymbolTable* table = v->getClosestTable();
@@ -310,10 +311,10 @@ void MoonAssemblyVisitor:: visit(GreaterThanOrEqTo* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tgte" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tcge " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -331,7 +332,6 @@ void MoonAssemblyVisitor:: visit(Add* v) {
 
 	std::vector<std::string>registersUsed;
 
-	SymbolTable* table = v->getClosestTable();
 
 	registersUsed.push_back(loadVariable(v->getChild(0), table));
 	//check this with the ast tree
@@ -341,10 +341,10 @@ void MoonAssemblyVisitor:: visit(Add* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tadd" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tadd " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -363,7 +363,7 @@ void MoonAssemblyVisitor:: visit(Subt* v) {
 
 	std::vector<std::string>registersUsed;
 
-	SymbolTable* table = v->getClosestTable();
+	
 
 	registersUsed.push_back(loadVariable(v->getChild(0), table));
 	//check this with the ast tree
@@ -373,10 +373,10 @@ void MoonAssemblyVisitor:: visit(Subt* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tsub" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tsub " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -394,7 +394,7 @@ void MoonAssemblyVisitor:: visit(Multiply* v) {
 
 	std::vector<std::string>registersUsed;
 
-	SymbolTable* table = v->getClosestTable();
+	
 
 	registersUsed.push_back(loadVariable(v->getChild(0), table));
 	//check this with the ast tree
@@ -404,10 +404,10 @@ void MoonAssemblyVisitor:: visit(Multiply* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tmul" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tmul " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -425,8 +425,6 @@ void MoonAssemblyVisitor:: visit(Divide* v) {
 
 	std::vector<std::string>registersUsed;
 
-	SymbolTable* table = v->getClosestTable();
-
 	registersUsed.push_back(loadVariable(v->getChild(0), table));
 	//check this with the ast tree
 	registersUsed.push_back(loadVariable(v->getChild(1), table));
@@ -435,10 +433,10 @@ void MoonAssemblyVisitor:: visit(Divide* v) {
 		std::string res = getRegister();
 		registersUsed.push_back(res);
 
-		codeOps.push_back("\tdiv" + res + "," + registersUsed[0] + "," + registersUsed[1]);
+		codeOps.push_back("\tdiv " + res + "," + registersUsed[0] + "," + registersUsed[1]);
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back("\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back("\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
 		reg != registersUsed.rend();
@@ -466,16 +464,16 @@ void MoonAssemblyVisitor:: visit(Or* v) {
 		std::string notZeroLabel = gl.genZeroLabel();
 		std::string endOrLabel = gl.genEndOrLabel();
 
-		codeOps.push_back("\tbnz" + registersUsed[0] + "," + notZeroLabel);
-		codeOps.push_back("\tbnz" + registersUsed[1] + "," + notZeroLabel);
+		codeOps.push_back("\tbnz " + registersUsed[0] + "," + notZeroLabel);
+		codeOps.push_back("\tbnz " + registersUsed[1] + "," + notZeroLabel);
 
-		codeOps.push_back("\taddi" + res + "," + zeroReg + ",0");
-		codeOps.push_back("\tj" + endOrLabel);
+		codeOps.push_back("\taddi " + res + "," + zeroReg + ",1");
+		codeOps.push_back("\tj " + endOrLabel);
 
-		codeOps.push_back(notZeroLabel + "\taddi" + res + "," + zeroReg + ",1");
+		codeOps.push_back(notZeroLabel + "\taddi " + res + "," + zeroReg + ",1");
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back(endOrLabel + "\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back(endOrLabel + "\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
@@ -505,16 +503,16 @@ void MoonAssemblyVisitor:: visit(And* v) {
 		std::string notZeroLabel = gl.genZeroLabel();
 		std::string endAndLabel = gl.genEndAndLabel();
 
-		codeOps.push_back("\tbz" + registersUsed[0] + "," + notZeroLabel);
-		codeOps.push_back("\tbz" + registersUsed[1] + "," + notZeroLabel);
+		codeOps.push_back("\tbz " + registersUsed[0] + "," + notZeroLabel);
+		codeOps.push_back("\tbz " + registersUsed[1] + "," + notZeroLabel);
 
-		codeOps.push_back("\taddi" + res + "," + zeroReg + ",0");
-		codeOps.push_back("\tj" + endAndLabel);
+		codeOps.push_back("\taddi " + res + "," + zeroReg + ",0");
+		codeOps.push_back("\tj " + endAndLabel);
 
-		codeOps.push_back(notZeroLabel + "\taddi" + res + "," + zeroReg + ",1");
+		codeOps.push_back(notZeroLabel + "\taddi " + res + "," + zeroReg + ",0");
 
 		TempEntry* tempRec = table->findTempRec(v->getAssemblyData());
-		codeOps.push_back(endAndLabel + "\tsw" + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
+		codeOps.push_back(endAndLabel + "\tsw " + std::to_string(tempRec->getOffset()) + "(" + stackFramePointerReg + ")," + res);
 	}
 
 	for (std::vector<std::string>::reverse_iterator reg = registersUsed.rbegin();
@@ -528,7 +526,19 @@ void MoonAssemblyVisitor:: visit(Period* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(Assign* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(Start* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(ClassImplFunc* v) {visitChildren(v);}
-void MoonAssemblyVisitor:: visit(ClassImplFuncList* v) {visitChildren(v);}
+void MoonAssemblyVisitor:: visit(ClassImplFuncList* v) {
+	//implement ts
+	
+	visitChildren(v);
+	/* 
+	if (Prog* progParent = dynamic_cast<Prog*>(v->parent)) {
+		if (codeOps.size() != 0) {
+			functions.push_back(codeOps);
+			codeOps = std::deque<std::string>();
+		}
+	}*/
+
+}
 void MoonAssemblyVisitor:: visit(addOp* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(addTermList* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(AParamsList* v) {visitChildren(v);}
@@ -543,9 +553,11 @@ void MoonAssemblyVisitor:: visit(FuncDecl* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(FuncDef* v) {
 	visitChildren(v);
 	if (FunctionEntry* fEntry = dynamic_cast<FunctionEntry*>(v->getSymbolRec())) {
-		codeOps.push_back(fEntry->name);
+		// Function prologue
+		codeOps.push_front(fEntry->name);
 
-		codeOps.push_back("\tjr" + returnAddrReg);
+		// Return to caller
+		codeOps.push_back("\tjr " + returnAddrReg);
 
 		functions.push_back(codeOps);
 		codeOps = std::deque<std::string>();
@@ -566,20 +578,22 @@ void MoonAssemblyVisitor:: visit(IfStat* v) {
 		std::string elseLabel = gl.genElseLabel();
 		std::string endIfLabel = gl.genEndIfLabel();
 
-		codeOps.push_back("\tbz" + relExpr + "," + elseLabel);
+		codeOps.push_back("\tbz " + relExpr + "," + elseLabel);
 
 		v->getChild(1)->accept(this, false);
-
-		codeOps.push_back("\tj" + endIfLabel);
+		codeOps.push_back("\tj " + endIfLabel);
 
 		codeOps.push_back(elseLabel + "\tnop");
+		v->getChild(2)->accept(this, false);
+
+		codeOps.push_back(endIfLabel + "\tnop");
 	}
 	else {
 		codeOps.push_back("% if statement");
 
 		std::string endIfLabel = gl.genEndIfLabel();
 
-		codeOps.push_back("\tbz" + relExpr + "," + endIfLabel);
+		codeOps.push_back("\tbz " + relExpr + "," + endIfLabel);
 
 		v->getChild(1)->accept(this, false);
 
@@ -600,20 +614,42 @@ void MoonAssemblyVisitor:: visit(MemberList* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(MemDecl* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(Prog* v) {
 	visitChildren(v);
-
+	bool hasMain = false;
 	if (SymbolTable* table = v->getSymbolTable()) {
-		codeOps.push_front("PROGRAM");
-		codeOps.push_front("\tsubi" + stackFramePointerReg + "," + stackFramePointerReg + ",4");
-		codeOps.push_front("\tsub" + zeroReg + "," + zeroReg + "," + zeroReg);
-		codeOps.push_front("\taddi" + stackFramePointerReg + "," + zeroReg + ",topaddr");
+		for (auto func : table->findFunctionRec("main")) {
+			if (func->name == "main") {
+				hasMain = true;
+				break;
+			}
+		}
+		// Program entry point and initialization
+		codeOps.push_front("MAIN");
+		codeOps.push_front("\tsubi " + stackFramePointerReg + "," + stackFramePointerReg + ",4");
+		codeOps.push_front("\tsub " + zeroReg + "," + zeroReg + "," + zeroReg);
+		codeOps.push_front("\taddi " + stackFramePointerReg + "," + zeroReg + ",topaddr");
 		codeOps.push_front("\tentry");
 
+		if (hasMain) {
+			codeOps.push_back("\tjl " + returnAddrReg + ",main");
+		}
+		// Add comment indicating program start
+		codeOps.push_front("% Program start");		
+
+		// Set up buffering for I/O operations
 		reserveOps.push_back("\t% buffer for output");
 		reserveOps.push_back("buf\tres 20");
+
+		// Call main function if necessary
+		// If your language requires an explicit call to main, add it here
+		// codeOps.push_back("\tjl " + returnAddrReg + ",main");
+
+		// Halt the program when execution completes
 		codeOps.push_back("\thlt");
-		
+
+		// Add the main program code to the functions list
 		functions.push_back(codeOps);
 	}
+
 
 }
 void MoonAssemblyVisitor:: visit(ReadStat* v) {
@@ -625,10 +661,10 @@ void MoonAssemblyVisitor:: visit(ReadStat* v) {
 	std::string getStrLabel = gl.genGetStrLabel();
 	std::string endGetLabel = gl.genEndGetLabel();
 
-	codeOps.push_back("\addi" + bufferReg + ',' + zeroReg + ",buf");
+	codeOps.push_back("\taddi " + bufferReg + ',' + zeroReg + ",buf");
 	codeOps.push_back("\tsw -8(" + stackFramePointerReg + ")," + bufferReg);
 
-	codeOps.push_back("\tsw" + std::to_string(table->compOffset()) + "(" + stackFramePointerReg + ")" + returnAddrReg);
+	codeOps.push_back("\tsw " + std::to_string(table->compOffset()) + "(" + stackFramePointerReg + ")," + returnAddrReg);
 
 	std::string charReg = getRegister();
 
@@ -669,7 +705,7 @@ void MoonAssemblyVisitor:: visit(ReturnStat* v) {
 
 	std::string returnReg = loadVariable(v->getChild(0), table);
 
-	codeOps.push_back("\tsw" + std::to_string(table->compOffset()) + "(" + stackFramePointerReg + ")," + returnReg);
+	codeOps.push_back("\tsw " + std::to_string(table->compOffset()) + "(" + stackFramePointerReg + ")," + returnReg);
 	//TODO work on handling array and aggregate types + add jump statement to actually exit the function
 	registers.push(returnReg);
 }
@@ -683,7 +719,6 @@ void MoonAssemblyVisitor:: visit(VarDecl* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(Visibility* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(VisMemberDecl* v) {visitChildren(v);}
 void MoonAssemblyVisitor:: visit(WhileStat* v) {
-	visitChildren(v);
 	codeOps.push_back("% while loop");
 
 	SymbolTable* table = v->getClosestTable();
@@ -696,26 +731,49 @@ void MoonAssemblyVisitor:: visit(WhileStat* v) {
 
 	std::string whileReg = loadVariable(v->getChild(0), table);
 
-	codeOps.push_back("\tbz" + whileReg + "," + endwhileLabel);
+	codeOps.push_back("\tbz " + whileReg + "," + endwhileLabel);
 
 	if (AST* statementList = v->getChild(1)) {
 		statementList->accept(this, false);
 	}
 
-	codeOps.push_back("\tj" + whileLabel);
+	codeOps.push_back("\tj " + whileLabel);
 
 	codeOps.push_back(endwhileLabel + "\tnop");
 
 	registers.push(whileReg);
 }
 void MoonAssemblyVisitor:: visit(WriteStat* v) {
-	/*
+	
 	SymbolTable* table = v->getClosestTable();
 	visitChildren(v);
 
 	codeOps.push_back("% write Statement");
 
-	std::string*/
+	std::string writeReg = loadVariable(v->getChild(0), table);
+
+	codeOps.push_back("\tsw " + std::to_string(table->compOffset()) + "(" + stackFramePointerReg + ")," + returnAddrReg);
+
+	codeOps.push_back("\taddi " + stackFramePointerReg + "," + stackFramePointerReg + "," + std::to_string(table->compOffset() - 4));
+
+
+	codeOps.push_back("\tsw -8(" + stackFramePointerReg + ")," + writeReg);
+
+	codeOps.push_back("\taddi " + writeReg + "," + zeroReg + ",buf");
+	codeOps.push_back("\tsw -12(" + stackFramePointerReg + ")," + writeReg);
+
+	codeOps.push_back("\tjl " + returnAddrReg + ",intstr");
+
+	codeOps.push_back("\tsw -8(" + stackFramePointerReg + "), r13");
+
+	codeOps.push_back("\tjl r15, putstr");
+
+	codeOps.push_back("\tsubi " + stackFramePointerReg + "," + stackFramePointerReg + "," + std::to_string(table->compOffset() - 4));
+
+	codeOps.push_back("\tlw " + returnAddrReg + "," + std::to_string(table->compOffset()) + "(" + stackFramePointerReg + ")");
+
+	registers.push(writeReg);
+
 
 }
 void MoonAssemblyVisitor:: visit(VisMemberDeclList* v) {visitChildren(v);}
@@ -730,7 +788,7 @@ void MoonAssemblyVisitor:: visit(AssignStat* v) {
 	codeOps.push_back("% assignment operation");
 
 	AST* leftOp = v->getChild(0);
-	AST* rightOp = v->getChild(1);
+	AST* rightOp = v->getChild(2);
 
 	SymbolTable* table = v->getClosestTable();
 
@@ -738,7 +796,7 @@ void MoonAssemblyVisitor:: visit(AssignStat* v) {
 	int leftVarArrOffset = 0;
 
 	VariableEntry* varRec = table->findVariableRec(leftOp->getData());
-	ParamEntry* parRec = table->findParRec(rightOp->getData());
+	ParamEntry* parRec = table->findParRec(leftOp->getData());
 
 	std::string type;
 
@@ -776,7 +834,7 @@ void MoonAssemblyVisitor:: visit(AssignStat* v) {
 
 		std::vector<AST*>leftVarIndices = leftOp->getChildren()[1]->getChildren();
 
-		for (int i = 0; i < leftVarIndices.size(); i++) {
+		for (size_t i = 0; i < leftVarIndices.size(); i++) {
 			if (i == leftVarArrSize.size() - 1) {
 				leftVarOffset += std::stoi(leftVarIndices[i]->getData()) * leftVarTypeSize;
 			}
@@ -820,7 +878,7 @@ void MoonAssemblyVisitor:: visit(AssignStat* v) {
 
 			std::vector<AST*>rightVarIndices = children[1]->getChildren();
 
-			for (int i = 0; i < rightVarIndices.size(); i++) {
+			for (size_t i = 0; i < rightVarIndices.size(); i++) {
 				if (i == rightVarArrSize.size() - 1) {
 					rightVarOffset += std::stoi(rightVarIndices[i]->getData()) * rightVarTypeSize;
 				}
@@ -832,20 +890,20 @@ void MoonAssemblyVisitor:: visit(AssignStat* v) {
 
 		std::string reg = registers.top(); registers.pop();
 
-		codeOps.push_back("\tlw" + reg + "," + std::to_string(rightVarRec->getOffset() - rightVarOffset) + "(" + stackFramePointerReg + ")");
+		codeOps.push_back("\tlw " + reg + "," + std::to_string(rightVarRec->getOffset() - rightVarOffset) + "(" + stackFramePointerReg + ")");
 
-		codeOps.push_back("\tsw" + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
+		codeOps.push_back("\tsw " + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
 
 		registers.push(reg);
 	}
 
-	if (FuncCall* funcCallNode = dynamic_cast<FuncCall*>(funcCallNode)) {
+	if (FuncCall* funcCallNode = dynamic_cast<FuncCall*>(rightOp)) {
 		TempEntry* tempRec = table->findTempRec(funcCallNode->getAssemblyData());
 
 		std::string reg = registers.top(); registers.pop();
-		codeOps.push_back("\tlw" + reg + "," + std::to_string(varAssign->getOffset()) + "(" + stackFramePointerReg + ")");
+		codeOps.push_back("\tlw " + reg + "," + std::to_string(varAssign->getOffset()) + "(" + stackFramePointerReg + ")");
 
-		codeOps.push_back("\tsw"  + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
+		codeOps.push_back("\tsw "  + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
 
 		registers.push(reg);
 	}
@@ -854,20 +912,20 @@ void MoonAssemblyVisitor:: visit(AssignStat* v) {
 
 		std::string reg = registers.top(); registers.pop();
 
-		codeOps.push_back("\tlw" + reg + "," + std::to_string(rightVarAssign->getOffset()) + "(" + stackFramePointerReg + ")");
+		codeOps.push_back("\tlw " + reg + "," + std::to_string(rightVarAssign->getOffset()) + "(" + stackFramePointerReg + ")");
 
-		codeOps.push_back("\tsw" + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
+		codeOps.push_back("\tsw " + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
 
 		registers.push(reg);
 	}
 	else if (TokenAST* specType = dynamic_cast<TokenAST*>(rightOp)) {
 		std::string reg = registers.top(); registers.pop();
 
-		codeOps.push_back("\tsub" + reg + "," + reg + "," + reg);
+		codeOps.push_back("\tsub " + reg + "," + reg + "," + reg);
 
-		codeOps.push_back("\taddi" + reg + "," + reg + "," + specType->getData());
+		codeOps.push_back("\taddi " + reg + "," + reg + "," + specType->getData());
 
-		codeOps.push_back("\tsw" + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
+		codeOps.push_back("\tsw " + std::to_string(varAssign->getOffset() - leftVarOffset) + "(" + stackFramePointerReg + ")" + "," + reg);
 
 		registers.push(reg);
 	}
@@ -897,45 +955,58 @@ void MoonAssemblyVisitor:: visit(FuncCall* v) {
 
 		int funcOffset = fEntry->link->compOffset();
 
+		// 1. Set up parameter passing
 		if (AST* aParamList = v->getChild(1)) {
-			std::vector<AST*>param = aParamList->getChildren();
+			std::vector<AST*> params = aParamList->getChildren();
 
-			std::string paramOffsetReg = getRegister();
+			// Pass parameters in reverse order (last parameter first)
+			for (int i = params.size() - 1; i >= 0; i--) {
+				codeOps.push_back("\t% Parameter " + std::to_string(i + 1));
+				std::string paramReg = loadVariable(params[i], table);
 
-			for (int i = 0; i < param.size(); i++) {
-				codeOps.push_back("\t% copy param");
+				// Store parameter at the appropriate offset in the new stack frame
+				// Parameters are typically stored at positive offsets from the frame pointer
+				int paramOffset = (tableOffset - 4) - 4 * i;
+				codeOps.push_back("\tsw " + std::to_string(paramOffset) + "(" + stackFramePointerReg + ")," + paramReg);
 
-				std::string paramReg = loadVariable(param[i], table);
-
-				codeOps.push_back("\tsw" + std::to_string((tableOffset - 4) - 4 * i) + "(" + stackFramePointerReg + ")," + paramReg);
 				registers.push(paramReg);
 			}
-			registers.push(paramOffsetReg);
 		}
-		// save jump register state
+
+		// 2. Save return address
+		codeOps.push_back("\t% Save return address");
 		codeOps.push_back("\tsw " + std::to_string(tableOffset) + "(" + stackFramePointerReg + ")," + returnAddrReg);
 
-		// increment stack frame
+		// 3. Adjust stack pointer to create new frame
+		codeOps.push_back("\t% Create new stack frame");
 		codeOps.push_back("\taddi " + stackFramePointerReg + "," + stackFramePointerReg + "," + std::to_string(tableOffset - 4));
 
-		// jump instruction
+		// 4. Call the function
+		codeOps.push_back("\t% Call function");
 		codeOps.push_back("\tjl " + returnAddrReg + "," + fEntry->name);
 
-		// decrement stack frame
+		// 5. Restore stack frame (undo the adjustment we made)
+		codeOps.push_back("\t% Restore original stack frame");
 		codeOps.push_back("\tsubi " + stackFramePointerReg + "," + stackFramePointerReg + "," + std::to_string(tableOffset - 4));
 
-		// restore jump register state
+		// 6. Restore return address
+		codeOps.push_back("\t% Restore return address");
 		codeOps.push_back("\tlw " + returnAddrReg + "," + std::to_string(tableOffset) + "(" + stackFramePointerReg + ")");
 
+		// 7. Handle return value if the function returns something
 		if (v->getType() != "void") {
-			codeOps.push_back("% return value");
+			codeOps.push_back("\t% Handle return value");
 			std::string returnReg = getRegister();
 
-			codeOps.push_back("\tlw" + returnReg + "," + std::to_string(tableOffset - 4 + funcOffset) + "(" + stackFramePointerReg + ")");
+			// Load return value from where the function stored it
+			// Return values are typically placed at a fixed offset from the frame pointer
+			codeOps.push_back("\tlw " + returnReg + "," + std::to_string(tableOffset - 4 + funcOffset) + "(" + stackFramePointerReg + ")");
 
+			// Store the return value in the temp location for this function call
 			TempEntry* tempReturn = table->findTempRec(v->getAssemblyData());
+			codeOps.push_back("\tsw " + std::to_string(tempReturn->getOffset()) + "(" + stackFramePointerReg + ")," + returnReg);
 
-			codeOps.push_back("\tsw" + std::to_string(tempReturn->getOffset()) + "(" + stackFramePointerReg + ")," + returnReg);
+			registers.push(returnReg);
 		}
 	}
 

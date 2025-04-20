@@ -1,0 +1,45 @@
+/* reverse the array */
+function reverseArray(arr: int[], size: int) => void 
+{
+  local start: int;
+  local end: int;
+  local temp: int;
+
+  start := 0;
+  end := size - 1;
+  temp := 0;
+
+  while (start < end) {
+    temp := arr[start];
+    arr[start] := arr[end];
+    arr[end] := temp;
+    start := start + 1;
+    end := end - 1;
+  };
+}
+
+/* print the array */
+function printArray(arr: int[], size: int) => void 
+{
+  local i: int; 
+  i := 0; 
+  while (i < size) { 
+    write(arr[i]);
+    i := i + 1;
+  };
+} 
+
+// main function to test reverse
+function main() => void
+{
+  local arr: int[6]; 
+  arr[0] := 10;
+  arr[1] := 20;
+  arr[2] := 30;
+  arr[3] := 40;
+  arr[4] := 50;
+  arr[5] := 60;
+  printArray(arr, 6); 
+  reverseArray(arr, 6);
+  printArray(arr, 6); 
+}

@@ -1,0 +1,225 @@
+function noStatemnt()=> void{}
+
+function singleStatement() => float{
+    local l1 : int;
+    l1 := 2;
+}
+
+function multipleStatements()=>id{
+    local l1 : int;
+    local l2 : int;
+    local l3 : int;
+    local l4 : int;
+
+    l1 := 1;
+    l2 := 2;
+    l3 := 3;
+    l4 := 4;
+
+    return(l1+l2+l3+l4);
+}
+
+function intReturn ()=> int{
+
+}
+function singleParameter(x : int)=>int{
+    l1:=2;
+}
+
+function multipleParameter(x : int, y: float, z: object)=>int{
+    l1:=2;
+}
+
+function arrParameters(x : int[], y: float[], z: object[], a: object[2]) => int
+{
+    local l1: int;
+}
+
+function main() => void{
+    //function call
+    intReturn();
+    singleParameter(1);
+    multipleParameter(a, b, c, d);
+    singleParameter(a[1]);
+    singleParameter(a[1][2]);
+    singleParameter(a+b-2);
+
+    //if with no statement
+    if(p1 > p2)
+    then{
+
+    }
+    else{
+
+    };
+
+    //if statement with 1 stat
+    if(p1 +2 >p2)
+        then{
+            l1 := r1;
+        }
+        else{
+            l1 := r2;
+        };
+    // if statement with multiple statements
+    if(p1 + 2> p2)
+    then{
+        l1 := 2;
+        l2 := 3;
+    }
+    else{
+        l1 := l2;
+        l2 := 3;
+    };
+
+    //while statement
+
+    while(1 ==1){
+
+    };
+
+    while(1==1){
+        local l1: int;
+        l1 := l2 + 3;
+        l2 := l1 + 2;
+        l3 := l1 + l2;
+    };
+
+    //read
+    read(l1);
+
+    write(l1 + l2* l3);
+
+    return(x);
+}
+/*
+    classes
+    --------------------------------------
+| | no class declaration
+| | class declaration
+| | multiple class declarations
+| | no data member declaration
+| | data member declaration
+| | multiple data member declaration
+| | no member function declaration
+| | member function declaration
+| | multiple member function declaration
+| | no member
+| | no inherited class
+| | one inherited class
+| | multiple inherited classes
+| | private member specifier
+| | public member specifier
+
+    functions: definitions
+    --------------------------------------
+| | no main function definition
+| | main function definition
+|X| no free function definition
+| | free function definition
+| | multiple free function definitions
+| | no member function definition
+|X| member function definition
+|X| multiple member function definitions
+|X| return type: void
+|X| return type: integer
+|X| return type: float
+|X| return type: id
+| | return type: array (not allowed)
+
+    functions: formal parameters
+    --------------------------------------
+|X| type: integer
+|X| type: float
+|X| type: id
+|X| type: 1-dim array 
+|X| type: n-dim array
+|X| type: array (with size)
+|X| type: array (without size)
+
+    functions: calls
+    --------------------------------------
+|X| free function call
+|X| member function call
+|X| parameters:0
+|X| parameters:1
+|X| parameters:n
+|X| array parameter - 1-dim
+|X| array parameter - n-dim
+|X| array parameter - with size
+|X| array parameter - without size
+| | function call as statement
+| | function call as expression factor
+| | expression as parameter
+
+    variable declaration
+    --------------------------------------
+| | type: integer
+| | type: float
+| | type: string
+| | type: id
+| | type: 1-dim array 
+| | type: n-dim array
+| | type: array (with size)
+| | type: array (without size)
+
+    function body: local variable declarations
+    --------------------------------------
+|X| no local variable declarations
+|X| local variable declarations
+|X| intertwined statements and variable declarations
+
+    function body: statements
+    --------------------------------------
+|X| no statement
+|X| 1 statement
+|X| n statements
+|X| if statement
+|X| if: empty then or else blocks
+|X| if: 1-statement then or else blocks
+|X| if: n-statements then or else blocks
+|X| while statement
+|X| while: empty block
+|X| while: 1-statement block
+|X| while: n-statement block
+|X| read(<variable>) statement
+|X| write(<expr>) statement
+|X| return(<expr>) statement
+|X| assignment statement
+
+    variable + idnest
+    --------------------------------------
+| | id
+| | id.id
+| | id.id(id)
+| | id(id).id
+| | id(id).id()
+| | id.id[id]
+| | id[id].id
+| | id[id].id[id]
+| | id.id[id][id]
+| | id[id][id].id
+| | id[id][id].id[id][id]
+| | id(id).id[id]
+| | id(id).id[id][id]
+| | expression as array index
+
+    expressions
+    --------------------------------------
+| | single variable
+| | involving addop
+| | involving multop
+| | involving relop
+| | involving addop + multop
+| | involving multop + relop
+| | involving addop + multop + relop
+| | involving parentheses
+| | involving nested parenhteses
+| | involving not
+| | involving sign
+| | involving literals
+| | involving variable + idnest
+| | involving function calls
+| | involving all the above in one expression
+*/
+

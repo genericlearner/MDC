@@ -103,7 +103,7 @@ void SymbolTableVisitor::visit(ClassImplFuncList* v) {
 
 			if (children[i]->getSymbolRec()->name == children[j]->getSymbolRec()->name) {
 				if (std::find(duplicateClass.begin(), duplicateClass.end(), children[i]->getSymbolRec()->name) == duplicateClass.end()) {
-					outError("Multiple Classes Declared" + children[i]->getSymbolRec()->name, 0);
+					outError("Multiple Classes Declared" + children[i]->getSymbolRec()->name, ((TokenAST*)children[j]->getChild(0))->getToken().getLine());
 					duplicateClass.push_back(children[i]->getSymbolRec()->name);
 				}
 				else {}
@@ -162,7 +162,7 @@ void SymbolTableVisitor::visit(ClassImplFuncList* v) {
 		std::vector<ClassEntry*>isaList = classDecl->getSymbolTable()->getClassRec();
 		for (ClassEntry* isa : isaList) {
 			if (classDecl->getSymbolRec()->name == isa->name) {
-				outError("self inhritance", 0);
+				outError("self inheritance", ((TokenAST*)classDecl->getChild(0))->getToken().getLine());
 			}
 
 
@@ -179,7 +179,7 @@ void SymbolTableVisitor::visit(ClassImplFuncList* v) {
 				}
 			}
 			if (!isaMatch) {
-				outError("ISA unmatched" + isa->name, 0);
+				outError("ISA unmatched" + isa->name, ((TokenAST*)classDecl->getChild(0))->getToken().getLine());
 			}
 		}
 	}
@@ -373,7 +373,7 @@ void SymbolTableVisitor::visit(LocalVarDeclList* v) {
 				if (varDecl != varDeclComp && varDecl->getSymbolRec()->name == varDeclComp->getSymbolRec()->name 
 					&& multi_var.count(varDecl->getSymbolRec()->name)==0) {
 					multi_var.insert(varDecl->getSymbolRec()->name);
-					outError("Multiple Declared data member: " + varDecl->getSymbolRec()->name, 0);
+					outError("Multiple Declared data member: " + varDecl->getSymbolRec()->name, ((TokenAST*)varDeclComp->getChild(1))->getToken().getLine());
 				}
 			}
 		}
@@ -417,10 +417,10 @@ void SymbolTableVisitor::visit(Prog* v) {
 			for (FunctionEntry* func : res) {
 				//int line = ((TokenAST*)classOrImplOrFunc->getChild(0)->getChild(0)->)
 				if (func->compare(functionSymbol)) {
-					outError("[ERROR] Redefinition of Function: " + functionSymbol->name, 0);
+					outError("[ERROR] Redefinition of Function: " + functionSymbol->name, ((TokenAST*)function->getChild(0)->getChild(0))->getToken().getLine());
 				}
 				else {
-					outError("[WARNING] Overloading of Function: " + functionSymbol->name, 0);
+					outError("[WARNING] Overloading of Function: " + functionSymbol->name, ((TokenAST*)function->getChild(0)->getChild(0))->getToken().getLine());
 				}
 			}
 			progTable->insertRec(function->getSymbolRec());
@@ -480,7 +480,7 @@ void SymbolTableVisitor::visit(Prog* v) {
 
 			for (FunctionEntry* memberFunc : memberFunctions) {
 				if (memberFunc->link == nullptr) {
-					outError("Function Definition Not found: " + classDecl->getSymbolRec()->name + " " + memberFunc->name, 0);
+					outError("Function Definition Not found: " + classDecl->getSymbolRec()->name + " " + memberFunc->name, ((TokenAST*)classDecl->getChild(0))->getToken().getLine());
 				}
 			}
 			SymbolTable* classSymbolTable = classDecl->getSymbolTable();
@@ -497,7 +497,7 @@ void SymbolTableVisitor::visit(Prog* v) {
 					VariableEntry* shadowRec = classRecord->link->findVariableRec(varRecord->name);
 
 					if (shadowRec) {
-						outError("Shadow Inherited Member variable: " + classDecl->getSymbolRec()->name + "::" + varRecord->name + "::" + classRecord->name + " " + shadowRec->name, 0);
+						outError("Shadow Inherited Member variable: " + classDecl->getSymbolRec()->name + "::" + varRecord->name + "::" + classRecord->name + " " + shadowRec->name, ((TokenAST*)classDecl->getChild(0))->getToken().getLine());
 					}
 				}
 				for (FunctionEntry* funcRecord : funcRecs) {
@@ -505,7 +505,7 @@ void SymbolTableVisitor::visit(Prog* v) {
 
 					for (FunctionEntry* shadow : shadowRec) {
 						if (funcRecord->compare(shadow)) {
-							outError("Shadow Member Function: " + classDecl->getSymbolRec()->name + " " + funcRecord->name + "Shadows" + classRecord->name + " " + shadow->name, 0);
+							outError("Shadow Member Function: " + classDecl->getSymbolRec()->name + " " + funcRecord->name + "Shadows" + classRecord->name + " " + shadow->name, ((TokenAST*)classDecl->getChild(0))->getToken().getLine());
 						}
 					}
 				}
@@ -594,7 +594,7 @@ void SymbolTableVisitor::visit(VisMemberDeclList* v) {
 			if (varDecl != varDeclComp && varDecl->getSymbolRec()->name == varDeclComp->getSymbolRec()->name
 				&& multi_var.count(varDecl->getSymbolRec()->name) == 0) {
 				multi_var.insert(varDecl->getSymbolRec()->name);
-				outError("Multiple Declared class member: " + varDecl->getSymbolRec()->name, 0);
+				outError("Multiple Declared class member: " + varDecl->getSymbolRec()->name, ((TokenAST*)varDeclComp->getChild(1))->getToken().getLine());
 			}
 		}
 	}
@@ -631,7 +631,9 @@ void SymbolTableVisitor::visit(fParams* v) {
 }
 void SymbolTableVisitor::visit(ArraySize* v) {}
 void SymbolTableVisitor::visit(ArraySizeList* v) {}
-void SymbolTableVisitor::visit(Variable* v) {}
+void SymbolTableVisitor::visit(Variable* v) {
+	v->setData(v->getChild(0)->getData());
+}
 void SymbolTableVisitor::visit(AssignStat* v) {}
 void SymbolTableVisitor::visit(FuncCall* v) {}
 void SymbolTableVisitor::visit(IndiceList* v) {}

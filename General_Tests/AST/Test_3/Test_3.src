@@ -1,0 +1,63 @@
+// ====== struct declarations ====== //
+class ACCOUNT {
+  public function deposit(amount: float) => void;
+  public function withdraw(amount: float) => void;
+  public function getBalance() => float;
+};
+
+class SAVINGS isa ACCOUNT {
+  private attribute balance: float;
+  public function build(initial: float) => SAVINGS;
+  public function deposit(amount: float) => void;
+  public function withdraw(amount: float) => void;
+  public function getBalance() => float;
+};
+
+// ====== struct implementations ====== //
+implementation ACCOUNT {
+  function deposit(amount: float) => void { };
+  function withdraw(amount: float) => void { };
+  function getBalance() => float {
+    return (0.0);
+  }
+}
+
+implementation SAVINGS {
+  function build(initial: float) => SAVINGS {
+    local new_account: SAVINGS;
+    new_account.balance := initial;
+    return (new_account);
+  }
+
+  function deposit(amount: float) => void {
+    balance := balance + amount;
+  }
+
+  function withdraw(amount: float) => void {
+    if (amount <= balance)
+      then {
+        balance := balance - amount;
+      } else ;
+  }
+
+  function getBalance() => float {
+    return (balance);
+  }
+}
+
+// ====== main ====== //
+function main() => void
+{
+  local acc: SAVINGS;
+  local bal: float;
+
+  acc := acc.build(100.0);
+  acc.deposit(50.0);
+  acc.withdraw(30.0);
+  bal := acc.getBalance();
+  write(bal); // should print 120.0
+
+  acc.withdraw(200.0); // should not change balance
+  bal := acc.getBalance();
+  write(bal); // should still print 120.0
+}

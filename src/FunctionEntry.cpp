@@ -40,12 +40,17 @@ bool FunctionEntry::compare(FunctionEntry* fEntry) {
 }
 
 int FunctionEntry::compSize() {
-	return 0;
+	int baseSize = 0;
+
+	if (link != nullptr){
+		baseSize = link->compSize();
+	}
+	return baseSize;
 }
 
-std::string FunctionEntry::toStr() {
-	return "function :" + name + "-" + signString();
+	std::string FunctionEntry::toStr() {
+	return "function-" + name + "-" + signString();
 }
 std::string FunctionEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>function</TD><TD>" + returnType + ": " + signString()+ "</TD><TD PORT=\"" + "function-" + name + "-" + signString() + "\">+</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>function</TD><TD>" + returnType + ":" + signString() + "</TD><TD>" + std::to_string(compSize()) + "</TD><TD>" + std::to_string(offset) + "</TD><TD PORT=\"" + "function-" + name + "-" + signString() + "\">+</TD></TR>\n";
 }

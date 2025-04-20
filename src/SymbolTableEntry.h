@@ -10,7 +10,7 @@ public:
 	std::string name="";
 	std::string vis= "";
 	SymbolTable* link;
-	int offset = 0;
+	int offset;
 
 	virtual std::string toStr() = 0;
 	virtual std::string toDot() = 0;

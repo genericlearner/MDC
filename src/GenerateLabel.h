@@ -12,7 +12,7 @@ class GenerateLabel {
 	int endIfLabel = 0;
 	int goWhileLabel = 0;
 	int endWhileLabel = 0;
-	//int getStrLabel = 0;
+	int getStrLabel = 0;
 	int endGetLabel = 0;
 public:
 	GenerateLabel();
@@ -21,7 +21,7 @@ public:
 	std::string genNonZeroLabel();
 	std::string genEndAndLabel();
 	std::string genEndOrLabel();
-	std::string geneEndNotLabel();
+	std::string genEndNotLabel();
 	std::string genElseLabel();
 	std::string genEndIfLabel();
 	std::string genGoWhileLabel();

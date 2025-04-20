@@ -5,11 +5,11 @@ ClassEntry::ClassEntry() {
 }
 
 std::string ClassEntry::toStr() {
-	return "Class :" + name;
+	return "class-" + name;
 }
 
 std::string ClassEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>class</TD><TD>" + "</TD><TD PORT=\"" + "class-" + name + "\">+</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>class</TD><TD></TD><TD>" + std::to_string(compSize()) + "</TD><TD>" + std::to_string(offset) + "</TD><TD PORT=\"" + "class-" + name + "\">+</TD></TR>\n";
 }
 
 int ClassEntry::compSize() {

@@ -26,12 +26,12 @@ std::string VariableEntry::toStr() {
 }
 
 std::string VariableEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>variable</TD><TD>" + generateSign()  + std::to_string(offset) + "</TD><TD PORT=\"" + "variable-" + generateSign() + "\">/</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>variable</TD><TD>" + generateSign() + "</TD><TD>" + std::to_string(compSize()) + "</TD><TD>" + std::to_string(offset) + "</TD><TD PORT=\"" + "variable-" + generateSign() + "\">/</TD></TR>\n";
 }
 
 int VariableEntry::compSize() {
 	int bSize = 0;
-	if (type == "integer") {
+	if (type == "int") {
 		bSize = 4;
 	}
 	else if (type == "float") {

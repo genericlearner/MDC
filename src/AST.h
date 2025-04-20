@@ -40,7 +40,7 @@ public:
 	virtual void setData(std::string data) { this->data = data; }
 
 	virtual std::string getAssemblyData() { return assemblyData; }
-	virtual void setAssemblyData(std::string data) { this->data = data; }
+	virtual void setAssemblyData(std::string data) { this->assemblyData = data; }
 
 
 	SymbolTableEntry* getSymbolRec() { return symbolRecord; }

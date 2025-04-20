@@ -12,4 +12,7 @@ std::string TokenAST::getData()
 std::string TokenAST::getLexeme() {
 	return token.getLexeme();
 }
+std::string TokenAST::getAssemblyData() {
+	return token.getLexeme();
+}
 

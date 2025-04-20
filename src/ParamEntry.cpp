@@ -26,10 +26,32 @@ std::string ParamEntry::toStr() {
 }
 
 std::string ParamEntry::toDot() {
-	return "<TR><TD>" + name + "</TD><TD>parameter</TD><TD>" + generateSign() + "</TD><TD PORT=\"" + "parameter-" + generateSign() + "\">/</TD></TR>\n";
+	return "<TR><TD>" + name + "</TD><TD>parameter</TD><TD>" + generateSign() + "</TD><TD>" + std::to_string(compSize()) + "</TD><TD>" + std::to_string(offset) + "</TD><TD PORT=\"" + "parameter-" + generateSign() + "\">/</TD></TR>\n";
 }
 
 int ParamEntry::compSize() {
-	return 0;
+	int bSize = 0;
+
+	if (type == "int") {
+		bSize = 4;
+	}
+	else if (type == "float") {
+		bSize = 8;
+	}
+	else {
+		if (link != nullptr) {
+			bSize = link->compSize();
+		}
+	}
+
+	int arrElmt = 1;
+
+	for (auto size : arrInd) {
+		if (size == -1) {
+			continue;
+		}
+		arrElmt *= size;
+	}
+	return bSize * arrElmt;
 }
 

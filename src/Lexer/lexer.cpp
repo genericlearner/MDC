@@ -234,6 +234,7 @@ Token Lexer::nextToken(){
         currentChar = nextChar();
         Token errToken = errorLoopAlpha(lex);
         writeError(errToken);
+        writeToken(errToken);
         return errToken;
     }
     if(isalpha(currentChar)){
@@ -253,6 +254,7 @@ Token Lexer::nextToken(){
         if(!isOperatorAlpha(currentChar) && !isBracket(currentChar) && !isspace(currentChar)){
             Token errToken = errorLoopAlpha(lex);
             writeError(errToken);
+            writeToken(errToken);
             return errToken;
         }
 
@@ -274,6 +276,7 @@ Token Lexer::nextToken(){
         if(lex[0] == '0' && lex.length() > 1){
             Token errToken = errorLoop(lex);
             writeError(errToken);
+            writeToken(errToken);
             return errToken;
         }
         
@@ -287,6 +290,7 @@ Token Lexer::nextToken(){
             if(!isdigit(currentChar)){
                 Token errToken = errorLoop(lex);
                 writeError(errToken);
+                writeToken(errToken);
                 return errToken;
             }
             while(isdigit(currentChar)){
@@ -298,6 +302,7 @@ Token Lexer::nextToken(){
             if(lex.back() == '0' && floatLex > 1){
                 Token errToken = errorLoop(lex);
                 writeError(errToken);
+                writeToken(errToken);
                 return errToken;
             }
 
@@ -313,6 +318,7 @@ Token Lexer::nextToken(){
             else{
                 Token errToken = errorLoop(lex);
                 writeError(errToken);
+                writeToken(errToken);
                 return errToken;
             }
             while(isdigit(currentChar)){
@@ -325,6 +331,7 @@ Token Lexer::nextToken(){
                 currentChar != '\n' && currentChar !=EOF ){
                     Token errToken = errorLoop(lex);
                     writeError(errToken);
+                    writeToken(errToken);
                     return errToken;
                 }
         //backupChar();
@@ -366,8 +373,9 @@ Token Lexer::nextToken(){
 
             // If block comment is not properly closed
             if (blockCommentDepth > 0) {
-                Token errorToken = createToken(TokenType::INVALID_NUM, "Unterminated block comment");
+                Token errorToken = createToken(TokenType::UNCLOSED_COMMENT, "Unterminated block comment");
                 writeError(errorToken);
+                writeToken(errorToken);
                 return errorToken;
             }
 

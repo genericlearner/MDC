@@ -190,6 +190,9 @@ std::string EnumeratedDeclarations::compositeConceptToString(compositeConcept cc
     case compositeConcept::ARRAYSIZELIST:
         str = "INDICELIST";
         break;
+    case compositeConcept::ARRAYSIZE:
+        str = "ARRAY DIMENSION?";
+        break;
     case compositeConcept::INDICELIST:
         str = "INDICELIST";
         break;

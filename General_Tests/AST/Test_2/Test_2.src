@@ -1,0 +1,52 @@
+/* find the maximum value in the array */
+function findMax(arr: int[], size: int) => int 
+{
+  local i: int;
+  local max: int;
+
+  i := 1;
+  max := arr[0];
+
+  while (i < size) {
+    if (arr[i] > max) 
+      then {
+        max := arr[i];
+      } else ;
+    i := i + 1;
+  };
+  return (max);
+}
+
+/* print a single integer */
+function printInt(val: int) => void 
+{
+  write(val);
+}
+
+/* print the array */
+function printArray(arr: int[], size: int) => void 
+{
+  local i: int; 
+  i := 0; 
+  while (i < size) { 
+    write(arr[i]);
+    i := i + 1;
+  };
+}
+
+// main function to test findMax
+function main() => void
+{
+  local arr: int[5];
+  local result: int;
+
+  arr[0] := 12;
+  arr[1] := 45;
+  arr[2] := 23;
+  arr[3] := 67;
+  arr[4] := 34;
+
+  printArray(arr, 5);
+  result := findMax(arr, 5);
+  printInt(result);
+}

@@ -312,10 +312,10 @@ void TypeCheckingVisitor::visit(Variable* v) {
 void TypeCheckingVisitor::visit(AssignStat* v) {
 	std::vector<AST*>operands = v->getChildren();
 
-
+	TokenAST* assign = (TokenAST*)v->getChild(1);
 	if (operands.size() == 3) {
 		if (operands[0]->getType() != operands[2]->getType()) {
-			outError("Incompatible operand type for Assignment \"" + operands[0]->getType() + "\"and right operand \"" + operands[1]->getType(), 0);
+			outError("Incompatible operand type for Assignment \"" + operands[0]->getType() + "\"and right operand \"" + operands[1]->getType(), assign->getToken().getLine());
 		}
 		else {
 			v->setType(operands[0]->getType());

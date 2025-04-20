@@ -183,7 +183,9 @@ AST* ASTFactory::makeNode(Token token) {
 		case TokenType::GTEQ:
 			treesProduced.push_back(new GreaterThanOrEqTo(token));
 			break;
-		
+		case TokenType::SELF:
+			treesProduced.push_back(new Self(token));
+			break;
 		case TokenType::ADD:
 			treesProduced.push_back(new Add(token));
 			break;

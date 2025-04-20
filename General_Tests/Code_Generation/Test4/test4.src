@@ -1,0 +1,17 @@
+function f1(x: int) => int
+{
+    return(x*2);
+}
+
+function main()=>void
+{
+    local a: int;
+    local b: int;
+    local c: int;
+
+    a:= 5;
+    b:=2;
+    c:=1;
+    local y: int;
+    write((f1(a)+c*b) - 5);
+}

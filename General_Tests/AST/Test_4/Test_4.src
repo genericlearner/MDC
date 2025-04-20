@@ -1,0 +1,71 @@
+// ====== struct declarations ====== //
+class SHAPE {
+  public function area() => float;
+};
+
+class CIRCLE isa SHAPE {
+  private attribute radius: float;
+  public function build(r: float) => CIRCLE;
+  public function area() => float;
+};
+
+class RECTANGLE isa SHAPE {
+  private attribute width: float;
+  private attribute height: float;
+  public function build(w: float, h: float) => RECTANGLE;
+  public function area() => float;
+};
+
+// ====== struct implementations ====== //
+implementation SHAPE {
+  function area() => float {
+    return (0.0);
+  }
+}
+
+implementation CIRCLE {
+  function build(r: float) => CIRCLE {
+    local new_circle: CIRCLE;
+    new_circle.radius := r;
+    return (new_circle);
+  }
+
+  function area() => float {
+    local result: float;
+    result := 3.14159 * radius * radius;
+    return (result);
+  }
+}
+
+implementation RECTANGLE {
+  function build(w: float, h: float) => RECTANGLE {
+    local new_rect: RECTANGLE;
+    new_rect.width := w;
+    new_rect.height := h;
+    return (new_rect);
+  }
+
+  function area() => float {
+    local result: float;
+    result := width * height;
+    return (result);
+  }
+}
+
+// ====== main ====== //
+function main() => void
+{
+  local c: CIRCLE;
+  local r: RECTANGLE;
+  local a1: float;
+  local a2: float;
+
+  c := c.build(5.0);       // radius = 5
+  r := r.build(4.0, 6.0);  // width = 4, height = 6
+
+  a1 := c.area();
+  a2 := r.area();
+
+  write(a1); // should print 78.53975
+  write(a2); // should print 24.0
+}

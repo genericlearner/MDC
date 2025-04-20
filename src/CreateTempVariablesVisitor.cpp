@@ -119,7 +119,6 @@ void CreateTempVariablesVisitor::visit(Multiply* v) {
 
 	TempEntry* tempEntry = SymbolTableHelper::createSymbolTempRec();
 	tempEntry->name = tempVarName;
-	v->setType("int");
 	tempEntry->type = v->getType();
 
 	v->insertIntoTable(tempEntry);
@@ -213,7 +212,6 @@ void CreateTempVariablesVisitor::visit(FuncCall* v) {
 
 	TempEntry* tempEntry = SymbolTableHelper::createSymbolTempRec();
 	tempEntry->name = tempVarName;
-	v->setType("int");
 	tempEntry->type = v->getType();
 
 	v->insertIntoTable(tempEntry);

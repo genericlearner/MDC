@@ -39,6 +39,7 @@ enum class TokenType
     ARROW,
     SCOPE,
     ENDOFILE,
+    EPSILON,
 
     OR,
     AND,
@@ -118,7 +119,7 @@ class Token
         size_t getLine() const;
         Token() : type(TokenType::UNKNOWN), lexeme(""), line(0) {};
         TokenType getType() const;
-
+        static std::string Token::tokenToString(TokenType token);
         // Constructor to initialize a token
         Token(TokenType type,const std::string& lexeme, size_t line);
 };

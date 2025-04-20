@@ -4,7 +4,10 @@
 #include "Parser/parser.h"
 #include "Lexer/Token.h"
 #include "SymbolTableVisitor.h"
+#include "AST.h"
 #include "TypeCheckingVisitor.h"
+#include "CreateTempVariablesVisitor.h"
+#include "MoonAssemblyVisitor.h"
 
 #include "AST.h"
 
@@ -22,7 +25,7 @@ void writeToDot(AST* ast, std::string path) {
 
    
 
-    file << "ASTTree {\n";
+    file << "digraph ASTTree {\n";
     file << ast->dotConvert();
     file << "}\n";
 
@@ -58,6 +61,17 @@ void writeSemanticError(std::vector<std::string>errors, std::string path) {
     }
 }
 
+void writeOutMoon(std::vector<std::string>output, std::string path) {
+    std::ofstream file(path);
+
+    if (file.fail()) { return; }
+
+    for (std::string str : output) {
+        file << str << std::endl;
+    }
+
+    file.close();
+}
 int main(int argc, char* argv []){
     if(argc < 2){
         std::cerr << "Usage: "<<argv[0]<<" sourcefile"<<std::endl;
@@ -79,7 +93,9 @@ int main(int argc, char* argv []){
     const std::string outputErrorFile = changeExtension(sourceFile, ".outlexerrors");
     const std::string outASTFile = changeExtension(sourceFile, ".outast");
     const std::string outSymbolFile = changeExtension(sourceFile, ".outsymbol");
+
     const std::string outSemanticErrorFile = changeExtension(sourceFile, ".outsemanticerrors");
+    const std::string outMoonPath = changeExtension(sourceFile, ".moon");
 
     std::ifstream inputStream(sourceFile);
     std::ofstream outDerivation(outDerivationFile);
@@ -119,25 +135,58 @@ int main(int argc, char* argv []){
     std::cout<<"starting the parser "<<std::endl;
     SymbolTableVisitor* symbolTableVisitor = new SymbolTableVisitor();
     TypeCheckingVisitor* typeCheckerVisitor = new TypeCheckingVisitor();
-    p->startParse();
-   
+    CreateTempVariablesVisitor* tempVariableVisitor = new CreateTempVariablesVisitor();
+    MoonAssemblyVisitor* moonAssemblyVisitor = new MoonAssemblyVisitor();
+
+    bool parseSuccess = p->startParse();
     
-    writeToDot(p->getast(), outASTFile);
-    p->getast()->accept(symbolTableVisitor);
-    p->getast()->accept(typeCheckerVisitor);
-    writeSymbolTable(p->getast(), outSymbolFile);
-    std::vector<std::string> allErrors = symbolTableVisitor->getError();
-    std::vector<std::string> typeErrors = typeCheckerVisitor->getError();
+    if (!parseSuccess) {
+        std::cout << "Parsing Unsuccessful" << std::endl;
+    }
+    else {
+        std::cout << "Parsing Successful, generating AST tree" << std::endl;
+    }
+   
+    if (parseSuccess) {
+        writeToDot(p->getast(), outASTFile);
+        std::cout << "Generated AST tree, visit the classes for generating Symbol table and type checking" << std::endl;
+        //p->getast()->accept(symbolTableVisitor);
+        //p->getast()->accept(typeCheckerVisitor);
+        //p->getast()->accept(tempVariableVisitor);
+        //writeSymbolTable(p->getast(), outSymbolFile);
+        std::vector<std::string> allErrors = symbolTableVisitor->getError();
+        std::vector<std::string> typeErrors = typeCheckerVisitor->getError();
 
-    // Append type errors to allErrors
-    allErrors.insert(allErrors.end(), typeErrors.begin(), typeErrors.end());
+        // Append type errors to allErrors
+        //allErrors.insert(allErrors.end(), typeErrors.begin(), typeErrors.end());
 
-    // Write once, ensuring no double append
-    writeSemanticError(allErrors, outSemanticErrorFile);
+        // Write once, ensuring no double append
+        
+        //writeSemanticError(allErrors, outSemanticErrorFile);
+        /*
+        try {
+            p->getast()->accept(moonAssemblyVisitor, false);
+        }
+        catch (...) {
+            std::cout << "Failed to get moon code" << std::endl;
+        }
+        writeOutMoon(moonAssemblyVisitor->getCode(), outMoonPath);
+
+        std::cout << "Moon Code generation Successful!" << std::endl;
+        */
+        
+    } 
     delete p;
     delete symbolTableVisitor;
+    delete typeCheckerVisitor;
+    delete tempVariableVisitor;
+    delete moonAssemblyVisitor;
     p = nullptr;
+
     symbolTableVisitor = nullptr;
+    typeCheckerVisitor = nullptr;
+    tempVariableVisitor = nullptr;
+    moonAssemblyVisitor = nullptr;
     
 
 }
